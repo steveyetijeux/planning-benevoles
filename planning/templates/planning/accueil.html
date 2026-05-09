@@ -1,0 +1,81 @@
+{% extends 'planning/base.html' %}
+
+{% block content %}
+
+<h1 class="mb-5 text-center">
+
+    Planning des bénévoles
+
+</h1>
+
+<div class="row">
+
+{% for creneau in creneaux %}
+
+<div class="col-md-4">
+
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+
+                {{ creneau.titre }}
+
+            </h3>
+
+            <hr>
+
+            <p>
+
+                📅 {{ creneau.date }}
+
+            </p>
+
+            <p>
+
+                ⏰ {{ creneau.heure_debut }}
+                -
+                {{ creneau.heure_fin }}
+
+            </p>
+
+            <p>
+
+                👥
+                {{ creneau.nb_inscrits }}
+                /
+                {{ creneau.max_benevoles }}
+
+            </p>
+
+            {% if creneau.nb_inscrits < creneau.max_benevoles %}
+
+            <a href="/inscription/{{ creneau.id }}/"
+               class="btn btn-primary w-100">
+
+               S'inscrire
+
+            </a>
+
+            {% else %}
+
+            <button class="btn btn-danger w-100">
+
+                Complet
+
+            </button>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

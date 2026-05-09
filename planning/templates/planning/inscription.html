@@ -1,0 +1,71 @@
+{% extends 'planning/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+    <div class="card">
+
+        <div class="card-body p-5">
+
+            <h2 class="mb-4 text-center">
+
+                Inscription bénévole
+
+            </h2>
+
+            <h4 class="mb-4 text-center">
+
+                {{ creneau.titre }}
+
+            </h4>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Nom
+                    </label>
+
+                    <input type="text"
+                           name="nom"
+                           class="form-control"
+                           required>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    <input type="email"
+                           name="email"
+                           class="form-control"
+                           required>
+
+                </div>
+
+                <button class="btn btn-success w-100">
+
+                    Valider mon inscription
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

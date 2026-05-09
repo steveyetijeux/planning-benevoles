@@ -3,12 +3,23 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-)k=sz%0xqruln+it_uow7lnj0_$4q24b_5ootw9&gh3#(+i^4s'
 
-DEBUG = True
+# =========================
+# 🔐 SECURITY
+# =========================
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-)k=sz%0xqruln+it_uow7lnj0_$4q24b_5ootw9&gh3#(+i^4s"
+)
 
-ALLOWED_HOSTS = ['*']
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
+ALLOWED_HOSTS = ["*"]
+
+
+# =========================
+# 📦 APPS
+# =========================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -19,6 +30,10 @@ INSTALLED_APPS = [
     'planning',
 ]
 
+
+# =========================
+# ⚙️ MIDDLEWARE
+# =========================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -30,8 +45,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'config.urls'
 
+
+# =========================
+# 🧩 TEMPLATES
+# =========================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -47,24 +67,28 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # =========================
-# 🟢 SUPABASE (POOLER FIX)
+# 🟢 DATABASE SUPABASE
 # =========================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres.hfoswzbicnsecblgbruc',
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'PASSWORD': 'Bouchon38)#!',
         'HOST': 'aws-1-eu-north-1.pooler.supabase.com',
         'PORT': '6543',
     }
 }
 
 
+# =========================
+# 🔒 AUTH VALIDATORS
+# =========================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -72,12 +96,26 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
+# =========================
+# 🌍 INTERNATIONALISATION
+# =========================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+
+# =========================
+# 📁 STATIC FILES
+# =========================
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-'PASSWORD': 'Bouchon38)#!',
+
+# =========================
+# 🔐 COOKIES / CSRF (Render compatible)
+# =========================
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com"
+]

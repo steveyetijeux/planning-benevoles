@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -7,7 +8,6 @@ SECRET_KEY = 'django-insecure-)k=sz%0xqruln+it_uow7lnj0_$4q24b_5ootw9&gh3#(+i^4s
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,16 +51,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # =========================
-# 🔥 BASE DE DONNÉES SUPABASE
+# 🟢 SUPABASE (POOLER FIX)
 # =========================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'Bouchon38)#!',
-        'HOST': 'db.hfoswzbicnsecblgbruc.supabase.co',
-        'PORT': '5432',
+        'USER': 'postgres.hfoswzbicnsecblgbruc',
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': 'aws-1-eu-north-1.pooler.supabase.com',
+        'PORT': '6543',
     }
 }
 

@@ -18,13 +18,15 @@ def inscription(request, creneau_id):
     if request.method == 'POST':
 
         nom = request.POST['nom']
-        email = request.POST['email']
+        telephone = request.POST['telephone']
 
+        # création ou récupération du bénévole
         benevole, created = Benevole.objects.get_or_create(
-            email=email,
-            defaults={'nom': nom}
+            nom=nom,
+            defaults={'telephone': telephone}
         )
 
+        # vérifier le nombre d'inscriptions
         nb = Inscription.objects.filter(
             creneau=creneau
         ).count()

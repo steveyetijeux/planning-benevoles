@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["planning-foyer-mdl.onrender.com"]
 
 
 # =========================
@@ -77,11 +77,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.hfoswzbicnsecblgbruc',
-        'PASSWORD': 'Bouchon38)#!',
-        'HOST': 'aws-1-eu-north-1.pooler.supabase.com',
-        'PORT': '6543',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'postgres.hfoswzbicnsecblgbruc'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'Bouchon38)#!'),
+        'HOST': os.environ.get(
+            'DB_HOST',
+            'aws-1-eu-north-1.pooler.supabase.com'
+        ),
+        'PORT': os.environ.get('DB_PORT', '6543'),
     }
 }
 

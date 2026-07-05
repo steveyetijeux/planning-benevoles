@@ -8,11 +8,9 @@ class MaintenanceModeMiddleware:
 
     def _call_(self, request):
 
-        # Autoriser admin même en maintenance
         if request.path.startswith("/admin"):
             return self.get_response(request)
 
-        # Mode maintenance activé
         if getattr(settings, "MAINTENANCE_MODE", False):
             return render(request, "maintenance.html", status=503)
 

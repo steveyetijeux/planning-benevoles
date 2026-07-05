@@ -129,3 +129,4 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com"
 ]
+print("SETTINGS.PY CHARGE")

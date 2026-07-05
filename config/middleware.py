@@ -8,13 +8,11 @@ class MaintenanceModeMiddleware:
 
     def _call_(self, request):
 
-        get_response = self.get_response
-
         if getattr(settings, "MAINTENANCE_MODE", False):
 
             if request.path.startswith("/admin"):
-                return get_response(request)
+                return self.get_response(request)
 
             return render(request, "maintenance.html", status=503)
 
-        return get_response(request)
+        return self.get_response(request)

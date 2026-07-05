@@ -16,6 +16,12 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ["planning-foyer-mdl.onrender.com"]
 
+# =========================
+# MODE MAINTENANCE 
+# =========================
+import os
+MAINTENANCE_MODE = os.environ.get("MAINTENANCE_MODE", "False") == "True"
+
 
 # =========================
 # 📦 APPS
@@ -35,6 +41,7 @@ INSTALLED_APPS = [
 # ⚙️ MIDDLEWARE
 # =========================
 MIDDLEWARE = [
+    'config.middleware.MaintenanceModeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +62,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],  # ✅ AJOUT ICI
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

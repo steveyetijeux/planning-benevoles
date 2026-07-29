@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Planning des bénévoles</title>
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/fr.js"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#eef2f7;
+}
+
+header{
+
+    background:#0d6efd;
+    color:white;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+
+}
+
+header h1{
+    margin:0;
+    font-size:32px;
+}
+
+.container{
+
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+
+}
+
+#calendar{
+
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+
+}
+
+.fc-toolbar-title{
+
+    font-size:1.5rem;
+
+}
+
+.fc-button{
+
+    border-radius:8px !important;
+
+}
+
+.fc-event{
+
+    cursor:pointer;
+    transition:.2s;
+
+}
+
+.fc-event:hover{
+
+    transform:scale(1.03);
+
+}
+
+/* ---------- Téléphone ---------- */
+
+@media (max-width:768px){
+
+    header{
+
+        padding:15px;
+
+    }
+
+    header h1{
+
+        font-size:24px;
+
+    }
+
+    .container{
+
+        padding:8px;
+
+    }
+
+    #calendar{
+
+        padding:8px;
+        border-radius:8px;
+
+    }
+
+    .fc-toolbar{
+
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .fc-toolbar-chunk{
+
+        display:flex;
+        justify-content:center;
+    }
+
+    .fc-toolbar-title{
+
+        font-size:20px;
+
+    }
+
+    .fc-button{
+
+        padding:.5em .8em !important;
+        font-size:13px !important;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>📅 Planning des bénévoles</h1>
+
+</header>
+
+<div class="container">
+
+    <div id="calendar"></div>
+
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    let calendarEl = document.getElementById('calendar');
+
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+
+        locale: 'fr',
+
+        firstDay: 1,
+
+        height: "auto",
+
+        initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth',
+
+        headerToolbar:{
+
+            left:'prev,next today',
+
+            center:'title',
+
+            right:'dayGridMonth,listWeek'
+
+        },
+
+        buttonText:{
+
+            today:"Aujourd'hui",
+            month:"Mois",
+            list:"Semaine"
+
+        },
+
+        events:'/api/creneaux/',
+
+        eventClick:function(info){
+
+            info.jsEvent.preventDefault();
+
+            window.location.href="/inscription/"+info.event.id+"/";
+
+        }
+
+    });
+
+    calendar.render();
+
+});
+
+</script>
+
+</body>
+
+</html>

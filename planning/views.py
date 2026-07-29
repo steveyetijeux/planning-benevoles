@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Creneau, Benevole, Inscription
+from django.http import JsonResponse
+from .models import Creneau
+from django.shortcuts import render
 
 
 def accueil(request):
@@ -43,3 +46,19 @@ def inscription(request, creneau_id):
     return render(request, 'planning/inscription.html', {
         'creneau': creneau
     })
+
+def api_creneaux(request):
+    events = []
+
+    for c in Creneau.objects.all():
+        events.append({
+            "id": c.id,
+            "title": c.titre,
+            "start": f"{c.date}T{c.heure_debut}",
+            "end": f"{c.date}T{c.heure_fin}",
+        })
+
+    return JsonResponse(events, safe=False)
+
+def calendrier(request):
+    return render(request, "calendrier.html")

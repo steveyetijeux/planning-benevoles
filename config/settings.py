@@ -14,7 +14,11 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["planning-foyer-mdl.onrender.com"]
+ALLOWED_HOSTS = [
+    "planning-foyer-mdl.onrender.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 # =========================
 # MODE MAINTENANCE 

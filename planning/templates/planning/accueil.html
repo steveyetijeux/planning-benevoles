@@ -2,13 +2,93 @@
 
 {% block content %}
 
-<h1 class="mb-5 text-center">
+<style>
 
-    Foyer Fermé - A l'année prochaine ! 
+/* ===========================
+   POPUP CALENDRIER
+=========================== */
 
-</h1>
+.popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.55);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
 
-<div style="text-align:center;margin:20px 0;">
+.popup-box{
+    background:white;
+    width:90%;
+    max-width:420px;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.30);
+    animation:popup .35s ease;
+}
+
+.popup-icon{
+    font-size:60px;
+}
+
+.popup-box h2{
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
+.popup-btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 25px;
+    background:#0d6efd;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.popup-btn:hover{
+    background:#0b5ed7;
+    color:white;
+}
+
+#popup-close{
+    display:block;
+    margin:15px auto 0;
+    border:none;
+    background:none;
+    color:#666;
+    cursor:pointer;
+    font-size:15px;
+}
+
+@keyframes popup{
+
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+</style>
+
+
+<h2 class="text-center mb-4">
+    Foyer Fermé - A l'année prochaine !
+</h2>
+
+<div class="text-center mb-4">
 
     <a href="/calendrier/"
        style="
@@ -20,72 +100,63 @@
        text-decoration:none;
        font-size:18px;
        font-weight:bold;">
+
         📅 Voir le calendrier
+
     </a>
 
 </div>
 
-<div class="row">
 
 {% for creneau in creneaux %}
 
-<div class="col-md-4">
+<div class="card mb-4">
 
-    <div class="card mb-4">
+    <div class="card-body">
 
-        <div class="card-body">
+        <h3 class="card-title">
 
-            <h3 class="card-title">
+            {{ creneau.titre }}
 
-                {{ creneau.titre }}
+        </h3>
 
-            </h3>
+        <hr>
 
-            <hr>
+        <p>
+            📅 {{ creneau.date }}
+        </p>
 
-            <p>
+        <p>
+            ⏰ {{ creneau.heure_debut }}
+            -
+            {{ creneau.heure_fin }}
+        </p>
 
-                📅 {{ creneau.date }}
+        <p>
+            👥
+            {{ creneau.nb_inscrits }}
+            /
+            {{ creneau.max_benevoles }}
+        </p>
 
-            </p>
+        {% if creneau.nb_inscrits < creneau.max_benevoles %}
 
-            <p>
+        <a href="/inscription/{{ creneau.id }}/"
+           class="btn btn-primary w-100">
 
-                ⏰ {{ creneau.heure_debut }}
-                -
-                {{ creneau.heure_fin }}
+            S'inscrire
 
-            </p>
+        </a>
 
-            <p>
+        {% else %}
 
-                👥
-                {{ creneau.nb_inscrits }}
-                /
-                {{ creneau.max_benevoles }}
+        <button class="btn btn-danger w-100">
 
-            </p>
+            Complet
 
-            {% if creneau.nb_inscrits < creneau.max_benevoles %}
+        </button>
 
-            <a href="/inscription/{{ creneau.id }}/"
-               class="btn btn-primary w-100">
-
-               S'inscrire
-
-            </a>
-
-            {% else %}
-
-            <button class="btn btn-danger w-100">
-
-                Complet
-
-            </button>
-
-            {% endif %}
-
-        </div>
+        {% endif %}
 
     </div>
 
@@ -93,6 +164,70 @@
 
 {% endfor %}
 
+
+<!-- ===========================
+     POPUP NOUVEAUTÉ
+=========================== -->
+
+<div id="popup-calendrier" class="popup-overlay">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">
+            📅
+        </div>
+
+        <h2>Nouveau !</h2>
+
+        <p>
+            Le planning dispose désormais
+            d'un <strong>calendrier interactif</strong>.
+        </p>
+
+        <p>
+            Consultez rapidement tous les créneaux
+            et inscrivez-vous directement
+            en cliquant sur un événement.
+        </p>
+
+        <a href="/calendrier/"
+           class="popup-btn">
+
+            Découvrir le calendrier
+
+        </a>
+
+        <button id="popup-close">
+
+            Plus tard
+
+        </button>
+
+    </div>
+
 </div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    if(localStorage.getItem("popupCalendrier")=="oui"){
+
+        document.getElementById("popup-calendrier").style.display="none";
+
+    }
+
+    document.getElementById("popup-close").onclick=function(){
+
+        document.getElementById("popup-calendrier").style.display="none";
+
+        localStorage.setItem("popupCalendrier","oui");
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

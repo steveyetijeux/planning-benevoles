@@ -212,19 +212,25 @@
 
 document.addEventListener("DOMContentLoaded", function(){
 
-    if(localStorage.getItem("popupCalendrier")=="oui"){
+    const versionPopup = "1";
 
-        document.getElementById("popup-calendrier").style.display="none";
+    if(localStorage.getItem("popupVersion") != versionPopup){
 
-    }
+        document.getElementById("popup-calendrier").style.display = "flex";
 
-    document.getElementById("popup-close").onclick=function(){
+    }else{
 
-        document.getElementById("popup-calendrier").style.display="none";
-
-        localStorage.setItem("popupCalendrier","oui");
+        document.getElementById("popup-calendrier").style.display = "none";
 
     }
+
+    document.getElementById("popup-close").onclick = function(){
+
+        document.getElementById("popup-calendrier").style.display = "none";
+
+        localStorage.setItem("popupVersion", versionPopup);
+
+    };
 
 });
 

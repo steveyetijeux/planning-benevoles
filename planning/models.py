@@ -1,33 +1,162 @@
 from django.db import models
 
 
+# =========================================================
+# BENEVOLE
+# =========================================================
+
 class Benevole(models.Model):
-    nom = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=20)
+
+    nom = models.CharField(
+        max_length=100
+    )
+
+    telephone = models.CharField(
+        max_length=20
+    )
 
     def __str__(self):
         return self.nom
 
 
+# =========================================================
+# CRENEAU
+# =========================================================
+
 class Creneau(models.Model):
-    titre = models.CharField(max_length=200)
+
+    titre = models.CharField(
+        max_length=200
+    )
+
     date = models.DateField()
+
     heure_debut = models.TimeField()
+
     heure_fin = models.TimeField()
+
     max_benevoles = models.IntegerField()
+
 
     def __str__(self):
         return self.titre
 
+
     @property
     def nb_inscrits(self):
+
         return self.inscription_set.count()
 
 
+# =========================================================
+# INSCRIPTION
+# =========================================================
+
 class Inscription(models.Model):
-    benevole = models.ForeignKey(Benevole, on_delete=models.CASCADE)
-    creneau = models.ForeignKey(Creneau, on_delete=models.CASCADE)
-    date_inscription = models.DateTimeField(auto_now_add=True)
+
+    benevole = models.ForeignKey(
+        Benevole,
+        on_delete=models.CASCADE
+    )
+
+    creneau = models.ForeignKey(
+        Creneau,
+        on_delete=models.CASCADE
+    )
+
+    date_inscription = models.DateTimeField(
+        auto_now_add=True
+    )
+
 
     class Meta:
-        unique_together = ('benevole', 'creneau')
+
+        unique_together = (
+            "benevole",
+            "creneau",
+        )
+
+
+    def __str__(self):
+
+        return (
+            f"{self.benevole} - "
+            f"{self.creneau}"
+        )
+
+
+# =========================================================
+# PARAMETRES DU SITE
+# =========================================================
+
+class SiteSettings(models.Model):
+
+    EVENT_CHOICES = [
+
+        (
+            "NONE",
+            "Aucun"
+        ),
+
+        (
+            "NOEL",
+            "Noël"
+        ),
+
+        (
+            "HALLOWEEN",
+            "Halloween"
+        ),
+
+        (
+            "PAQUES",
+            "Pâques"
+        ),
+
+        (
+            "ETE",
+            "Été"
+        ),
+
+        (
+            "AUTOMNE",
+            "Automne"
+        ),
+
+        (
+            "RENTREE",
+            "Rentrée"
+        ),
+
+        (
+            "NOUVEL_AN",
+            "Nouvel An"
+        ),
+
+        (
+            "SAINT_VALENTIN",
+            "Saint-Valentin"
+        ),
+    ]
+
+
+    event_mode = models.CharField(
+
+        max_length=20,
+
+        choices=EVENT_CHOICES,
+
+        default="NONE",
+    )
+
+
+    def __str__(self):
+
+        return "Paramètres du site"
+
+
+    class Meta:
+
+        verbose_name = "Paramètres du site"
+
+        verbose_name_plural = "Paramètres du site"

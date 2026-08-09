@@ -1,136 +1,255 @@
 from pathlib import Path
 import os
 
+
+# =========================================================
+# BASE
+# =========================================================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# =========================
-# 🔐 SECURITY
-# =========================
+# =========================================================
+# SECURITY
+# =========================================================
+
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
-    "django-insecure-)k=sz%0xqruln+it_uow7lnj0_$4q24b_5ootw9&gh3#(+i^4s"
+    "django-insecure-change-this-in-production"
 )
 
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = [
-    "planning-foyer-mdl.onrender.com",
     "127.0.0.1",
     "localhost",
+    "planning-foyer-mdl.onrender.com",
 ]
 
-# =========================
-# MODE MAINTENANCE 
-# =========================
-import os
-MAINTENANCE_MODE = os.environ.get("MAINTENANCE_MODE", "False") == "True"
+
+# =========================================================
+# MAINTENANCE
+# =========================================================
+
+MAINTENANCE_MODE = (
+    os.environ.get("MAINTENANCE_MODE", "False") == "True"
+)
 
 
-# =========================
-# 📦 APPS
-# =========================
+# =========================================================
+# APPLICATIONS
+# =========================================================
+
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'planning',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    "planning",
 ]
 
 
-# =========================
-# ⚙️ MIDDLEWARE
-# =========================
+# =========================================================
+# MIDDLEWARE
+# =========================================================
+
 MIDDLEWARE = [
-    'config.middleware.MaintenanceModeMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "config.middleware.MaintenanceModeMiddleware",
+
+    "django.middleware.security.SecurityMiddleware",
+
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
+    "django.contrib.sessions.middleware.SessionMiddleware",
+
+    "django.middleware.common.CommonMiddleware",
+
+    "django.middleware.csrf.CsrfViewMiddleware",
+
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+
+    "django.contrib.messages.middleware.MessageMiddleware",
+
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 
-ROOT_URLCONF = 'config.urls'
+# =========================================================
+# URLS
+# =========================================================
+
+ROOT_URLCONF = "config.urls"
 
 
-# =========================
-# 🧩 TEMPLATES
-# =========================
+# =========================================================
+# TEMPLATES
+# =========================================================
+
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
+
+        "APP_DIRS": True,
+
+        "OPTIONS": {
+            "context_processors": [
+
+                "django.template.context_processors.request",
+
+                "django.contrib.auth.context_processors.auth",
+
+                "django.contrib.messages.context_processors.messages",
+
+                # Thèmes saisonniers
+                "planning.context_processors.event_mode",
+
+                # Paramètres du site
+                "planning.context_processors.site_settings",
             ],
         },
     },
 ]
 
 
-WSGI_APPLICATION = 'config.wsgi.application'
+# =========================================================
+# WSGI
+# =========================================================
+
+WSGI_APPLICATION = "config.wsgi.application"
 
 
-# =========================
-# 🟢 DATABASE SUPABASE
-# =========================
+# =========================================================
+# DATABASE
+# =========================================================
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('DB_USER', 'postgres.hfoswzbicnsecblgbruc'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'Bouchon38)#!'),
-        'HOST': os.environ.get(
-            'DB_HOST',
-            'aws-1-eu-north-1.pooler.supabase.com'
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+
+        "NAME": os.environ.get(
+            "DB_NAME",
+            "postgres",
         ),
-        'PORT': os.environ.get('DB_PORT', '6543'),
+
+        "USER": os.environ.get(
+            "DB_USER",
+            "",
+        ),
+
+        "PASSWORD": os.environ.get(
+            "DB_PASSWORD",
+            "",
+        ),
+
+        "HOST": os.environ.get(
+            "DB_HOST",
+            "",
+        ),
+
+        "PORT": os.environ.get(
+            "DB_PORT",
+            "5432",
+        ),
     }
 }
 
 
-# =========================
-# 🔒 AUTH VALIDATORS
-# =========================
+# =========================================================
+# PASSWORD VALIDATION
+# =========================================================
+
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        "NAME":
+        "django.contrib.auth.password_validation."
+        "UserAttributeSimilarityValidator",
+    },
+
+    {
+        "NAME":
+        "django.contrib.auth.password_validation."
+        "MinimumLengthValidator",
+    },
+
+    {
+        "NAME":
+        "django.contrib.auth.password_validation."
+        "CommonPasswordValidator",
+    },
+
+    {
+        "NAME":
+        "django.contrib.auth.password_validation."
+        "NumericPasswordValidator",
+    },
 ]
 
 
-# =========================
-# 🌍 INTERNATIONALISATION
-# =========================
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# =========================================================
+# INTERNATIONALISATION
+# =========================================================
+
+LANGUAGE_CODE = "fr-fr"
+
+TIME_ZONE = "Europe/Paris"
+
 USE_I18N = True
+
 USE_TZ = True
 
 
-# =========================
-# 📁 STATIC FILES
-# =========================
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# =========================================================
+# STATIC FILES
+# =========================================================
 
+STATIC_URL = "/static/"
 
-# =========================
-# 🔐 COOKIES / CSRF (Render compatible)
-# =========================
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
 ]
-print("SETTINGS.PY CHARGE")
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+# WhiteNoise
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
+
+
+# =========================================================
+# DEFAULT PRIMARY KEY
+# =========================================================
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# =========================================================
+# CSRF
+# =========================================================
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://planning-foyer-mdl.onrender.com",
+]
+
+
+# =========================================================
+# SECURITY / PRODUCTION
+# =========================================================
+
+if not DEBUG:
+
+    SECURE_BROWSER_XSS_FILTER = True
+
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    SESSION_COOKIE_SECURE = True
+
+    CSRF_COOKIE_SECURE = True

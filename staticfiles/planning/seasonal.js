@@ -1,1087 +1,896 @@
 ```javascript
-/* =========================================================
-   PLANNING FOYER MDL
-   SEASONAL EXPERIENCE V2
-   =========================================================
+/*
+=========================================================
+ PLANNING FOYER MDL
+ ANIMATIONS SAISONNIÈRES — VERSION WOW
+=========================================================
+*/
 
-   Moteur d'animations saisonnières.
-
-   IMPORTANT :
-   - syntaxe volontairement classique
-   - pas de classes JS
-   - pas de modules
-   - pas de dépendances
-   - chaque particule reçoit ses propres paramètres
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
+(function () {
     "use strict";
 
-    var body = document.body;
+    function initSeasonal() {
 
-    if (!body) {
-        return;
-    }
+        var body = document.body;
 
+        if (!body) {
+            return;
+        }
 
-    /* =====================================================
-       COUCHE PRINCIPALE
-    ===================================================== */
+        /* Empêche une double initialisation */
+        if (document.querySelector(".season-layer")) {
+            return;
+        }
 
-    var layer = document.createElement("div");
+        var layer = document.createElement("div");
+        layer.className = "season-layer";
+        body.appendChild(layer);
 
-    layer.className = "season-layer";
-
-    body.appendChild(layer);
-
-
-    /* =====================================================
-       OUTILS
-    ===================================================== */
-
-    function random(min, max) {
-        return min + Math.random() * (max - min);
-    }
-
-    function randomInt(min, max) {
-        return Math.floor(random(min, max + 1));
-    }
-
-    function setVariable(element, name, value) {
-        element.style.setProperty(name, value);
-    }
+        console.log("🌟 SEASONAL WOW V3 ACTIVE 🌟");
 
 
-    /*
-       Création de particules avec paramètres individuels.
-    */
+        /* =====================================================
+           OUTILS
+        ===================================================== */
 
-    function createParticles(
-        className,
-        count,
-        options
-    ) {
+        function random(min, max) {
+            return min + Math.random() * (max - min);
+        }
 
-        var i;
-        var particle;
-        var duration;
-        var delay;
+        function randomInt(min, max) {
+            return Math.floor(random(min, max + 1));
+        }
 
-        options = options || {};
+        function setStyles(element, styles) {
+            Object.keys(styles).forEach(function (key) {
+                element.style[key] = styles[key];
+            });
+        }
 
-        for (i = 0; i < count; i++) {
+        function createElement(className, parent) {
 
-            particle = document.createElement("div");
+            var element = document.createElement("div");
 
-            particle.className =
+            element.className =
                 "season-particle " + className;
 
-            particle.style.left =
-                random(
-                    options.minLeft || 0,
-                    options.maxLeft || 100
-                ) + "%";
+            (parent || layer).appendChild(element);
 
-
-            duration =
-                random(
-                    options.minDuration || 8,
-                    options.maxDuration || 16
-                );
-
-            delay =
-                -random(
-                    0,
-                    duration
-                );
-
-
-            setVariable(
-                particle,
-                "--duration",
-                duration + "s"
-            );
-
-            setVariable(
-                particle,
-                "--delay",
-                delay + "s"
-            );
-
-
-            if (options.opacity) {
-                setVariable(
-                    particle,
-                    "--opacity",
-                    random(
-                        options.opacity[0],
-                        options.opacity[1]
-                    )
-                );
-            }
-
-
-            if (options.scale) {
-                setVariable(
-                    particle,
-                    "--scale",
-                    random(
-                        options.scale[0],
-                        options.scale[1]
-                    )
-                );
-            }
-
-
-            if (options.size) {
-                setVariable(
-                    particle,
-                    "--size",
-                    random(
-                        options.size[0],
-                        options.size[1]
-                    ) + "px"
-                );
-            }
-
-
-            /* vent / trajectoire totalement individuelle */
-
-            setVariable(
-                particle,
-                "--wind1",
-                random(-120, 120) + "px"
-            );
-
-            setVariable(
-                particle,
-                "--wind2",
-                random(-160, 160) + "px"
-            );
-
-            setVariable(
-                particle,
-                "--wind3",
-                random(-180, 180) + "px"
-            );
-
-            setVariable(
-                particle,
-                "--wind4",
-                random(-150, 150) + "px"
-            );
-
-            setVariable(
-                particle,
-                "--wind5",
-                random(-180, 180) + "px"
-            );
-
-
-            if (options.extra) {
-                options.extra(
-                    particle,
-                    i
-                );
-            }
-
-
-            layer.appendChild(particle);
+            return element;
         }
-    }
-
-
-    /* =====================================================
-       NOËL
-    ===================================================== */
-
-    if (body.classList.contains("theme-noel")) {
-
-        /*
-         * Neige principale.
-         *
-         * Beaucoup de flocons mais chacun possède
-         * sa propre trajectoire.
-         */
-
-        createParticles(
-            "snowflake",
-            105,
-            {
-                minDuration: 9,
-                maxDuration: 22,
-                opacity: [.45, .98],
-                scale: [.65, 1.45],
-                size: [3, 10]
-            }
-        );
 
 
         /*
-         * Petits flocons très lointains.
-         */
+        ---------------------------------------------------------
+        PARTICULES FLOTTANTES
 
-        createParticles(
-            "snowflake small",
-            55,
-            {
-                minDuration: 15,
-                maxDuration: 28,
-                opacity: [.25, .65],
-                scale: [.4, .8],
-                size: [2, 5]
+        Chaque élément possède :
+        - position différente
+        - vitesse différente
+        - délai différent
+        - amplitude horizontale différente
+        - rotation différente
+        - échelle différente
+        ---------------------------------------------------------
+        */
+
+        function createParticles(className, count, options) {
+
+            options = options || {};
+
+            var durationMin =
+                options.durationMin || 8;
+
+            var durationMax =
+                options.durationMax || 18;
+
+            var delayMax =
+                options.delayMax || durationMax;
+
+            for (var i = 0; i < count; i++) {
+
+                var particle =
+                    createElement(className);
+
+                var startX =
+                    random(0, 100);
+
+                var drift =
+                    random(
+                        options.driftMin || -100,
+                        options.driftMax || 100
+                    );
+
+                var rotation =
+                    random(
+                        options.rotationMin || -360,
+                        options.rotationMax || 360
+                    );
+
+                var duration =
+                    random(
+                        durationMin,
+                        durationMax
+                    );
+
+                var scale =
+                    random(
+                        options.scaleMin || 0.6,
+                        options.scaleMax || 1.4
+                    );
+
+                var delay =
+                    random(-delayMax, 0);
+
+                var opacity =
+                    random(
+                        options.opacityMin || 0.35,
+                        options.opacityMax || 1
+                    );
+
+                setStyles(particle, {
+
+                    left: startX + "%",
+
+                    "--drift":
+                        drift + "px",
+
+                    "--rotation":
+                        rotation + "deg",
+
+                    "--scale":
+                        scale,
+
+                    "--particle-opacity":
+                        opacity,
+
+                    animationDuration:
+                        duration + "s",
+
+                    animationDelay:
+                        delay + "s"
+                });
             }
-        );
+        }
 
 
-        /*
-         * Étoiles.
-         */
+        /* =====================================================
+           NOËL
+        ===================================================== */
 
-        createParticles(
-            "star",
-            32,
-            {
-                minDuration: 2,
-                maxDuration: 5,
-                size: [2, 5],
-                opacity: [.2, 1]
-            }
-        );
+        if (body.classList.contains("theme-noel")) {
 
+            /*
+            -----------------------------------------------------
+            CIEL NOCTURNE / AURA
+            -----------------------------------------------------
+            */
 
-        /*
-         * Guirlande lumineuse.
-         */
+            var christmasGlow =
+                createElement("christmas-glow");
 
-        createParticles(
-            "christmas-light",
-            22,
-            {
-                minDuration: 1.4,
-                maxDuration: 3.2
-            }
-        );
+            christmasGlow.style.animationDelay =
+                random(-5, 0) + "s";
 
 
-        /*
-         * Père Noël.
-         */
+            /*
+            -----------------------------------------------------
+            NEIGE
 
-        function createSanta() {
+            Beaucoup de flocons mais avec des trajectoires
+            indépendantes.
+            -----------------------------------------------------
+            */
 
-            if (document.querySelector(".santa-flight")) {
-                return;
-            }
+            createParticles(
+                "snowflake snow-depth-1",
+                35,
+                {
+                    durationMin: 11,
+                    durationMax: 21,
+                    driftMin: -180,
+                    driftMax: 180,
+                    scaleMin: 0.45,
+                    scaleMax: 0.8,
+                    opacityMin: 0.35,
+                    opacityMax: 0.75
+                }
+            );
 
-            var santa;
-            var glow;
-            var trail;
-            var sleigh;
-            var runner1;
-            var runner2;
-            var claus;
-            var head;
-            var beard;
-            var hat;
-            var santaBody;
-            var arm1;
-            var arm2;
-            var leg1;
-            var leg2;
-            var boot1;
-            var boot2;
+            createParticles(
+                "snowflake snow-depth-2",
+                28,
+                {
+                    durationMin: 8,
+                    durationMax: 16,
+                    driftMin: -240,
+                    driftMax: 240,
+                    scaleMin: 0.7,
+                    scaleMax: 1.15,
+                    opacityMin: 0.6,
+                    opacityMax: 1
+                }
+            );
 
-            santa = document.createElement("div");
-            santa.className = "santa-flight";
-
-            setVariable(
-                santa,
-                "--santa-top",
-                random(9, 30) + "vh"
+            createParticles(
+                "snowflake snow-depth-3",
+                12,
+                {
+                    durationMin: 6,
+                    durationMax: 12,
+                    driftMin: -300,
+                    driftMax: 300,
+                    scaleMin: 1,
+                    scaleMax: 1.65,
+                    opacityMin: 0.75,
+                    opacityMax: 1
+                }
             );
 
 
             /*
-             * halo
-             */
+            -----------------------------------------------------
+            ÉTOILES
+            -----------------------------------------------------
+            */
 
-            glow = document.createElement("div");
-            glow.className = "santa-glow";
-
-
-            /*
-             * traînée magique
-             */
-
-            trail = document.createElement("div");
-            trail.className = "santa-trail";
-
-
-            /*
-             * traîneau
-             */
-
-            sleigh = document.createElement("div");
-            sleigh.className = "santa-sleigh-body";
-
-
-            runner1 = document.createElement("div");
-            runner1.className = "santa-runner";
-
-            runner2 = document.createElement("div");
-            runner2.className = "santa-runner second";
+            createParticles(
+                "star",
+                28,
+                {
+                    durationMin: 2,
+                    durationMax: 5,
+                    driftMin: -20,
+                    driftMax: 20,
+                    scaleMin: 0.5,
+                    scaleMax: 1.8,
+                    opacityMin: 0.25,
+                    opacityMax: 1
+                }
+            );
 
 
             /*
-             * Père Noël.
-             */
+            -----------------------------------------------------
+            GUIRLANDE
+            -----------------------------------------------------
+            */
 
-            claus = document.createElement("div");
-            claus.className = "santa-claus";
+            var garland =
+                document.createElement("div");
 
+            garland.className =
+                "christmas-garland";
 
-            head = document.createElement("div");
-            head.className = "santa-head";
+            body.appendChild(garland);
 
-            beard = document.createElement("div");
-            beard.className = "santa-beard";
+            var bulbColors = [
+                "red",
+                "gold",
+                "green",
+                "blue",
+                "red",
+                "gold",
+                "green",
+                "blue",
+                "red",
+                "gold",
+                "green",
+                "blue"
+            ];
 
-            hat = document.createElement("div");
-            hat.className = "santa-hat";
+            bulbColors.forEach(function (color, index) {
 
-            santaBody = document.createElement("div");
-            santaBody.className = "santa-body";
+                var bulb =
+                    document.createElement("span");
 
-            arm1 = document.createElement("div");
-            arm1.className = "santa-arm left";
+                bulb.className =
+                    "christmas-bulb " + color;
 
-            arm2 = document.createElement("div");
-            arm2.className = "santa-arm right";
+                bulb.style.animationDelay =
+                    (-index * 0.15) + "s";
 
-            leg1 = document.createElement("div");
-            leg1.className = "santa-leg left";
-
-            leg2 = document.createElement("div");
-            leg2.className = "santa-leg right";
-
-            boot1 = document.createElement("div");
-            boot1.className = "santa-boot left";
-
-            boot2 = document.createElement("div");
-            boot2.className = "santa-boot right";
-
-
-            head.appendChild(hat);
-            head.appendChild(beard);
-
-            claus.appendChild(head);
-            claus.appendChild(santaBody);
-            claus.appendChild(arm1);
-            claus.appendChild(arm2);
-            claus.appendChild(leg1);
-            claus.appendChild(leg2);
-            claus.appendChild(boot1);
-            claus.appendChild(boot2);
+                garland.appendChild(bulb);
+            });
 
 
-            santa.appendChild(glow);
-            santa.appendChild(trail);
-            santa.appendChild(sleigh);
-            santa.appendChild(runner1);
-            santa.appendChild(runner2);
-            santa.appendChild(claus);
+            /*
+            -----------------------------------------------------
+            FLOCONS LUMINEUX
+            -----------------------------------------------------
+            */
+
+            createParticles(
+                "christmas-spark",
+                20,
+                {
+                    durationMin: 3,
+                    durationMax: 7,
+                    driftMin: -140,
+                    driftMax: 140,
+                    scaleMin: 0.5,
+                    scaleMax: 1.4
+                }
+            );
 
 
-            body.appendChild(santa);
+            /*
+            -----------------------------------------------------
+            PÈRE NOËL
 
+            Construction CSS :
+            tête + bonnet + barbe + corps + sac +
+            traîneau + rennes.
+            -----------------------------------------------------
+            */
 
-            window.setTimeout(
-                function () {
+            function createSanta() {
+
+                if (document.querySelector(".santa-flight")) {
+                    return;
+                }
+
+                var santa =
+                    document.createElement("div");
+
+                santa.className =
+                    "santa-flight";
+
+                santa.innerHTML =
+
+                    '<div class="santa-trail"></div>' +
+
+                    '<div class="santa-sleigh-wow">' +
+
+                        '<div class="sleigh-seat"></div>' +
+
+                        '<div class="sleigh-runner-wow runner-one"></div>' +
+                        '<div class="sleigh-runner-wow runner-two"></div>' +
+
+                        '<div class="santa-body">' +
+                            '<div class="santa-belt"></div>' +
+                            '<div class="santa-buckle"></div>' +
+                            '<div class="santa-arm"></div>' +
+                            '<div class="santa-arm santa-arm-two"></div>' +
+                            '<div class="santa-head">' +
+                                '<div class="santa-face"></div>' +
+                                '<div class="santa-beard"></div>' +
+                                '<div class="santa-hat">' +
+                                    '<div class="santa-hat-pom"></div>' +
+                                '</div>' +
+                                '<div class="santa-nose"></div>' +
+                            '</div>' +
+                        '</div>' +
+
+                        '<div class="santa-gift gift-one"></div>' +
+                        '<div class="santa-gift gift-two"></div>' +
+
+                    '</div>' +
+
+                    '<div class="reindeer-group">' +
+                        '<div class="reindeer reindeer-one">' +
+                            '<span class="reindeer-antler"></span>' +
+                        '</div>' +
+                        '<div class="reindeer reindeer-two">' +
+                            '<span class="reindeer-antler"></span>' +
+                        '</div>' +
+                        '<div class="reindeer reindeer-three">' +
+                            '<span class="reindeer-antler"></span>' +
+                        '</div>' +
+                    '</div>';
+
+                body.appendChild(santa);
+
+                setTimeout(function () {
 
                     if (santa.parentNode) {
                         santa.parentNode.removeChild(santa);
                     }
 
-                },
-                16000
+                }, 17000);
+            }
+
+            setTimeout(createSanta, 5000);
+
+            setInterval(createSanta, 36000);
+        }
+
+
+        /* =====================================================
+           RENTRÉE
+        ===================================================== */
+
+        if (body.classList.contains("theme-rentree")) {
+
+            /*
+            Cahier / feuilles
+            */
+
+            createParticles(
+                "school-paper",
+                13,
+                {
+                    durationMin: 9,
+                    durationMax: 17,
+                    driftMin: -260,
+                    driftMax: 260,
+                    rotationMin: -180,
+                    rotationMax: 180,
+                    scaleMin: 0.6,
+                    scaleMax: 1.2
+                }
+            );
+
+            /*
+            Crayons
+            */
+
+            createParticles(
+                "school-pencil",
+                8,
+                {
+                    durationMin: 8,
+                    durationMax: 15,
+                    driftMin: -220,
+                    driftMax: 220,
+                    rotationMin: -500,
+                    rotationMax: 500,
+                    scaleMin: 0.7,
+                    scaleMax: 1.2
+                }
+            );
+
+            /*
+            Petites étoiles / poussière
+            */
+
+            createParticles(
+                "school-spark",
+                20,
+                {
+                    durationMin: 4,
+                    durationMax: 9,
+                    driftMin: -180,
+                    driftMax: 180,
+                    scaleMin: 0.5,
+                    scaleMax: 1.4
+                }
+            );
+
+            /*
+            Règles / traits décoratifs
+            */
+
+            for (var r = 0; r < 5; r++) {
+
+                var line =
+                    createElement("school-ruler");
+
+                line.style.left =
+                    random(0, 100) + "%";
+
+                line.style.top =
+                    random(15, 90) + "%";
+
+                line.style.transform =
+                    "rotate(" +
+                    random(-25, 25) +
+                    "deg)";
+            }
+        }
+
+
+        /* =====================================================
+           SAINT-VALENTIN
+        ===================================================== */
+
+        if (body.classList.contains("theme-saint-valentin")) {
+
+            createParticles(
+                "heart-particle heart-small",
+                28,
+                {
+                    durationMin: 7,
+                    durationMax: 14,
+                    driftMin: -220,
+                    driftMax: 220,
+                    rotationMin: -180,
+                    rotationMax: 180,
+                    scaleMin: 0.5,
+                    scaleMax: 1
+                }
+            );
+
+            createParticles(
+                "heart-particle heart-large",
+                12,
+                {
+                    durationMin: 10,
+                    durationMax: 19,
+                    driftMin: -300,
+                    driftMax: 300,
+                    rotationMin: -240,
+                    rotationMax: 240,
+                    scaleMin: 0.8,
+                    scaleMax: 1.5
+                }
+            );
+
+            createParticles(
+                "love-spark",
+                18,
+                {
+                    durationMin: 3,
+                    durationMax: 7,
+                    driftMin: -120,
+                    driftMax: 120
+                }
             );
         }
 
 
-        /*
-         * Premier passage.
-         */
+        /* =====================================================
+           PÂQUES
+        ===================================================== */
 
-        window.setTimeout(
-            createSanta,
-            3500
-        );
+        if (body.classList.contains("theme-paques")) {
 
-
-        /*
-         * Puis régulièrement.
-         */
-
-        window.setInterval(
-            createSanta,
-            30000
-        );
-    }
-
-
-    /* =====================================================
-       RENTRÉE
-    ===================================================== */
-
-    if (body.classList.contains("theme-rentree")) {
-
-        createParticles(
-            "school-paper",
-            15,
-            {
-                minDuration: 11,
-                maxDuration: 23,
-                opacity: [.55, .9],
-                scale: [.7, 1.15],
-
-                extra: function (particle) {
-
-                    setVariable(
-                        particle,
-                        "--paper-width",
-                        random(18, 30) + "px"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--paper-height",
-                        random(25, 40) + "px"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rotation-start",
-                        random(-40, 40) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rotation-mid",
-                        random(60, 180) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rotation2",
-                        random(140, 280) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rotation3",
-                        random(240, 400) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rotation-end",
-                        random(330, 540) + "deg"
-                    );
+            createParticles(
+                "easter-egg",
+                15,
+                {
+                    durationMin: 9,
+                    durationMax: 17,
+                    driftMin: -280,
+                    driftMax: 280,
+                    rotationMin: -240,
+                    rotationMax: 240,
+                    scaleMin: 0.6,
+                    scaleMax: 1.35
                 }
-            }
-        );
+            );
 
-
-        createParticles(
-            "school-pencil",
-            8,
-            {
-                minDuration: 13,
-                maxDuration: 24,
-                opacity: [.65, 1],
-                scale: [.7, 1.1]
-            }
-        );
-
-
-        createParticles(
-            "school-eraser",
-            6,
-            {
-                minDuration: 14,
-                maxDuration: 25,
-                opacity: [.6, .95]
-            }
-        );
-    }
-
-
-    /* =====================================================
-       SAINT-VALENTIN
-    ===================================================== */
-
-    if (body.classList.contains("theme-saint-valentin")) {
-
-        createParticles(
-            "heart-particle",
-            38,
-            {
-                minDuration: 9,
-                maxDuration: 18,
-                opacity: [.45, .9],
-
-                extra: function (particle) {
-
-                    setVariable(
-                        particle,
-                        "--heart-size",
-                        random(9, 24) + "px"
-                    );
+            createParticles(
+                "spring-flower",
+                22,
+                {
+                    durationMin: 8,
+                    durationMax: 16,
+                    driftMin: -220,
+                    driftMax: 220,
+                    rotationMin: -360,
+                    rotationMax: 360,
+                    scaleMin: 0.5,
+                    scaleMax: 1.3
                 }
-            }
-        );
+            );
 
-
-        /*
-         * Quelques gros cœurs plus rares.
-         */
-
-        createParticles(
-            "heart-particle",
-            8,
-            {
-                minDuration: 13,
-                maxDuration: 22,
-                opacity: [.3, .65],
-
-                extra: function (particle) {
-
-                    setVariable(
-                        particle,
-                        "--heart-size",
-                        random(20, 34) + "px"
-                    );
+            createParticles(
+                "butterfly",
+                7,
+                {
+                    durationMin: 11,
+                    durationMax: 20,
+                    driftMin: -350,
+                    driftMax: 350,
+                    rotationMin: -20,
+                    rotationMax: 20,
+                    scaleMin: 0.7,
+                    scaleMax: 1.25
                 }
-            }
-        );
-    }
+            );
 
-
-    /* =====================================================
-       PÂQUES
-    ===================================================== */
-
-    if (body.classList.contains("theme-paques")) {
-
-        createParticles(
-            "easter-egg",
-            24,
-            {
-                minDuration: 11,
-                maxDuration: 22,
-                scale: [.65, 1.15],
-
-                extra: function (particle) {
-
-                    var palettes = [
-                        ["#f9a8d4", "#fbcfe8"],
-                        ["#93c5fd", "#bfdbfe"],
-                        ["#fde68a", "#fef3c7"],
-                        ["#86efac", "#bbf7d0"],
-                        ["#c4b5fd", "#ddd6fe"],
-                        ["#fdba74", "#fed7aa"]
-                    ];
-
-                    var palette =
-                        palettes[
-                            randomInt(
-                                0,
-                                palettes.length - 1
-                            )
-                        ];
-
-                    setVariable(
-                        particle,
-                        "--egg-color1",
-                        palette[0]
-                    );
-
-                    setVariable(
-                        particle,
-                        "--egg-color2",
-                        palette[1]
-                    );
-
-                    setVariable(
-                        particle,
-                        "--egg-width",
-                        random(18, 27) + "px"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--egg-height",
-                        random(25, 36) + "px"
-                    );
+            createParticles(
+                "spring-spark",
+                18,
+                {
+                    durationMin: 4,
+                    durationMax: 9,
+                    driftMin: -160,
+                    driftMax: 160
                 }
-            }
-        );
+            );
+        }
 
 
-        createParticles(
-            "spring-flower",
-            26,
-            {
-                minDuration: 9,
-                maxDuration: 19,
+        /* =====================================================
+           HALLOWEEN
+        ===================================================== */
 
-                extra: function (particle) {
+        if (body.classList.contains("theme-halloween")) {
 
-                    var colors = [
-                        "#f9a8d4",
-                        "#fbcfe8",
-                        "#c4b5fd",
-                        "#bfdbfe",
-                        "#fde68a"
-                    ];
-
-                    setVariable(
-                        particle,
-                        "--flower-color",
-                        colors[
-                            randomInt(
-                                0,
-                                colors.length - 1
-                            )
-                        ]
-                    );
-                }
-            }
-        );
-
-
-        createParticles(
-            "spring-butterfly",
-            6,
-            {
-                minDuration: 13,
-                maxDuration: 22,
-
-                extra: function (particle) {
-
-                    var colors = [
-                        "#c084fc",
-                        "#60a5fa",
-                        "#f472b6",
-                        "#34d399"
-                    ];
-
-                    setVariable(
-                        particle,
-                        "--butterfly-color",
-                        colors[
-                            randomInt(
-                                0,
-                                colors.length - 1
-                            )
-                        ]
-                    );
-                }
-            }
-        );
-    }
-
-
-    /* =====================================================
-       HALLOWEEN
-    ===================================================== */
-
-    if (body.classList.contains("theme-halloween")) {
-
-        var moon =
-            document.createElement("div");
-
-        moon.className =
-            "halloween-moon";
-
-        body.appendChild(moon);
-
-
-        var fog =
-            document.createElement("div");
-
-        fog.className =
-            "halloween-fog";
-
-        body.appendChild(fog);
-
-
-        createParticles(
-            "bat",
-            12,
-            {
-                minDuration: 10,
-                maxDuration: 21,
-
-                extra: function (particle) {
-
-                    setVariable(
-                        particle,
-                        "--start-y",
-                        random(0, 75) + "vh"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--y1",
-                        random(-20, 30) + "vh"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--y2",
-                        random(-20, 40) + "vh"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--y3",
-                        random(-20, 30) + "vh"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--scale",
-                        random(.55, 1.2)
-                    );
-                }
-            }
-        );
-
-
-        createParticles(
-            "pumpkin",
-            11,
-            {
-                minDuration: 1.8,
-                maxDuration: 3.8,
-
-                extra: function (particle) {
-
-                    setVariable(
-                        particle,
-                        "--pumpkin-width",
-                        random(28, 46) + "px"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--pumpkin-height",
-                        random(24, 38) + "px"
-                    );
-                }
-            }
-        );
-
-
-        createParticles(
-            "ghost",
-            5,
-            {
-                minDuration: 13,
-                maxDuration: 23
-            }
-        );
-    }
-
-
-    /* =====================================================
-       NOUVEL AN
-    ===================================================== */
-
-    if (body.classList.contains("theme-nouvel-an")) {
-
-        createParticles(
-            "newyear-star",
-            55,
-            {
-                minDuration: 1.5,
-                maxDuration: 5,
-                size: [2, 5]
-            }
-        );
-
-
-        function createFirework() {
-
-            var firework;
-            var colors;
-
-            colors = [
-                "#ffffff",
-                "#7dd3fc",
-                "#c4b5fd",
-                "#f9a8d4",
-                "#fde68a"
-            ];
-
-
-            firework =
+            var moon =
                 document.createElement("div");
 
-            firework.className =
-                "firework";
+            moon.className =
+                "halloween-moon";
+
+            body.appendChild(moon);
 
 
-            firework.style.left =
-                random(12, 88) + "%";
+            var fog =
+                document.createElement("div");
 
-            firework.style.top =
-                random(10, 48) + "%";
+            fog.className =
+                "halloween-fog";
+
+            body.appendChild(fog);
 
 
-            setVariable(
-                firework,
-                "--firework-color",
-                colors[
-                    randomInt(
-                        0,
-                        colors.length - 1
-                    )
-                ]
+            var fogTwo =
+                document.createElement("div");
+
+            fogTwo.className =
+                "halloween-fog fog-two";
+
+            body.appendChild(fogTwo);
+
+
+            createParticles(
+                "bat",
+                9,
+                {
+                    durationMin: 8,
+                    durationMax: 16,
+                    driftMin: -350,
+                    driftMax: 350,
+                    rotationMin: -30,
+                    rotationMax: 30,
+                    scaleMin: 0.6,
+                    scaleMax: 1.25
+                }
+            );
+
+            createParticles(
+                "pumpkin",
+                9,
+                {
+                    durationMin: 6,
+                    durationMax: 13,
+                    driftMin: -220,
+                    driftMax: 220,
+                    rotationMin: -90,
+                    rotationMax: 90,
+                    scaleMin: 0.6,
+                    scaleMax: 1.2
+                }
+            );
+
+            createParticles(
+                "ghost",
+                5,
+                {
+                    durationMin: 9,
+                    durationMax: 17,
+                    driftMin: -280,
+                    driftMax: 280,
+                    scaleMin: 0.6,
+                    scaleMax: 1.2
+                }
+            );
+        }
+
+
+        /* =====================================================
+           NOUVEL AN
+        ===================================================== */
+
+        if (body.classList.contains("theme-nouvel-an")) {
+
+            createParticles(
+                "newyear-star",
+                55,
+                {
+                    durationMin: 2,
+                    durationMax: 5,
+                    driftMin: -40,
+                    driftMax: 40,
+                    scaleMin: 0.5,
+                    scaleMax: 1.8,
+                    opacityMin: 0.2,
+                    opacityMax: 1
+                }
             );
 
 
-            setVariable(
-                firework,
-                "--delay",
-                random(0, 1.5) + "s"
-            );
+            function createFirework() {
 
+                var firework =
+                    document.createElement("div");
 
-            setVariable(
-                firework,
-                "--duration",
-                random(2.1, 3.4) + "s"
-            );
+                firework.className =
+                    "firework";
 
+                firework.style.left =
+                    random(12, 88) + "%";
 
-            layer.appendChild(firework);
+                firework.style.top =
+                    random(10, 52) + "%";
 
+                firework.style.setProperty(
+                    "--firework-scale",
+                    random(0.7, 1.45)
+                );
 
-            window.setTimeout(
-                function () {
+                firework.style.animationDelay =
+                    random(0, 1.2) + "s";
+
+                layer.appendChild(firework);
+
+                setTimeout(function () {
 
                     if (firework.parentNode) {
-                        firework.parentNode.removeChild(
-                            firework
-                        );
+                        firework.parentNode.removeChild(firework);
                     }
 
-                },
-                4000
-            );
-        }
+                }, 3600);
+            }
 
 
-        /*
-         * Départ décalé pour éviter un feu d'artifice
-         * qui explose toujours au même endroit.
-         */
+            for (var f = 0; f < 7; f++) {
 
-        var fireworkIndex;
+                setTimeout(
+                    createFirework,
+                    f * 650
+                );
+            }
 
-        for (
-            fireworkIndex = 0;
-            fireworkIndex < 7;
-            fireworkIndex++
-        ) {
 
-            window.setTimeout(
+            setInterval(
                 createFirework,
-                fireworkIndex * 700
+                2800
             );
         }
 
 
-        window.setInterval(
-            createFirework,
-            2500
-        );
+        /* =====================================================
+           ÉTÉ
+        ===================================================== */
+
+        if (body.classList.contains("theme-ete")) {
+
+            var sun =
+                document.createElement("div");
+
+            sun.className =
+                "sun";
+
+            body.appendChild(sun);
+
+
+            createParticles(
+                "summer-spark",
+                24,
+                {
+                    durationMin: 4,
+                    durationMax: 10,
+                    driftMin: -180,
+                    driftMax: 180,
+                    scaleMin: 0.4,
+                    scaleMax: 1.2
+                }
+            );
+
+            createParticles(
+                "summer-bubble",
+                15,
+                {
+                    durationMin: 8,
+                    durationMax: 17,
+                    driftMin: -240,
+                    driftMax: 240,
+                    scaleMin: 0.5,
+                    scaleMax: 1.3
+                }
+            );
+
+            createParticles(
+                "summer-cloud",
+                5,
+                {
+                    durationMin: 30,
+                    durationMax: 50,
+                    driftMin: -300,
+                    driftMax: 300,
+                    scaleMin: 0.8,
+                    scaleMax: 1.5
+                }
+            );
+        }
+
+
+        /* =====================================================
+           AUTOMNE
+        ===================================================== */
+
+        if (body.classList.contains("theme-automne")) {
+
+            /*
+            Plusieurs familles de feuilles.
+            Chaque feuille possède une trajectoire différente.
+            */
+
+            createParticles(
+                "leaf-particle leaf-orange",
+                22,
+                {
+                    durationMin: 7,
+                    durationMax: 15,
+                    driftMin: -320,
+                    driftMax: 320,
+                    rotationMin: -720,
+                    rotationMax: 720,
+                    scaleMin: 0.55,
+                    scaleMax: 1.25
+                }
+            );
+
+            createParticles(
+                "leaf-particle leaf-red",
+                17,
+                {
+                    durationMin: 9,
+                    durationMax: 18,
+                    driftMin: -420,
+                    driftMax: 420,
+                    rotationMin: -900,
+                    rotationMax: 900,
+                    scaleMin: 0.6,
+                    scaleMax: 1.35
+                }
+            );
+
+            createParticles(
+                "leaf-particle leaf-yellow",
+                13,
+                {
+                    durationMin: 6,
+                    durationMax: 13,
+                    driftMin: -260,
+                    driftMax: 260,
+                    rotationMin: -500,
+                    rotationMax: 500,
+                    scaleMin: 0.5,
+                    scaleMax: 1.15
+                }
+            );
+
+
+            createParticles(
+                "autumn-dust",
+                25,
+                {
+                    durationMin: 5,
+                    durationMax: 11,
+                    driftMin: -240,
+                    driftMax: 240,
+                    scaleMin: 0.4,
+                    scaleMax: 1
+                }
+            );
+        }
+
     }
 
 
-    /* =====================================================
-       ÉTÉ
-    ===================================================== */
+    /*
+    =========================================================
+    INITIALISATION
+    =========================================================
+    */
 
-    if (body.classList.contains("theme-ete")) {
+    if (document.readyState === "loading") {
 
-        var sun =
-            document.createElement("div");
-
-        sun.className =
-            "sun";
-
-        body.appendChild(sun);
-
-
-        createParticles(
-            "summer-cloud",
-            5,
-            {
-                minDuration: 28,
-                maxDuration: 48,
-
-                extra: function (particle) {
-
-                    particle.style.top =
-                        random(8, 38) + "vh";
-
-                    setVariable(
-                        particle,
-                        "--duration",
-                        random(28, 48) + "s"
-                    );
-                }
-            }
+        document.addEventListener(
+            "DOMContentLoaded",
+            initSeasonal
         );
+
+    } else {
+
+        initSeasonal();
+
     }
 
-
-    /* =====================================================
-       AUTOMNE
-    ===================================================== */
-
-    if (body.classList.contains("theme-automne")) {
-
-        createParticles(
-            "leaf-particle",
-            42,
-            {
-                minDuration: 8,
-                maxDuration: 20,
-                opacity: [.55, 1],
-                scale: [.65, 1.25],
-
-                extra: function (particle) {
-
-                    var colors = [
-                        ["#92400e", "#d97706"],
-                        ["#b45309", "#f59e0b"],
-                        ["#9a3412", "#ea580c"],
-                        ["#78350f", "#ca8a04"],
-                        ["#a16207", "#eab308"]
-                    ];
-
-                    var palette =
-                        colors[
-                            randomInt(
-                                0,
-                                colors.length - 1
-                            )
-                        ];
-
-
-                    setVariable(
-                        particle,
-                        "--leaf-color1",
-                        palette[0]
-                    );
-
-                    setVariable(
-                        particle,
-                        "--leaf-color2",
-                        palette[1]
-                    );
-
-
-                    setVariable(
-                        particle,
-                        "--leaf-width",
-                        random(10, 20) + "px"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--leaf-height",
-                        random(16, 27) + "px"
-                    );
-
-
-                    setVariable(
-                        particle,
-                        "--rot-start",
-                        random(-50, 50) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rot1",
-                        random(40, 180) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rot2",
-                        random(140, 360) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rot3",
-                        random(260, 520) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rot4",
-                        random(360, 680) + "deg"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--rot5",
-                        random(500, 900) + "deg"
-                    );
-                }
-            }
-        );
-
-
-        /*
-         * Quelques feuilles très petites,
-         * donnant de la profondeur.
-         */
-
-        createParticles(
-            "leaf-particle",
-            25,
-            {
-                minDuration: 15,
-                maxDuration: 28,
-                opacity: [.25, .6],
-                scale: [.4, .7],
-
-                extra: function (particle) {
-
-                    setVariable(
-                        particle,
-                        "--leaf-width",
-                        random(6, 11) + "px"
-                    );
-
-                    setVariable(
-                        particle,
-                        "--leaf-height",
-                        random(10, 17) + "px"
-                    );
-                }
-            }
-        );
-    }
-
-});
+})();
 ```

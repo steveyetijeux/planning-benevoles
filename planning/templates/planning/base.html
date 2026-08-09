@@ -1,7 +1,5 @@
 {% load static %}
-
 <!DOCTYPE html>
-
 <html lang="fr">
 
 <head>
@@ -13,9 +11,7 @@
         content="width=device-width, initial-scale=1"
     >
 
-    <title>
-        Planning Foyer MDL
-    </title>
+    <title>Planning Foyer MDL</title>
 
 
     <!-- =====================================================
@@ -39,11 +35,8 @@
             min-height: 100%;
         }
 
-
         body {
-
             margin: 0;
-
             min-height: 100vh;
 
             background-color: #f4f6f9;
@@ -52,34 +45,24 @@
                 background 0.5s ease,
                 color 0.5s ease;
 
+            overflow-x: hidden;
         }
 
-
         .navbar {
-
             background-color: #1e293b;
 
             transition:
                 background 0.5s ease;
-
         }
-
 
         .navbar-brand {
-
             color: white !important;
-
             font-weight: bold;
-
             font-size: 24px;
-
         }
 
-
         .card {
-
             border: none;
-
             border-radius: 15px;
 
             box-shadow:
@@ -88,79 +71,61 @@
             transition:
                 transform 0.3s ease,
                 box-shadow 0.3s ease;
-
         }
-
 
         .card:hover {
-
-            transform:
-                translateY(-5px);
-
+            transform: translateY(-5px);
         }
-
 
         .btn-primary {
-
             background-color: #2563eb;
-
             border: none;
-
         }
-
 
         .btn-success {
-
             background-color: #16a34a;
-
             border: none;
-
         }
 
-
         footer {
-
             margin-top: 80px;
-
             padding: 30px;
 
             text-align: center;
 
             background-color: #1e293b;
-
             color: white;
-
-        }
-
-
-        /*
-         * Le contenu doit rester sous la couche
-         * d'animation mais celle-ci ne doit jamais
-         * bloquer les clics.
-         */
-
-        .season-layer {
-
-            pointer-events: none;
-
         }
 
     </style>
 
 
     <!-- =====================================================
-         THEMES SAISONNIERS
+         CSS DES THÈMES SAISONNIERS
     ====================================================== -->
 
     <link
         rel="stylesheet"
-        href="{% static 'planning/seasonal.css' %}?v=100"
+        href="{% static 'planning/seasonal.css' %}?v=200"
     >
 
 </head>
 
 
-<body class="{{ event_mode_class|default:'' }}">
+<body class="{{ event_mode_class }}">
+
+    <!-- =====================================================
+         COUCHE DES ANIMATIONS
+         Créée ici directement.
+         Le JavaScript ne peut donc plus échouer à la créer.
+    ====================================================== -->
+
+    <div
+        id="season-layer"
+        class="season-layer"
+        aria-hidden="true"
+    ></div>
+
 
     <!-- =====================================================
          NAVBAR
@@ -184,7 +149,7 @@
 
     <!-- =====================================================
          CONTENU
-    ====================================================== -->
+    ===================================================== -->
 
     <main class="container mt-5">
 
@@ -197,7 +162,7 @@
 
     <!-- =====================================================
          FOOTER
-    ====================================================== -->
+    ===================================================== -->
 
     <footer>
 
@@ -217,11 +182,14 @@
 
     <!-- =====================================================
          ANIMATIONS SAISONNIÈRES
+         
+         IMPORTANT :
+         PAS DE defer.
+         Le layer existe déjà dans le HTML.
     ====================================================== -->
 
     <script
-        src="{% static 'planning/seasonal.js' %}?v=100"
-        defer
+        src="{% static 'planning/seasonal.js' %}?v=200"
     ></script>
 
 </body>

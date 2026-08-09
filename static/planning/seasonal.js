@@ -1,12 +1,17 @@
-/*
-=========================================================
- PLANNING FOYER MDL
- ANIMATIONS SAISONNIÈRES — VERSION WOW
-=========================================================
-*/
+/* =========================================================
+   PLANNING FOYER MDL
+   ANIMATIONS SAISONNIERES
+   VERSION STABLE - AUCUNE DEPENDANCE
+========================================================= */
 
 (function () {
+
     "use strict";
+
+
+    /* =====================================================
+       INITIALISATION
+    ===================================================== */
 
     function initSeasonal() {
 
@@ -16,587 +21,487 @@
             return;
         }
 
-        /* Empêche une double initialisation */
-        if (document.querySelector(".season-layer")) {
-            return;
+
+        /*
+         * Ne jamais créer deux systèmes d'animation.
+         */
+
+        var oldLayer = document.querySelector(".season-layer");
+
+        if (oldLayer) {
+            oldLayer.parentNode.removeChild(oldLayer);
         }
 
+
         var layer = document.createElement("div");
+
         layer.className = "season-layer";
+
         body.appendChild(layer);
 
-        console.log("🌟 SEASONAL WOW V3 ACTIVE 🌟");
 
-
-        /* =====================================================
+        /* =================================================
            OUTILS
-        ===================================================== */
+        ================================================= */
 
         function random(min, max) {
             return min + Math.random() * (max - min);
         }
 
-        function randomInt(min, max) {
-            return Math.floor(random(min, max + 1));
+
+        function setVariable(element, name, value) {
+            element.style.setProperty(name, value);
         }
 
-        function setStyles(element, styles) {
-            Object.keys(styles).forEach(function (key) {
-                element.style[key] = styles[key];
-            });
-        }
 
-        function createElement(className, parent) {
+        function createParticle(className, options) {
 
-            var element = document.createElement("div");
+            var element =
+                document.createElement("div");
 
             element.className =
                 "season-particle " + className;
 
-            (parent || layer).appendChild(element);
+
+            /*
+             * Position initiale complètement indépendante.
+             */
+
+            var x =
+                random(-10, 100);
+
+
+            setVariable(
+                element,
+                "--x0",
+                x + "vw"
+            );
+
+
+            /*
+             * Chaque particule possède ses propres
+             * déplacements horizontaux.
+             */
+
+            setVariable(
+                element,
+                "--drift1",
+                random(-140, 140) + "px"
+            );
+
+            setVariable(
+                element,
+                "--drift2",
+                random(-180, 180) + "px"
+            );
+
+            setVariable(
+                element,
+                "--drift3",
+                random(-220, 220) + "px"
+            );
+
+            setVariable(
+                element,
+                "--drift4",
+                random(-260, 260) + "px"
+            );
+
+
+            setVariable(
+                element,
+                "--duration",
+                random(
+                    options.minDuration,
+                    options.maxDuration
+                ) + "s"
+            );
+
+
+            setVariable(
+                element,
+                "--scale",
+                random(
+                    options.minScale || 0.6,
+                    options.maxScale || 1.3
+                )
+            );
+
+
+            setVariable(
+                element,
+                "--opacity",
+                random(
+                    options.minOpacity || 0.45,
+                    options.maxOpacity || 1
+                )
+            );
+
+
+            setVariable(
+                element,
+                "--rot0",
+                random(-180, 180) + "deg"
+            );
+
+
+            if (options.y !== undefined) {
+
+                setVariable(
+                    element,
+                    "--y0",
+                    options.y + "vh"
+                );
+            }
+
+
+            if (options.leaf) {
+
+                var leafColors = [
+                    ["#b91c1c", "#ef4444"],
+                    ["#c2410c", "#f97316"],
+                    ["#92400e", "#d97706"],
+                    ["#a16207", "#eab308"],
+                    ["#7c2d12", "#ea580c"]
+                ];
+
+                var pair =
+                    leafColors[
+                        Math.floor(
+                            Math.random() *
+                            leafColors.length
+                        )
+                    ];
+
+
+                setVariable(
+                    element,
+                    "--leaf1",
+                    pair[0]
+                );
+
+                setVariable(
+                    element,
+                    "--leaf2",
+                    pair[1]
+                );
+            }
+
+
+            layer.appendChild(element);
 
             return element;
         }
 
 
-        /*
-        ---------------------------------------------------------
-        PARTICULES FLOTTANTES
+        function createParticles(
+            className,
+            count,
+            minDuration,
+            maxDuration,
+            options
+        ) {
 
-        Chaque élément possède :
-        - position différente
-        - vitesse différente
-        - délai différent
-        - amplitude horizontale différente
-        - rotation différente
-        - échelle différente
-        ---------------------------------------------------------
-        */
+            var i;
 
-        function createParticles(className, count, options) {
+            options =
+                options || {};
 
-            options = options || {};
 
-            var durationMin =
-                options.durationMin || 8;
+            options.minDuration =
+                minDuration;
 
-            var durationMax =
-                options.durationMax || 18;
+            options.maxDuration =
+                maxDuration;
 
-            var delayMax =
-                options.delayMax || durationMax;
 
-            for (var i = 0; i < count; i++) {
+            for (i = 0; i < count; i++) {
 
-                var particle =
-                    createElement(className);
-
-                var startX =
-                    random(0, 100);
-
-                var drift =
-                    random(
-                        options.driftMin || -100,
-                        options.driftMax || 100
-                    );
-
-                var rotation =
-                    random(
-                        options.rotationMin || -360,
-                        options.rotationMax || 360
-                    );
-
-                var duration =
-                    random(
-                        durationMin,
-                        durationMax
-                    );
-
-                var scale =
-                    random(
-                        options.scaleMin || 0.6,
-                        options.scaleMax || 1.4
-                    );
-
-                var delay =
-                    random(-delayMax, 0);
-
-                var opacity =
-                    random(
-                        options.opacityMin || 0.35,
-                        options.opacityMax || 1
-                    );
-
-                setStyles(particle, {
-
-                    left: startX + "%",
-
-                    "--drift":
-                        drift + "px",
-
-                    "--rotation":
-                        rotation + "deg",
-
-                    "--scale":
-                        scale,
-
-                    "--particle-opacity":
-                        opacity,
-
-                    animationDuration:
-                        duration + "s",
-
-                    animationDelay:
-                        delay + "s"
-                });
+                createParticle(
+                    className,
+                    options
+                );
             }
         }
 
 
-        /* =====================================================
-           NOËL
-        ===================================================== */
+        /* =================================================
+           NOEL
+        ================================================= */
 
-        if (body.classList.contains("theme-noel")) {
-
-            /*
-            -----------------------------------------------------
-            CIEL NOCTURNE / AURA
-            -----------------------------------------------------
-            */
-
-            var christmasGlow =
-                createElement("christmas-glow");
-
-            christmasGlow.style.animationDelay =
-                random(-5, 0) + "s";
-
-
-            /*
-            -----------------------------------------------------
-            NEIGE
-
-            Beaucoup de flocons mais avec des trajectoires
-            indépendantes.
-            -----------------------------------------------------
-            */
+        if (
+            body.classList.contains(
+                "theme-noel"
+            )
+        ) {
 
             createParticles(
-                "snowflake snow-depth-1",
-                35,
+                "snowflake",
+                70,
+                10,
+                23,
                 {
-                    durationMin: 11,
-                    durationMax: 21,
-                    driftMin: -180,
-                    driftMax: 180,
-                    scaleMin: 0.45,
-                    scaleMax: 0.8,
-                    opacityMin: 0.35,
-                    opacityMax: 0.75
-                }
-            );
-
-            createParticles(
-                "snowflake snow-depth-2",
-                28,
-                {
-                    durationMin: 8,
-                    durationMax: 16,
-                    driftMin: -240,
-                    driftMax: 240,
-                    scaleMin: 0.7,
-                    scaleMax: 1.15,
-                    opacityMin: 0.6,
-                    opacityMax: 1
-                }
-            );
-
-            createParticles(
-                "snowflake snow-depth-3",
-                12,
-                {
-                    durationMin: 6,
-                    durationMax: 12,
-                    driftMin: -300,
-                    driftMax: 300,
-                    scaleMin: 1,
-                    scaleMax: 1.65,
-                    opacityMin: 0.75,
-                    opacityMax: 1
+                    minScale: .45,
+                    maxScale: 1.5,
+                    minOpacity: .45,
+                    maxOpacity: 1
                 }
             );
 
 
-            /*
-            -----------------------------------------------------
-            ÉTOILES
-            -----------------------------------------------------
-            */
+            createParticles(
+                "snow-crystal",
+                14,
+                13,
+                24,
+                {
+                    minScale: .55,
+                    maxScale: 1.15,
+                    minOpacity: .5,
+                    maxOpacity: .9
+                }
+            );
+
 
             createParticles(
                 "star",
-                28,
+                25,
+                2,
+                5,
                 {
-                    durationMin: 2,
-                    durationMax: 5,
-                    driftMin: -20,
-                    driftMax: 20,
-                    scaleMin: 0.5,
-                    scaleMax: 1.8,
-                    opacityMin: 0.25,
-                    opacityMax: 1
+                    minScale: .5,
+                    maxScale: 1.4,
+                    minOpacity: .2,
+                    maxOpacity: 1
                 }
             );
 
-
-            /*
-            -----------------------------------------------------
-            GUIRLANDE
-            -----------------------------------------------------
-            */
-
-            var garland =
-                document.createElement("div");
-
-            garland.className =
-                "christmas-garland";
-
-            body.appendChild(garland);
-
-            var bulbColors = [
-                "red",
-                "gold",
-                "green",
-                "blue",
-                "red",
-                "gold",
-                "green",
-                "blue",
-                "red",
-                "gold",
-                "green",
-                "blue"
-            ];
-
-            bulbColors.forEach(function (color, index) {
-
-                var bulb =
-                    document.createElement("span");
-
-                bulb.className =
-                    "christmas-bulb " + color;
-
-                bulb.style.animationDelay =
-                    (-index * 0.15) + "s";
-
-                garland.appendChild(bulb);
-            });
-
-
-            /*
-            -----------------------------------------------------
-            FLOCONS LUMINEUX
-            -----------------------------------------------------
-            */
 
             createParticles(
-                "christmas-spark",
+                "christmas-light",
                 20,
+                1.5,
+                3,
                 {
-                    durationMin: 3,
-                    durationMax: 7,
-                    driftMin: -140,
-                    driftMax: 140,
-                    scaleMin: 0.5,
-                    scaleMax: 1.4
+                    minScale: .7,
+                    maxScale: 1.2,
+                    minOpacity: .3,
+                    maxOpacity: 1
                 }
             );
 
 
             /*
-            -----------------------------------------------------
-            PÈRE NOËL
+             * Pere Noel / traineau.
+             */
 
-            Construction CSS :
-            tête + bonnet + barbe + corps + sac +
-            traîneau + rennes.
-            -----------------------------------------------------
-            */
+            function createSleigh() {
 
-            function createSanta() {
-
-                if (document.querySelector(".santa-flight")) {
+                if (
+                    document.querySelector(
+                        ".santa-sleigh"
+                    )
+                ) {
                     return;
                 }
 
-                var santa =
+
+                var sleigh =
                     document.createElement("div");
 
-                santa.className =
-                    "santa-flight";
+                sleigh.className =
+                    "santa-sleigh";
 
-                santa.innerHTML =
 
-                    '<div class="santa-trail"></div>' +
+                var snow =
+                    document.createElement("div");
 
-                    '<div class="santa-sleigh-wow">' +
+                snow.className =
+                    "sleigh-snow";
 
-                        '<div class="sleigh-seat"></div>' +
 
-                        '<div class="sleigh-runner-wow runner-one"></div>' +
-                        '<div class="sleigh-runner-wow runner-two"></div>' +
+                var reindeer =
+                    document.createElement("div");
 
-                        '<div class="santa-body">' +
-                            '<div class="santa-belt"></div>' +
-                            '<div class="santa-buckle"></div>' +
-                            '<div class="santa-arm"></div>' +
-                            '<div class="santa-arm santa-arm-two"></div>' +
-                            '<div class="santa-head">' +
-                                '<div class="santa-face"></div>' +
-                                '<div class="santa-beard"></div>' +
-                                '<div class="santa-hat">' +
-                                    '<div class="santa-hat-pom"></div>' +
-                                '</div>' +
-                                '<div class="santa-nose"></div>' +
-                            '</div>' +
-                        '</div>' +
+                reindeer.className =
+                    "sleigh-reindeer";
 
-                        '<div class="santa-gift gift-one"></div>' +
-                        '<div class="santa-gift gift-two"></div>' +
 
-                    '</div>' +
+                var sleighBody =
+                    document.createElement("div");
 
-                    '<div class="reindeer-group">' +
-                        '<div class="reindeer reindeer-one">' +
-                            '<span class="reindeer-antler"></span>' +
-                        '</div>' +
-                        '<div class="reindeer reindeer-two">' +
-                            '<span class="reindeer-antler"></span>' +
-                        '</div>' +
-                        '<div class="reindeer reindeer-three">' +
-                            '<span class="reindeer-antler"></span>' +
-                        '</div>' +
-                    '</div>';
+                sleighBody.className =
+                    "sleigh-body";
 
-                body.appendChild(santa);
 
-                setTimeout(function () {
+                var runner1 =
+                    document.createElement("div");
 
-                    if (santa.parentNode) {
-                        santa.parentNode.removeChild(santa);
-                    }
+                runner1.className =
+                    "sleigh-runner";
 
-                }, 17000);
+
+                var runner2 =
+                    document.createElement("div");
+
+                runner2.className =
+                    "sleigh-runner second";
+
+
+                sleigh.appendChild(snow);
+                sleigh.appendChild(reindeer);
+                sleigh.appendChild(sleighBody);
+                sleigh.appendChild(runner1);
+                sleigh.appendChild(runner2);
+
+
+                body.appendChild(sleigh);
+
+
+                window.setTimeout(
+                    function () {
+
+                        if (
+                            sleigh.parentNode
+                        ) {
+
+                            sleigh.parentNode
+                                .removeChild(
+                                    sleigh
+                                );
+                        }
+
+                    },
+                    16000
+                );
             }
 
-            setTimeout(createSanta, 5000);
 
-            setInterval(createSanta, 36000);
+            window.setTimeout(
+                createSleigh,
+                3000
+            );
+
+
+            window.setInterval(
+                createSleigh,
+                30000
+            );
         }
 
 
-        /* =====================================================
-           RENTRÉE
-        ===================================================== */
+        /* =================================================
+           RENTREE
+        ================================================= */
 
-        if (body.classList.contains("theme-rentree")) {
-
-            /*
-            Cahier / feuilles
-            */
+        if (
+            body.classList.contains(
+                "theme-rentree"
+            )
+        ) {
 
             createParticles(
                 "school-paper",
-                13,
+                15,
+                11,
+                22,
                 {
-                    durationMin: 9,
-                    durationMax: 17,
-                    driftMin: -260,
-                    driftMax: 260,
-                    rotationMin: -180,
-                    rotationMax: 180,
-                    scaleMin: 0.6,
-                    scaleMax: 1.2
+                    minScale: .7,
+                    maxScale: 1.25,
+                    minOpacity: .55,
+                    maxOpacity: .95
                 }
             );
 
-            /*
-            Crayons
-            */
 
             createParticles(
                 "school-pencil",
-                8,
+                7,
+                13,
+                25,
                 {
-                    durationMin: 8,
-                    durationMax: 15,
-                    driftMin: -220,
-                    driftMax: 220,
-                    rotationMin: -500,
-                    rotationMax: 500,
-                    scaleMin: 0.7,
-                    scaleMax: 1.2
-                }
-            );
-
-            /*
-            Petites étoiles / poussière
-            */
-
-            createParticles(
-                "school-spark",
-                20,
-                {
-                    durationMin: 4,
-                    durationMax: 9,
-                    driftMin: -180,
-                    driftMax: 180,
-                    scaleMin: 0.5,
-                    scaleMax: 1.4
-                }
-            );
-
-            /*
-            Règles / traits décoratifs
-            */
-
-            for (var r = 0; r < 5; r++) {
-
-                var line =
-                    createElement("school-ruler");
-
-                line.style.left =
-                    random(0, 100) + "%";
-
-                line.style.top =
-                    random(15, 90) + "%";
-
-                line.style.transform =
-                    "rotate(" +
-                    random(-25, 25) +
-                    "deg)";
-            }
-        }
-
-
-        /* =====================================================
-           SAINT-VALENTIN
-        ===================================================== */
-
-        if (body.classList.contains("theme-saint-valentin")) {
-
-            createParticles(
-                "heart-particle heart-small",
-                28,
-                {
-                    durationMin: 7,
-                    durationMax: 14,
-                    driftMin: -220,
-                    driftMax: 220,
-                    rotationMin: -180,
-                    rotationMax: 180,
-                    scaleMin: 0.5,
-                    scaleMax: 1
-                }
-            );
-
-            createParticles(
-                "heart-particle heart-large",
-                12,
-                {
-                    durationMin: 10,
-                    durationMax: 19,
-                    driftMin: -300,
-                    driftMax: 300,
-                    rotationMin: -240,
-                    rotationMax: 240,
-                    scaleMin: 0.8,
-                    scaleMax: 1.5
-                }
-            );
-
-            createParticles(
-                "love-spark",
-                18,
-                {
-                    durationMin: 3,
-                    durationMax: 7,
-                    driftMin: -120,
-                    driftMax: 120
+                    minScale: .7,
+                    maxScale: 1.15,
+                    minOpacity: .6,
+                    maxOpacity: 1
                 }
             );
         }
 
 
-        /* =====================================================
-           PÂQUES
-        ===================================================== */
+        /* =================================================
+           SAINT VALENTIN
+        ================================================= */
 
-        if (body.classList.contains("theme-paques")) {
+        if (
+            body.classList.contains(
+                "theme-saint-valentin"
+            )
+        ) {
+
+            createParticles(
+                "heart-particle",
+                30,
+                9,
+                19,
+                {
+                    minScale: .55,
+                    maxScale: 1.3,
+                    minOpacity: .45,
+                    maxOpacity: .95
+                }
+            );
+        }
+
+
+        /* =================================================
+           PAQUES
+        ================================================= */
+
+        if (
+            body.classList.contains(
+                "theme-paques"
+            )
+        ) {
 
             createParticles(
                 "easter-egg",
-                15,
+                16,
+                11,
+                21,
                 {
-                    durationMin: 9,
-                    durationMax: 17,
-                    driftMin: -280,
-                    driftMax: 280,
-                    rotationMin: -240,
-                    rotationMax: 240,
-                    scaleMin: 0.6,
-                    scaleMax: 1.35
+                    minScale: .65,
+                    maxScale: 1.2,
+                    minOpacity: .65,
+                    maxOpacity: 1
                 }
             );
+
 
             createParticles(
                 "spring-flower",
                 22,
+                9,
+                19,
                 {
-                    durationMin: 8,
-                    durationMax: 16,
-                    driftMin: -220,
-                    driftMax: 220,
-                    rotationMin: -360,
-                    rotationMax: 360,
-                    scaleMin: 0.5,
-                    scaleMax: 1.3
-                }
-            );
-
-            createParticles(
-                "butterfly",
-                7,
-                {
-                    durationMin: 11,
-                    durationMax: 20,
-                    driftMin: -350,
-                    driftMax: 350,
-                    rotationMin: -20,
-                    rotationMax: 20,
-                    scaleMin: 0.7,
-                    scaleMax: 1.25
-                }
-            );
-
-            createParticles(
-                "spring-spark",
-                18,
-                {
-                    durationMin: 4,
-                    durationMax: 9,
-                    driftMin: -160,
-                    driftMax: 160
+                    minScale: .6,
+                    maxScale: 1.2,
+                    minOpacity: .45,
+                    maxOpacity: .9
                 }
             );
         }
 
 
-        /* =====================================================
+        /* =================================================
            HALLOWEEN
-        ===================================================== */
+        ================================================= */
 
-        if (body.classList.contains("theme-halloween")) {
+        if (
+            body.classList.contains(
+                "theme-halloween"
+            )
+        ) {
 
             var moon =
                 document.createElement("div");
@@ -616,78 +521,55 @@
             body.appendChild(fog);
 
 
-            var fogTwo =
-                document.createElement("div");
-
-            fogTwo.className =
-                "halloween-fog fog-two";
-
-            body.appendChild(fogTwo);
-
-
             createParticles(
                 "bat",
-                9,
+                10,
+                11,
+                22,
                 {
-                    durationMin: 8,
-                    durationMax: 16,
-                    driftMin: -350,
-                    driftMax: 350,
-                    rotationMin: -30,
-                    rotationMax: 30,
-                    scaleMin: 0.6,
-                    scaleMax: 1.25
+                    minScale: .65,
+                    maxScale: 1.2,
+                    minOpacity: .7,
+                    maxOpacity: 1
                 }
             );
+
 
             createParticles(
                 "pumpkin",
                 9,
-                {
-                    durationMin: 6,
-                    durationMax: 13,
-                    driftMin: -220,
-                    driftMax: 220,
-                    rotationMin: -90,
-                    rotationMax: 90,
-                    scaleMin: 0.6,
-                    scaleMax: 1.2
-                }
-            );
-
-            createParticles(
-                "ghost",
                 5,
+                11,
                 {
-                    durationMin: 9,
-                    durationMax: 17,
-                    driftMin: -280,
-                    driftMax: 280,
-                    scaleMin: 0.6,
-                    scaleMax: 1.2
+                    minScale: .75,
+                    maxScale: 1.2,
+                    minOpacity: .7,
+                    maxOpacity: 1
                 }
             );
         }
 
 
-        /* =====================================================
+        /* =================================================
            NOUVEL AN
-        ===================================================== */
+        ================================================= */
 
-        if (body.classList.contains("theme-nouvel-an")) {
+        if (
+            body.classList.contains(
+                "theme-nouvel-an"
+            )
+        ) {
 
             createParticles(
                 "newyear-star",
-                55,
+                60,
+                2,
+                6,
                 {
-                    durationMin: 2,
-                    durationMax: 5,
-                    driftMin: -40,
-                    driftMax: 40,
-                    scaleMin: 0.5,
-                    scaleMax: 1.8,
-                    opacityMin: 0.2,
-                    opacityMax: 1
+                    minScale: .5,
+                    maxScale: 1.5,
+                    minOpacity: .2,
+                    maxOpacity: 1
                 }
             );
 
@@ -700,53 +582,70 @@
                 firework.className =
                     "firework";
 
+
                 firework.style.left =
-                    random(12, 88) + "%";
+                    random(10, 85) + "%";
+
 
                 firework.style.top =
-                    random(10, 52) + "%";
+                    random(8, 48) + "%";
 
-                firework.style.setProperty(
-                    "--firework-scale",
-                    random(0.7, 1.45)
+
+                layer.appendChild(
+                    firework
                 );
 
-                firework.style.animationDelay =
-                    random(0, 1.2) + "s";
 
-                layer.appendChild(firework);
+                window.setTimeout(
+                    function () {
 
-                setTimeout(function () {
+                        if (
+                            firework.parentNode
+                        ) {
 
-                    if (firework.parentNode) {
-                        firework.parentNode.removeChild(firework);
-                    }
+                            firework.parentNode
+                                .removeChild(
+                                    firework
+                                );
+                        }
 
-                }, 3600);
+                    },
+                    3000
+                );
             }
 
 
-            for (var f = 0; f < 7; f++) {
+            var j;
 
-                setTimeout(
+            for (
+                j = 0;
+                j < 6;
+                j++
+            ) {
+
+                window.setTimeout(
                     createFirework,
-                    f * 650
+                    j * 800
                 );
             }
 
 
-            setInterval(
+            window.setInterval(
                 createFirework,
-                2800
+                3000
             );
         }
 
 
-        /* =====================================================
-           ÉTÉ
-        ===================================================== */
+        /* =================================================
+           ETE
+        ================================================= */
 
-        if (body.classList.contains("theme-ete")) {
+        if (
+            body.classList.contains(
+                "theme-ete"
+            )
+        ) {
 
             var sun =
                 document.createElement("div");
@@ -755,130 +654,43 @@
                 "sun";
 
             body.appendChild(sun);
-
-
-            createParticles(
-                "summer-spark",
-                24,
-                {
-                    durationMin: 4,
-                    durationMax: 10,
-                    driftMin: -180,
-                    driftMax: 180,
-                    scaleMin: 0.4,
-                    scaleMax: 1.2
-                }
-            );
-
-            createParticles(
-                "summer-bubble",
-                15,
-                {
-                    durationMin: 8,
-                    durationMax: 17,
-                    driftMin: -240,
-                    driftMax: 240,
-                    scaleMin: 0.5,
-                    scaleMax: 1.3
-                }
-            );
-
-            createParticles(
-                "summer-cloud",
-                5,
-                {
-                    durationMin: 30,
-                    durationMax: 50,
-                    driftMin: -300,
-                    driftMax: 300,
-                    scaleMin: 0.8,
-                    scaleMax: 1.5
-                }
-            );
         }
 
 
-        /* =====================================================
+        /* =================================================
            AUTOMNE
-        ===================================================== */
+        ================================================= */
 
-        if (body.classList.contains("theme-automne")) {
-
-            /*
-            Plusieurs familles de feuilles.
-            Chaque feuille possède une trajectoire différente.
-            */
-
-            createParticles(
-                "leaf-particle leaf-orange",
-                22,
-                {
-                    durationMin: 7,
-                    durationMax: 15,
-                    driftMin: -320,
-                    driftMax: 320,
-                    rotationMin: -720,
-                    rotationMax: 720,
-                    scaleMin: 0.55,
-                    scaleMax: 1.25
-                }
-            );
+        if (
+            body.classList.contains(
+                "theme-automne"
+            )
+        ) {
 
             createParticles(
-                "leaf-particle leaf-red",
-                17,
+                "leaf-particle",
+                40,
+                9,
+                20,
                 {
-                    durationMin: 9,
-                    durationMax: 18,
-                    driftMin: -420,
-                    driftMax: 420,
-                    rotationMin: -900,
-                    rotationMax: 900,
-                    scaleMin: 0.6,
-                    scaleMax: 1.35
-                }
-            );
-
-            createParticles(
-                "leaf-particle leaf-yellow",
-                13,
-                {
-                    durationMin: 6,
-                    durationMax: 13,
-                    driftMin: -260,
-                    driftMax: 260,
-                    rotationMin: -500,
-                    rotationMax: 500,
-                    scaleMin: 0.5,
-                    scaleMax: 1.15
-                }
-            );
-
-
-            createParticles(
-                "autumn-dust",
-                25,
-                {
-                    durationMin: 5,
-                    durationMax: 11,
-                    driftMin: -240,
-                    driftMax: 240,
-                    scaleMin: 0.4,
-                    scaleMax: 1
+                    leaf: true,
+                    minScale: .55,
+                    maxScale: 1.3,
+                    minOpacity: .55,
+                    maxOpacity: 1
                 }
             );
         }
-
     }
 
 
-    /*
-    =========================================================
-    INITIALISATION
-    =========================================================
-    */
+    /* =====================================================
+       DEMARRAGE ROBUSTE
+    ===================================================== */
 
-    if (document.readyState === "loading") {
+    if (
+        document.readyState === "loading"
+    ) {
 
         document.addEventListener(
             "DOMContentLoaded",
@@ -888,8 +700,6 @@
     } else {
 
         initSeasonal();
-
     }
 
 })();
-

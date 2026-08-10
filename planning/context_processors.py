@@ -1,7 +1,15 @@
+```python
 from .models import SiteSettings
 
 
 def event_mode(request):
+    """
+    Rend disponibles dans tous les templates :
+    - event_mode
+    - event_mode_class
+
+    La classe CSS est directement utilisable sur le <body>.
+    """
 
     settings = SiteSettings.objects.first()
 
@@ -12,7 +20,6 @@ def event_mode(request):
         }
 
     classes = {
-        "NONE": "",
         "NOEL": "theme-noel",
         "HALLOWEEN": "theme-halloween",
         "PAQUES": "theme-paques",
@@ -23,19 +30,26 @@ def event_mode(request):
         "SAINT_VALENTIN": "theme-saint-valentin",
     }
 
+    event_mode_value = settings.event_mode or "NONE"
+
     return {
-        "event_mode": settings.event_mode,
+        "event_mode": event_mode_value,
         "event_mode_class": classes.get(
-            settings.event_mode,
+            event_mode_value,
             "",
         ),
     }
 
 
 def site_settings(request):
+    """
+    Rend les paramètres généraux du site disponibles
+    dans tous les templates.
+    """
 
     settings = SiteSettings.objects.first()
 
     return {
         "site_settings": settings,
     }
+```

@@ -1,4 +1,6 @@
+```html
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -48,6 +50,11 @@
             overflow-x: hidden;
         }
 
+
+        /* =================================================
+           NAVBAR
+        ================================================= */
+
         .navbar {
             background-color: #1e293b;
 
@@ -57,12 +64,20 @@
 
         .navbar-brand {
             color: white !important;
+
             font-weight: bold;
+
             font-size: 24px;
         }
 
+
+        /* =================================================
+           CARTES
+        ================================================= */
+
         .card {
             border: none;
+
             border-radius: 15px;
 
             box-shadow:
@@ -77,24 +92,66 @@
             transform: translateY(-5px);
         }
 
+
+        /* =================================================
+           BOUTONS
+        ================================================= */
+
         .btn-primary {
             background-color: #2563eb;
+
             border: none;
         }
 
         .btn-success {
             background-color: #16a34a;
+
             border: none;
         }
 
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
         footer {
             margin-top: 80px;
+
             padding: 30px;
 
             text-align: center;
 
             background-color: #1e293b;
+
             color: white;
+        }
+
+
+        /* =================================================
+           COUCHE SAISONNIÈRE
+
+           Elle existe directement dans le HTML.
+           Le JavaScript ne doit donc PAS la créer.
+        ================================================= */
+
+        #season-layer,
+        .season-layer {
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            pointer-events: none;
+
+            overflow: hidden;
+
+            z-index: 9990;
+        }
+
+        .season-particle {
+            pointer-events: none;
         }
 
     </style>
@@ -106,18 +163,23 @@
 
     <link
         rel="stylesheet"
-        href="{% static 'planning/seasonal.css' %}?v=200"
+        href="{% static 'planning/seasonal.css' %}?v=300"
     >
 
 </head>
 
 
-<body class="{{ event_mode_class }}">
+<body>
+
 
     <!-- =====================================================
-         COUCHE DES ANIMATIONS
-         Créée ici directement.
-         Le JavaScript ne peut donc plus échouer à la créer.
+         COUCHE DES ANIMATIONS SAISONNIÈRES
+
+         IMPORTANT :
+         Cette couche est créée directement dans le HTML.
+
+         seasonal.js doit uniquement l'utiliser.
+         Il ne doit PAS essayer de la recréer.
     ====================================================== -->
 
     <div
@@ -149,7 +211,7 @@
 
     <!-- =====================================================
          CONTENU
-    ===================================================== -->
+    ====================================================== -->
 
     <main class="container mt-5">
 
@@ -162,7 +224,7 @@
 
     <!-- =====================================================
          FOOTER
-    ===================================================== -->
+    ====================================================== -->
 
     <footer>
 
@@ -183,15 +245,17 @@
     <!-- =====================================================
          ANIMATIONS SAISONNIÈRES
          
-         IMPORTANT :
-         PAS DE defer.
-         Le layer existe déjà dans le HTML.
+         Le layer existe déjà au moment où ce script
+         est exécuté.
+
+         PAS DE defer volontairement.
     ====================================================== -->
 
     <script
-        src="{% static 'planning/seasonal.js' %}?v=200"
+        src="{% static 'planning/seasonal.js' %}?v=300"
     ></script>
 
 </body>
 
 </html>
+```

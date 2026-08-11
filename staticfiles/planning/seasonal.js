@@ -1,1206 +1,1007 @@
+(function () {
+"use strict";
+
+
 /* =========================================================
    PLANNING FOYER MDL
    THEMES SAISONNIERS
-   VERSION ATMOSPHERIQUE + PERSONNAGES
+   VERSION ATMOSPHERIQUE + ELEMENTS INDEPENDANTS
 ========================================================= */
 
-(function () {
-    "use strict";
 
-    function initSeasonal() {
+function initSeasonal() {
 
-        var body = document.body;
+    var body = document.body;
+    var layer = document.getElementById("season-layer");
 
-        if (!body) {
-            return;
-        }
+    if (!body || !layer) {
+        return;
+    }
 
-        /* =====================================================
-           COUCHE
-        ===================================================== */
-
-        var oldLayer = document.querySelector(".season-layer");
-
-        if (oldLayer) {
-            oldLayer.remove();
-        }
-
-        var layer = document.createElement("div");
-        layer.className = "season-layer";
-
-        body.appendChild(layer);
+    layer.innerHTML = "";
 
 
-        /* =====================================================
-           OUTILS
-        ===================================================== */
+    /* =====================================================
+       DETECTION DU THEME
+    ===================================================== */
 
-        function random(min, max) {
-            return min + Math.random() * (max - min);
-        }
+    var mode =
+        body.classList.contains("theme-noel") ? "noel" :
+        body.classList.contains("theme-halloween") ? "halloween" :
+        body.classList.contains("theme-paques") ? "paques" :
+        body.classList.contains("theme-rentree") ? "rentree" :
+        body.classList.contains("theme-saint-valentin") ? "saint-valentin" :
+        body.classList.contains("theme-nouvel-an") ? "nouvel-an" :
+        body.classList.contains("theme-ete") ? "ete" :
+        body.classList.contains("theme-automne") ? "automne" :
+        null;
 
-        function randomInt(min, max) {
-            return Math.floor(random(min, max + 1));
-        }
-
-        function pick(array) {
-            return array[
-                Math.floor(Math.random() * array.length)
-            ];
-        }
-
-        function css(element, property, value) {
-            element.style.setProperty(property, value);
-        }
+    if (!mode) {
+        return;
+    }
 
 
-        /* =====================================================
-           PARTICULES
-        ===================================================== */
+    /* =====================================================
+       OUTILS
+    ===================================================== */
 
-        function createParticle(
-            className,
-            minDuration,
-            maxDuration,
-            options
-        ) {
+    function random(min, max) {
+        return min + Math.random() * (max - min);
+    }
 
-            options = options || {};
+    function randomInt(min, max) {
+        return Math.floor(random(min, max + 1));
+    }
 
-            var particle = document.createElement("div");
+    function create(className) {
 
-            particle.className =
-                "season-particle " + className;
+        var element = document.createElement("div");
 
-            var x = random(
-                options.minX !== undefined ? options.minX : 0,
-                options.maxX !== undefined ? options.maxX : 100
+        element.className =
+            "season-particle " + className;
+
+        layer.appendChild(element);
+
+        return element;
+    }
+
+    function setVar(element, name, value) {
+        element.style.setProperty(name, value);
+    }
+
+    function setPosition(element, x, y) {
+        setVar(element, "--x", x + "%");
+        setVar(element, "--y", y + "%");
+    }
+
+    function setFlight(element) {
+
+        setVar(element, "--sway1", random(-18, 18) + "vw");
+        setVar(element, "--sway2", random(-24, 24) + "vw");
+        setVar(element, "--sway3", random(-30, 30) + "vw");
+
+        setVar(element, "--swayY1", random(-10, 10) + "vh");
+        setVar(element, "--swayY2", random(-15, 15) + "vh");
+        setVar(element, "--swayY3", random(-20, 20) + "vh");
+
+        setVar(element, "--duration", random(14, 24) + "s");
+        setVar(element, "--delay", random(-24, 0) + "s");
+    }
+
+
+    /* =====================================================
+       NOEL
+    ===================================================== */
+
+    if (mode === "noel") {
+
+        /* -------------------------------------------------
+           LUNE
+        ------------------------------------------------- */
+
+        var moon = create("christmas-moon");
+
+        moon.style.left = "auto";
+        moon.style.top = "7%";
+        moon.style.right = "7%";
+
+
+        /* -------------------------------------------------
+           45 FLOCONS
+        ------------------------------------------------- */
+
+        for (var i = 0; i < 45; i++) {
+
+            var snow = create("snowflake");
+
+            setVar(
+                snow,
+                "--x",
+                random(-5, 100) + "%"
             );
 
-            var duration = random(
-                minDuration,
-                maxDuration
-            );
-
-            var delay =
-                options.delayRandom === false
-                    ? 0
-                    : -random(0, duration);
-
-            var size =
-                options.sizeMin !== undefined
-                    ? random(
-                        options.sizeMin,
-                        options.sizeMax
-                    )
-                    : random(.7, 1.4);
-
-            var opacity =
-                options.opacityMin !== undefined
-                    ? random(
-                        options.opacityMin,
-                        options.opacityMax
-                    )
-                    : random(.5, .95);
-
-            var drift =
-                options.driftMin !== undefined
-                    ? random(
-                        options.driftMin,
-                        options.driftMax
-                    )
-                    : random(-120, 120);
-
-            var sway1 = random(-160, 160);
-            var sway2 = random(-180, 180);
-            var sway3 = random(-180, 180);
-            var sway4 = random(-180, 180);
-
-            var swayY1 = random(-80, 80);
-            var swayY2 = random(-120, 120);
-            var swayY3 = random(-120, 120);
-
-            particle.style.left = x + "%";
-            particle.style.animationDuration =
-                duration + "s";
-            particle.style.animationDelay =
-                delay + "s";
-
-            css(
-                particle,
+            setVar(
+                snow,
                 "--size",
-                size + "px"
+                random(4, 11) + "px"
             );
 
-            css(
-                particle,
+            setVar(
+                snow,
                 "--opacity",
-                opacity
+                random(.45, .95)
             );
 
-            css(
-                particle,
+            setVar(
+                snow,
                 "--drift",
-                drift + "px"
+                random(-90, 90) + "px"
             );
 
-            css(
-                particle,
+            setVar(
+                snow,
+                "--duration",
+                random(13, 25) + "s"
+            );
+
+            setVar(
+                snow,
+                "--delay",
+                random(-25, 0) + "s"
+            );
+        }
+
+
+        /* -------------------------------------------------
+           ETOILES
+        ------------------------------------------------- */
+
+        for (var s = 0; s < 22; s++) {
+
+            var star = create("star");
+
+            setPosition(
+                star,
+                random(3, 97),
+                random(3, 58)
+            );
+
+            setVar(
+                star,
+                "--size",
+                random(3, 7) + "px"
+            );
+
+            setVar(
+                star,
+                "--opacity",
+                random(.35, .9)
+            );
+
+            setVar(
+                star,
+                "--duration",
+                random(3, 7) + "s"
+            );
+
+            setVar(
+                star,
+                "--delay",
+                random(-7, 0) + "s"
+            );
+        }
+
+
+        /* -------------------------------------------------
+           LUMIERES
+           Elles restent en place.
+        ------------------------------------------------- */
+
+        var lightColors = [
+            "#fff6b0",
+            "#ff6b6b",
+            "#8be9fd",
+            "#ffd166",
+            "#ffffff"
+        ];
+
+        for (var l = 0; l < 28; l++) {
+
+            var light = create("christmas-light");
+
+            setPosition(
+                light,
+                random(4, 96),
+                random(8, 72)
+            );
+
+            setVar(
+                light,
+                "--light-color",
+                lightColors[
+                    randomInt(0, lightColors.length - 1)
+                ]
+            );
+
+            setVar(
+                light,
+                "--duration",
+                random(2.5, 5.5) + "s"
+            );
+
+            setVar(
+                light,
+                "--delay",
+                random(-5, 0) + "s"
+            );
+        }
+
+
+        /* -------------------------------------------------
+           PERE NOEL
+           Structure correspondant au CSS existant.
+        ------------------------------------------------- */
+
+        var santa = create("santa-sleigh");
+
+        var sleighBody = document.createElement("div");
+        sleighBody.className = "sleigh-body";
+        santa.appendChild(sleighBody);
+
+        var runner1 = document.createElement("div");
+        runner1.className = "sleigh-runner";
+        santa.appendChild(runner1);
+
+        var runner2 = document.createElement("div");
+        runner2.className = "sleigh-runner second";
+        santa.appendChild(runner2);
+
+        var reindeer = document.createElement("div");
+        reindeer.className = "sleigh-reindeer";
+        santa.appendChild(reindeer);
+
+        var sleighSnow = document.createElement("div");
+        sleighSnow.className = "sleigh-snow";
+        santa.appendChild(sleighSnow);
+
+        /*
+         * Corps du Père Noël.
+         * On crée plusieurs éléments plutôt qu'une simple forme
+         * afin que le CSS puisse réellement lui donner une silhouette.
+         */
+
+        var santaBody = document.createElement("div");
+        santaBody.className = "santa-body";
+        santa.appendChild(santaBody);
+
+        var santaHead = document.createElement("div");
+        santaHead.className = "santa-head";
+        santa.appendChild(santaHead);
+
+        var santaHat = document.createElement("div");
+        santaHat.className = "santa-hat";
+        santa.appendChild(santaHat);
+
+        var santaBeard = document.createElement("div");
+        santaBeard.className = "santa-beard";
+        santa.appendChild(santaBeard);
+
+        var santaArm = document.createElement("div");
+        santaArm.className = "santa-arm";
+        santa.appendChild(santaArm);
+
+        var santaBoot = document.createElement("div");
+        santaBoot.className = "santa-boot";
+        santa.appendChild(santaBoot);
+    }
+
+
+    /* =====================================================
+       RENTREE
+    ===================================================== */
+
+    if (mode === "rentree") {
+
+        /* Beaucoup moins dense que la neige,
+           mais chaque élément possède son vol propre. */
+
+        for (var p = 0; p < 18; p++) {
+
+            var paper = create("school-paper");
+
+            setVar(
+                paper,
+                "--x",
+                random(-5, 100) + "%"
+            );
+
+            setVar(
+                paper,
+                "--w",
+                random(20, 34) + "px"
+            );
+
+            setVar(
+                paper,
+                "--h",
+                random(28, 46) + "px"
+            );
+
+            setVar(
+                paper,
                 "--sway1",
-                sway1 + "px"
+                random(-25, 25) + "vw"
             );
 
-            css(
-                particle,
+            setVar(
+                paper,
                 "--sway2",
-                sway2 + "px"
+                random(-30, 30) + "vw"
             );
 
-            css(
-                particle,
+            setVar(
+                paper,
                 "--sway3",
-                sway3 + "px"
+                random(-35, 35) + "vw"
             );
 
-            css(
-                particle,
-                "--sway4",
-                sway4 + "px"
+            setVar(
+                paper,
+                "--duration",
+                random(15, 25) + "s"
             );
 
-            css(
-                particle,
+            setVar(
+                paper,
+                "--delay",
+                random(-25, 0) + "s"
+            );
+        }
+
+
+        for (var cr = 0; cr < 12; cr++) {
+
+            var pencil = create("school-pencil");
+
+            setVar(
+                pencil,
+                "--x",
+                random(-5, 100) + "%"
+            );
+
+            setVar(
+                pencil,
+                "--sway1",
+                random(-30, 30) + "vw"
+            );
+
+            setVar(
+                pencil,
+                "--sway2",
+                random(-35, 35) + "vw"
+            );
+
+            setVar(
+                pencil,
+                "--sway3",
+                random(-40, 40) + "vw"
+            );
+
+            setVar(
+                pencil,
+                "--duration",
+                random(17, 28) + "s"
+            );
+
+            setVar(
+                pencil,
+                "--delay",
+                random(-28, 0) + "s"
+            );
+        }
+    }
+
+
+    /* =====================================================
+       SAINT VALENTIN
+    ===================================================== */
+
+    if (mode === "saint-valentin") {
+
+        var heartColors = [
+            "#e11d48",
+            "#f43f5e",
+            "#fb7185",
+            "#be123c",
+            "#ec4899",
+            "#fda4af"
+        ];
+
+        for (var h = 0; h < 20; h++) {
+
+            var heart = create("heart-particle");
+
+            setVar(
+                heart,
+                "--x",
+                random(-5, 100) + "%"
+            );
+
+            setVar(
+                heart,
+                "--size",
+                random(11, 24) + "px"
+            );
+
+            setVar(
+                heart,
+                "--heart-color",
+                heartColors[
+                    randomInt(0, heartColors.length - 1)
+                ]
+            );
+
+            setVar(
+                heart,
+                "--sway1",
+                random(-20, 20) + "vw"
+            );
+
+            setVar(
+                heart,
+                "--sway2",
+                random(-30, 30) + "vw"
+            );
+
+            setVar(
+                heart,
+                "--sway3",
+                random(-35, 35) + "vw"
+            );
+
+            setVar(
+                heart,
+                "--duration",
+                random(15, 25) + "s"
+            );
+
+            setVar(
+                heart,
+                "--delay",
+                random(-25, 0) + "s"
+            );
+        }
+    }
+
+
+    /* =====================================================
+       PAQUES
+    ===================================================== */
+
+    if (mode === "paques") {
+
+        var eggColors = [
+            ["#f9a8d4", "#db2777"],
+            ["#93c5fd", "#2563eb"],
+            ["#fde68a", "#f59e0b"],
+            ["#86efac", "#16a34a"]
+        ];
+
+        for (var e = 0; e < 20; e++) {
+
+            var egg = create("easter-egg");
+
+            var palette =
+                eggColors[
+                    randomInt(0, eggColors.length - 1)
+                ];
+
+            setVar(
+                egg,
+                "--x",
+                random(-5, 100) + "%"
+            );
+
+            setVar(
+                egg,
+                "--w",
+                random(22, 34) + "px"
+            );
+
+            setVar(
+                egg,
+                "--h",
+                random(31, 46) + "px"
+            );
+
+            setVar(
+                egg,
+                "--egg-light",
+                palette[0]
+            );
+
+            setVar(
+                egg,
+                "--egg-color",
+                palette[1]
+            );
+
+            setVar(
+                egg,
+                "--sway1",
+                random(-20, 20) + "vw"
+            );
+
+            setVar(
+                egg,
+                "--sway2",
+                random(-28, 28) + "vw"
+            );
+
+            setVar(
+                egg,
+                "--sway3",
+                random(-35, 35) + "vw"
+            );
+
+            setVar(
+                egg,
+                "--duration",
+                random(15, 25) + "s"
+            );
+
+            setVar(
+                egg,
+                "--delay",
+                random(-25, 0) + "s"
+            );
+        }
+
+
+        for (var f = 0; f < 18; f++) {
+
+            var flower = create("spring-flower");
+
+            setPosition(
+                flower,
+                random(2, 98),
+                random(8, 90)
+            );
+
+            setVar(
+                flower,
+                "--size",
+                random(5, 9) + "px"
+            );
+
+            setVar(
+                flower,
+                "--flower-color",
+                [
+                    "#f9a8d4",
+                    "#fca5a5",
+                    "#bfdbfe",
+                    "#c4b5fd",
+                    "#fde68a"
+                ][randomInt(0, 4)]
+            );
+
+            setVar(
+                flower,
+                "--flower-center",
+                "#facc15"
+            );
+
+            setVar(
+                flower,
+                "--sway",
+                random(15, 55) + "px"
+            );
+
+            setVar(
+                flower,
+                "--duration",
+                random(4, 8) + "s"
+            );
+
+            setVar(
+                flower,
+                "--delay",
+                random(-8, 0) + "s"
+            );
+        }
+    }
+
+
+    /* =====================================================
+       HALLOWEEN
+    ===================================================== */
+
+    if (mode === "halloween") {
+
+        var halloweenMoon = create("halloween-moon");
+
+        halloweenMoon.style.left = "auto";
+        halloweenMoon.style.top = "7%";
+        halloweenMoon.style.right = "9%";
+
+
+        var fog = create("halloween-fog");
+
+
+        /* Chauves-souris */
+        for (var b = 0; b < 12; b++) {
+
+            var bat = create("bat");
+
+            setVar(
+                bat,
+                "--x",
+                random(-10, 100) + "%"
+            );
+
+            setVar(
+                bat,
+                "--y",
+                random(8, 55) + "%"
+            );
+
+            setVar(
+                bat,
+                "--sway1",
+                random(10, 35) + "vw"
+            );
+
+            setVar(
+                bat,
+                "--sway2",
+                random(35, 75) + "vw"
+            );
+
+            setVar(
+                bat,
+                "--sway3",
+                random(70, 120) + "vw"
+            );
+
+            setVar(
+                bat,
                 "--swayY1",
-                swayY1 + "px"
+                random(-8, 8) + "vh"
             );
 
-            css(
-                particle,
+            setVar(
+                bat,
                 "--swayY2",
-                swayY2 + "px"
+                random(-15, 15) + "vh"
             );
 
-            css(
-                particle,
+            setVar(
+                bat,
                 "--swayY3",
-                swayY3 + "px"
+                random(-20, 20) + "vh"
             );
 
-            if (options.top !== undefined) {
-                particle.style.top =
-                    options.top;
-            }
+            setVar(
+                bat,
+                "--duration",
+                random(15, 25) + "s"
+            );
 
-            if (options.bottom !== undefined) {
-                particle.style.bottom =
-                    options.bottom;
-            }
-
-            layer.appendChild(particle);
-
-            return particle;
+            setVar(
+                bat,
+                "--delay",
+                random(-25, 0) + "s"
+            );
         }
 
 
-        function createParticles(
-            className,
-            count,
-            minDuration,
-            maxDuration,
-            options
-        ) {
+        /* Citrouilles */
+        for (var pu = 0; pu < 8; pu++) {
 
-            var i;
+            var pumpkin = create("pumpkin");
 
-            for (i = 0; i < count; i++) {
+            setVar(
+                pumpkin,
+                "--x",
+                random(3, 94) + "%"
+            );
 
-                createParticle(
-                    className,
-                    minDuration,
-                    maxDuration,
-                    options
-                );
-            }
+            setVar(
+                pumpkin,
+                "--bottom",
+                random(3, 15) + "%"
+            );
+
+            setVar(
+                pumpkin,
+                "--size",
+                random(30, 52) + "px"
+            );
+
+            setVar(
+                pumpkin,
+                "--duration",
+                random(3, 6) + "s"
+            );
+
+            setVar(
+                pumpkin,
+                "--delay",
+                random(-6, 0) + "s"
+            );
+        }
+    }
+
+
+    /* =====================================================
+       NOUVEL AN
+    ===================================================== */
+
+    if (mode === "nouvel-an") {
+
+        for (var ns = 0; ns < 35; ns++) {
+
+            var newStar = create("newyear-star");
+
+            setPosition(
+                newStar,
+                random(2, 98),
+                random(3, 72)
+            );
+
+            setVar(
+                newStar,
+                "--size",
+                random(2, 6) + "px"
+            );
+
+            setVar(
+                newStar,
+                "--duration",
+                random(2, 5) + "s"
+            );
+
+            setVar(
+                newStar,
+                "--delay",
+                random(-5, 0) + "s"
+            );
         }
 
 
-        /* =====================================================
-           NOËL
-        ===================================================== */
+        function launchFirework() {
 
-        if (body.classList.contains("theme-noel")) {
+            if (!document.body.classList.contains("theme-nouvel-an")) {
+                return;
+            }
 
-            /*
-             * IMPORTANT :
-             * 45 vrais flocons.
-             * Les lumières ne tombent plus.
-             */
+            var firework = create("firework");
 
-            createParticles(
-                "snowflake",
-                45,
-                16,
-                28,
-                {
-                    sizeMin: 3,
-                    sizeMax: 10,
-                    opacityMin: .45,
-                    opacityMax: .95,
-                    driftMin: -170,
-                    driftMax: 170
-                }
+            setVar(
+                firework,
+                "--fire-x",
+                random(8, 92) + "%"
             );
 
-
-            /*
-             * Étoiles discrètes dans le ciel.
-             */
-
-            createParticles(
-                "star",
-                18,
-                4,
-                8,
-                {
-                    sizeMin: 2,
-                    sizeMax: 6,
-                    opacityMin: .35,
-                    opacityMax: .95,
-                    delayRandom: true
-                }
+            setVar(
+                firework,
+                "--fire-y",
+                random(8, 48) + "%"
             );
 
-
-            /*
-             * Guirlande lumineuse :
-             * quelques points fixes qui scintillent.
-             */
-
-            var lightColors = [
-                "#fff4c2",
-                "#ffd166",
-                "#ffe9a8",
+            var colors = [
                 "#ffffff",
-                "#bfe9ff"
+                "#facc15",
+                "#60a5fa",
+                "#f472b6",
+                "#a78bfa",
+                "#34d399"
             ];
 
-            var lightCount = 12;
+            setVar(
+                firework,
+                "--fire-color",
+                colors[
+                    randomInt(0, colors.length - 1)
+                ]
+            );
 
-            for (var li = 0; li < lightCount; li++) {
+            setTimeout(function () {
 
-                var light = createParticle(
-                    "christmas-light",
-                    3.5,
-                    6,
-                    {
-                        minX: 8,
-                        maxX: 92,
-                        sizeMin: 5,
-                        sizeMax: 9,
-                        opacityMin: .35,
-                        opacityMax: .9
-                    }
-                );
-
-                light.style.top =
-                    random(8, 55) + "%";
-
-                css(
-                    light,
-                    "--light-color",
-                    pick(lightColors)
-                );
-            }
-
-
-            /*
-             * Père Noël.
-             *
-             * SVG autonome : aucune dépendance supplémentaire
-             * au CSS pour dessiner le personnage.
-             */
-
-            function createSanta() {
-
-                if (
-                    document.querySelector(
-                        ".santa-sleigh"
-                    )
-                ) {
-                    return;
+                if (firework.parentNode) {
+                    firework.parentNode.removeChild(firework);
                 }
 
-                var santa =
-                    document.createElement("div");
-
-                santa.className =
-                    "santa-sleigh";
-
-                santa.innerHTML =
-
-                    '<svg ' +
-                    'viewBox="0 0 560 220" ' +
-                    'xmlns="http://www.w3.org/2000/svg" ' +
-                    'aria-hidden="true">' +
-
-                    /*
-                     * TRAÎNÉE DE NEIGE
-                     */
-
-                    '<g opacity=".65">' +
-                        '<ellipse cx="95" cy="191" rx="75" ry="12" fill="#ffffff"/>' +
-                        '<ellipse cx="175" cy="198" rx="85" ry="10" fill="#dff4ff"/>' +
-                    '</g>' +
-
-
-                    /*
-                     * RENNE
-                     */
-
-                    '<g transform="translate(360 54)">' +
-
-                        '<ellipse ' +
-                            'cx="60" cy="82" ' +
-                            'rx="55" ry="30" ' +
-                            'fill="#7b4327"/>' +
-
-                        '<ellipse ' +
-                            'cx="112" cy="66" ' +
-                            'rx="29" ry="25" ' +
-                            'fill="#8d5030"/>' +
-
-                        '<ellipse ' +
-                            'cx="130" cy="76" ' +
-                            'rx="18" ry="11" ' +
-                            'fill="#5d301d"/>' +
-
-                        '<circle ' +
-                            'cx="119" cy="61" ' +
-                            'r="4" ' +
-                            'fill="#1b1010"/>' +
-
-                        '<circle ' +
-                            'cx="133" cy="77" ' +
-                            'r="4" ' +
-                            'fill="#e63946"/>' +
-
-                        /*
-                         * Bois
-                         */
-
-                        '<path ' +
-                            'd="M104 45 Q91 14 78 5 M92 29 L68 19 M99 37 L84 18" ' +
-                            'fill="none" ' +
-                            'stroke="#704225" ' +
-                            'stroke-width="7" ' +
-                            'stroke-linecap="round"/>' +
-
-                        '<path ' +
-                            'd="M119 43 Q125 12 142 2 M128 29 L149 18 M123 35 L139 15" ' +
-                            'fill="none" ' +
-                            'stroke="#704225" ' +
-                            'stroke-width="7" ' +
-                            'stroke-linecap="round"/>' +
-
-                        /*
-                         * Pattes
-                         */
-
-                        '<path d="M34 103 L22 137" stroke="#5b301e" stroke-width="9" stroke-linecap="round"/>' +
-                        '<path d="M69 106 L62 142" stroke="#5b301e" stroke-width="9" stroke-linecap="round"/>' +
-                        '<path d="M88 106 L97 139" stroke="#5b301e" stroke-width="9" stroke-linecap="round"/>' +
-
-                        /*
-                         * Harnais
-                         */
-
-                        '<path ' +
-                            'd="M18 71 Q60 55 106 70" ' +
-                            'fill="none" ' +
-                            'stroke="#b91c1c" ' +
-                            'stroke-width="7"/>' +
-
-                        '<circle ' +
-                            'cx="67" cy="69" r="7" ' +
-                            'fill="#f7c948"/>' +
-
-                    '</g>' +
-
-
-                    /*
-                     * TRAÎNEAU
-                     */
-
-                    '<g>' +
-
-                        /*
-                         * Patins
-                         */
-
-                        '<path ' +
-                            'd="M52 190 Q105 210 235 194 Q290 188 331 197" ' +
-                            'fill="none" ' +
-                            'stroke="#e7c46a" ' +
-                            'stroke-width="8" ' +
-                            'stroke-linecap="round"/>' +
-
-                        '<path ' +
-                            'd="M72 202 Q145 218 245 204 Q294 197 337 203" ' +
-                            'fill="none" ' +
-                            'stroke="#c89b3c" ' +
-                            'stroke-width="5" ' +
-                            'stroke-linecap="round"/>' +
-
-                        /*
-                         * Corps du traîneau
-                         */
-
-                        '<path ' +
-                            'd="M60 130 Q90 105 145 110 L275 110 Q300 111 316 130 L302 173 Q294 187 267 187 L92 183 Q67 178 60 160 Z" ' +
-                            'fill="#a71930" ' +
-                            'stroke="#f3cf72" ' +
-                            'stroke-width="5"/>' +
-
-                        /*
-                         * Bordure
-                         */
-
-                        '<path ' +
-                            'd="M70 136 Q150 153 293 137" ' +
-                            'fill="none" ' +
-                            'stroke="#ffd86a" ' +
-                            'stroke-width="8" ' +
-                            'stroke-linecap="round"/>' +
-
-                        /*
-                         * Intérieur
-                         */
-
-                        '<path ' +
-                            'd="M99 124 Q155 103 222 121 L251 139 L109 141 Z" ' +
-                            'fill="#651326" ' +
-                            'opacity=".7"/>' +
-
-                        /*
-                         * Sac de cadeaux
-                         */
-
-                        '<path ' +
-                            'd="M177 108 Q180 67 217 62 Q254 66 259 110 Z" ' +
-                            'fill="#2f6f4e" ' +
-                            'stroke="#f0cf70" ' +
-                            'stroke-width="4"/>' +
-
-                        '<path ' +
-                            'd="M217 65 L217 110" ' +
-                            'stroke="#d6b64d" ' +
-                            'stroke-width="5"/>' +
-
-                    '</g>' +
-
-
-                    /*
-                     * PÈRE NOËL
-                     */
-
-                    '<g transform="translate(108 8)">' +
-
-                        /*
-                         * Jambes
-                         */
-
-                        '<path ' +
-                            'd="M78 142 L72 180" ' +
-                            'stroke="#651326" ' +
-                            'stroke-width="18" ' +
-                            'stroke-linecap="round"/>' +
-
-                        '<path ' +
-                            'd="M125 142 L135 180" ' +
-                            'stroke="#651326" ' +
-                            'stroke-width="18" ' +
-                            'stroke-linecap="round"/>' +
-
-                        /*
-                         * Bottes
-                         */
-
-                        '<path ' +
-                            'd="M59 180 Q75 169 91 182 L87 195 L55 195 Q47 188 59 180 Z" ' +
-                            'fill="#201820"/>' +
-
-                        '<path ' +
-                            'd="M125 180 Q140 170 156 184 L158 196 L125 196 Q117 188 125 180 Z" ' +
-                            'fill="#201820"/>' +
-
-                        /*
-                         * Corps
-                         */
-
-                        '<path ' +
-                            'd="M55 72 Q91 54 130 72 L145 144 Q109 164 63 144 Z" ' +
-                            'fill="#c81e35" ' +
-                            'stroke="#8d1224" ' +
-                            'stroke-width="4"/>' +
-
-                        /*
-                         * Ceinture
-                         */
-
-                        '<path ' +
-                            'd="M61 119 Q103 130 140 118" ' +
-                            'stroke="#25161a" ' +
-                            'stroke-width="11"/>' +
-
-                        '<rect ' +
-                            'x="94" y="116" ' +
-                            'width="18" ' +
-                            'height="18" ' +
-                            'rx="3" ' +
-                            'fill="#f4ca5b"/>' +
-
-                        /*
-                         * Bras
-                         */
-
-                        '<path ' +
-                            'd="M62 83 Q34 94 30 124" ' +
-                            'stroke="#c81e35" ' +
-                            'stroke-width="17" ' +
-                            'stroke-linecap="round"/>' +
-
-                        '<path ' +
-                            'd="M130 83 Q151 93 160 116" ' +
-                            'stroke="#c81e35" ' +
-                            'stroke-width="17" ' +
-                            'stroke-linecap="round"/>' +
-
-                        /*
-                         * Gants
-                         */
-
-                        '<circle cx="29" cy="128" r="10" fill="#fff"/>' +
-                        '<circle cx="162" cy="119" r="10" fill="#fff"/>' +
-
-                        /*
-                         * Tête
-                         */
-
-                        '<circle ' +
-                            'cx="94" cy="53" ' +
-                            'r="35" ' +
-                            'fill="#f1b58f" ' +
-                            'stroke="#c98b68" ' +
-                            'stroke-width="3"/>' +
-
-                        /*
-                         * Oreilles
-                         */
-
-                        '<circle cx="60" cy="58" r="9" fill="#e6a47e"/>' +
-                        '<circle cx="128" cy="58" r="9" fill="#e6a47e"/>' +
-
-                        /*
-                         * Barbe
-                         */
-
-                        '<path ' +
-                            'd="M61 58 Q94 71 128 58 Q126 99 94 105 Q64 98 61 58 Z" ' +
-                            'fill="#fffdf7" ' +
-                            'stroke="#e6e4dc" ' +
-                            'stroke-width="3"/>' +
-
-                        /*
-                         * Moustache
-                         */
-
-                        '<path ' +
-                            'd="M68 68 Q80 61 94 70 Q108 61 121 68 Q108 82 94 75 Q80 82 68 68 Z" ' +
-                            'fill="#fffdf7"/>' +
-
-                        /*
-                         * Yeux
-                         */
-
-                        '<circle cx="81" cy="51" r="4" fill="#25191a"/>' +
-                        '<circle cx="107" cy="51" r="4" fill="#25191a"/>' +
-
-                        /*
-                         * Nez
-                         */
-
-                        '<ellipse cx="94" cy="63" rx="7" ry="5" fill="#d77e68"/>' +
-
-                        /*
-                         * Bonnet
-                         */
-
-                        '<path ' +
-                            'd="M58 39 Q70 2 98 4 Q124 6 137 42 Q102 29 58 39 Z" ' +
-                            'fill="#c81e35" ' +
-                            'stroke="#8d1224" ' +
-                            'stroke-width="3"/>' +
-
-                        /*
-                         * Fourrure du bonnet
-                         */
-
-                        '<path ' +
-                            'd="M57 39 Q94 27 137 42 L133 53 Q96 39 59 52 Z" ' +
-                            'fill="#fffdf7"/>' +
-
-                        /*
-                         * Pompon
-                         */
-
-                        '<circle cx="101" cy="7" r="10" fill="#fffdf7"/>' +
-
-                    '</g>' +
-
-                    '</svg>';
-
-                /*
-                 * Animation plus lente et plus rare.
-                 */
-
-                santa.style.animationDuration =
-                    "24s";
-
-                santa.style.animationDelay =
-                    "2s";
-
-                layer.appendChild(santa);
-
-                window.setTimeout(
-                    function () {
-
-                        if (santa.parentNode) {
-                            santa.parentNode.removeChild(
-                                santa
-                            );
-                        }
-
-                    },
-                    26000
-                );
-            }
-
-
-            /*
-             * Un passage du Père Noël,
-             * puis de longs intervalles.
-             */
-
-            window.setTimeout(
-                createSanta,
-                7000
-            );
-
-            window.setInterval(
-                createSanta,
-                42000
-            );
-        }
-
-
-        /* =====================================================
-           RENTRÉE
-        ===================================================== */
-
-        if (body.classList.contains("theme-rentree")) {
-
-            createParticles(
-                "school-paper",
-                18,
-                14,
-                24,
-                {
-                    sizeMin: 18,
-                    sizeMax: 30,
-                    opacityMin: .45,
-                    opacityMax: .9,
-                    driftMin: -180,
-                    driftMax: 180
-                }
-            );
-
-
-            createParticles(
-                "school-pencil",
-                9,
-                15,
-                26,
-                {
-                    sizeMin: 7,
-                    sizeMax: 9,
-                    opacityMin: .5,
-                    opacityMax: .9,
-                    driftMin: -190,
-                    driftMax: 190
-                }
-            );
-
-
-            /*
-             * Petites touches lumineuses / scolaires.
-             * Très discrètes.
-             */
-
-            if (
-                document.querySelector(
-                    ".school-star"
-                )
-            ) {
-
-                createParticles(
-                    "school-star",
-                    8,
-                    5,
-                    9,
-                    {
-                        sizeMin: 3,
-                        sizeMax: 6,
-                        opacityMin: .25,
-                        opacityMax: .65
-                    }
-                );
-            }
-        }
-
-
-        /* =====================================================
-           SAINT-VALENTIN
-        ===================================================== */
-
-        if (
-            body.classList.contains(
-                "theme-saint-valentin"
-            )
-        ) {
-
-            createParticles(
-                "heart-particle",
-                30,
-                15,
-                25,
-                {
-                    sizeMin: 10,
-                    sizeMax: 22,
-                    opacityMin: .45,
-                    opacityMax: .9,
-                    driftMin: -150,
-                    driftMax: 150
-                }
-            );
-        }
-
-
-        /* =====================================================
-           PÂQUES
-        ===================================================== */
-
-        if (body.classList.contains("theme-paques")) {
-
-            var eggColors = [
-                ["#f9a8d4", "#db2777"],
-                ["#93c5fd", "#2563eb"],
-                ["#fde68a", "#eab308"],
-                ["#86efac", "#16a34a"]
-            ];
-
-
-            for (var e = 0; e < 20; e++) {
-
-                var egg = createParticle(
-                    "easter-egg",
-                    15,
-                    25,
-                    {
-                        sizeMin: 22,
-                        sizeMax: 38,
-                        opacityMin: .5,
-                        opacityMax: .95,
-                        driftMin: -170,
-                        driftMax: 170
-                    }
-                );
-
-                var colors =
-                    eggColors[
-                        e % eggColors.length
-                    ];
-
-                css(
-                    egg,
-                    "--egg-color",
-                    colors[1]
-                );
-
-                css(
-                    egg,
-                    "--egg-light",
-                    colors[0]
-                );
-
-                css(
-                    egg,
-                    "--w",
-                    random(22, 34) + "px"
-                );
-
-                css(
-                    egg,
-                    "--h",
-                    random(30, 46) + "px"
-                );
-            }
-
-
-            createParticles(
-                "spring-flower",
-                22,
-                8,
-                15,
-                {
-                    sizeMin: 6,
-                    sizeMax: 11,
-                    opacityMin: .45,
-                    opacityMax: .9
-                }
-            );
-
-
-            if (
-                document.querySelector(
-                    ".spring-butterfly"
-                )
-            ) {
-
-                createParticles(
-                    "spring-butterfly",
-                    7,
-                    14,
-                    23,
-                    {
-                        sizeMin: 5,
-                        sizeMax: 10,
-                        opacityMin: .4,
-                        opacityMax: .8
-                    }
-                );
-            }
-        }
-
-
-        /* =====================================================
-           HALLOWEEN
-        ===================================================== */
-
-        if (body.classList.contains("theme-halloween")) {
-
-            var moon =
-                document.createElement("div");
-
-            moon.className =
-                "halloween-moon";
-
-            layer.appendChild(moon);
-
-
-            var fog =
-                document.createElement("div");
-
-            fog.className =
-                "halloween-fog";
-
-            layer.appendChild(fog);
-
-
-            createParticles(
-                "bat",
-                10,
-                17,
-                28,
-                {
-                    sizeMin: 28,
-                    sizeMax: 46,
-                    opacityMin: .45,
-                    opacityMax: .9
-                }
-            );
-
-
-            createParticles(
-                "pumpkin",
-                8,
-                5,
-                8,
-                {
-                    sizeMin: 28,
-                    sizeMax: 52,
-                    opacityMin: .6,
-                    opacityMax: 1
-                }
-            );
-        }
-
-
-        /* =====================================================
-           NOUVEL AN
-        ===================================================== */
-
-        if (
-            body.classList.contains(
-                "theme-nouvel-an"
-            )
-        ) {
-
-            createParticles(
-                "newyear-star",
-                50,
-                2,
-                5,
-                {
-                    sizeMin: 2,
-                    sizeMax: 6,
-                    opacityMin: .2,
-                    opacityMax: .95
-                }
-            );
-
-
-            function createFirework() {
-
-                var firework =
-                    document.createElement("div");
-
-                firework.className =
-                    "firework";
-
-                firework.style.left =
-                    random(10, 90) + "%";
-
-                firework.style.top =
-                    random(8, 48) + "%";
-
-                firework.style.setProperty(
-                    "--fire-color",
-                    pick([
-                        "#fff",
-                        "#ffd166",
-                        "#ff6b9d",
-                        "#7dd3fc",
-                        "#c4b5fd",
-                        "#86efac"
-                    ])
-                );
-
-                firework.style.animationDelay =
-                    "0s";
-
-                layer.appendChild(
-                    firework
-                );
-
-
-                window.setTimeout(
-                    function () {
-
-                        if (
-                            firework.parentNode
-                        ) {
-                            firework.parentNode.removeChild(
-                                firework
-                            );
-                        }
-
-                    },
-                    3000
-                );
-            }
-
-
-            /*
-             * Petit bouquet initial.
-             */
-
-            for (
-                var j = 0;
-                j < 5;
-                j++
-            ) {
-
-                window.setTimeout(
-                    createFirework,
-                    j * 900
-                );
-            }
-
-
-            /*
-             * Puis des feux réguliers mais
-             * suffisamment espacés pour rester élégants.
-             */
-
-            window.setInterval(
-                createFirework,
-                3000
-            );
-        }
-
-
-        /* =====================================================
-           ÉTÉ
-        ===================================================== */
-
-        if (body.classList.contains("theme-ete")) {
-
-            var sun =
-                document.createElement("div");
-
-            sun.className =
-                "sun";
-
-            layer.appendChild(sun);
-
-
-            /*
-             * Petites particules lumineuses.
-             */
-
-            createParticles(
-                "summer-light",
-                18,
-                7,
-                14,
-                {
-                    sizeMin: 2,
-                    sizeMax: 5,
-                    opacityMin: .25,
-                    opacityMax: .75,
-                    driftMin: -100,
-                    driftMax: 100
-                }
-            );
-        }
-
-
-        /* =====================================================
-           AUTOMNE
-        ===================================================== */
-
-        if (body.classList.contains("theme-automne")) {
-
-            var autumnColors = [
-                "#b45309",
-                "#c2410c",
-                "#dc2626",
-                "#ea580c",
-                "#a16207",
-                "#92400e",
-                "#d97706",
-                "#7c2d12"
-            ];
-
-
-            /*
-             * EXACTEMENT 42 feuilles.
-             */
-
-            for (
-                var leafIndex = 0;
-                leafIndex < 42;
-                leafIndex++
-            ) {
-
-                var leaf =
-                    createParticle(
-                        "leaf-particle",
-                        17,
-                        30,
-                        {
-                            sizeMin: 13,
-                            sizeMax: 30,
-                            opacityMin: .45,
-                            opacityMax: .95,
-                            driftMin: -210,
-                            driftMax: 210
-                        }
-                    );
-
-
-                css(
-                    leaf,
-                    "--leaf-color",
-                    pick(autumnColors)
-                );
-
-
-                css(
-                    leaf,
-                    "--scale",
-                    random(.65, 1.25)
-                );
-
-
-                css(
-                    leaf,
-                    "--sway1",
-                    random(-220, 220) + "px"
-                );
-
-                css(
-                    leaf,
-                    "--sway2",
-                    random(-260, 260) + "px"
-                );
-
-                css(
-                    leaf,
-                    "--sway3",
-                    random(-230, 230) + "px"
-                );
-
-                css(
-                    leaf,
-                    "--sway4",
-                    random(-300, 300) + "px"
-                );
-            }
+            }, 3000);
         }
 
 
         /*
-         * Sécurité.
+         * Feux visibles et réguliers,
+         * sans transformer l'écran en sapin de Noël.
          */
 
-        layer.style.pointerEvents =
-            "none";
+        for (var fw = 0; fw < 4; fw++) {
 
-        layer.setAttribute(
-            "aria-hidden",
-            "true"
+            setTimeout(
+                launchFirework,
+                fw * 900
+            );
+        }
+
+        setInterval(
+            launchFirework,
+            1800
         );
     }
 
 
-    /* =========================================================
-       INITIALISATION
-    ========================================================= */
+    /* =====================================================
+       ETE
+    ===================================================== */
 
-    if (
-        document.readyState ===
-        "loading"
-    ) {
+    if (mode === "ete") {
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            initSeasonal
-        );
+        var sun = create("sun");
 
-    } else {
+        sun.style.left = "auto";
+        sun.style.top = "7%";
+        sun.style.right = "7%";
 
-        initSeasonal();
+
+        for (var sp = 0; sp < 24; sp++) {
+
+            var summerParticle =
+                create("summer-particle");
+
+            setPosition(
+                summerParticle,
+                random(2, 98),
+                random(5, 95)
+            );
+
+            setVar(
+                summerParticle,
+                "--size",
+                random(2, 7) + "px"
+            );
+
+            setVar(
+                summerParticle,
+                "--duration",
+                random(3, 8) + "s"
+            );
+
+            setVar(
+                summerParticle,
+                "--delay",
+                random(-8, 0) + "s"
+            );
+        }
     }
+
+
+    /* =====================================================
+       AUTOMNE
+    ===================================================== */
+
+    if (mode === "automne") {
+
+        var autumnColors = [
+            "#b45309",
+            "#c2410c",
+            "#ea580c",
+            "#dc2626",
+            "#a16207",
+            "#92400e",
+            "#f59e0b",
+            "#78350f"
+        ];
+
+
+        /*
+         * EXACTEMENT 42 FEUILLES.
+         * Chaque feuille possède :
+         * - sa taille
+         * - sa position
+         * - sa vitesse
+         * - ses trajectoires
+         * - sa rotation
+         * - son délai
+         */
+
+        for (var leafIndex = 0; leafIndex < 42; leafIndex++) {
+
+            var leaf = create("leaf-particle");
+
+            setVar(
+                leaf,
+                "--x",
+                random(-5, 100) + "%"
+            );
+
+            setVar(
+                leaf,
+                "--size",
+                random(15, 34) + "px"
+            );
+
+            setVar(
+                leaf,
+                "--scale",
+                random(.65, 1.35)
+            );
+
+            setVar(
+                leaf,
+                "--leaf-color",
+                autumnColors[
+                    randomInt(0, autumnColors.length - 1)
+                ]
+            );
+
+            setVar(
+                leaf,
+                "--sway1",
+                random(-25, 25) + "vw"
+            );
+
+            setVar(
+                leaf,
+                "--sway2",
+                random(-35, 35) + "vw"
+            );
+
+            setVar(
+                leaf,
+                "--sway3",
+                random(-45, 45) + "vw"
+            );
+
+            setVar(
+                leaf,
+                "--sway4",
+                random(-55, 55) + "vw"
+            );
+
+            setVar(
+                leaf,
+                "--duration",
+                random(14, 24) + "s"
+            );
+
+            setVar(
+                leaf,
+                "--delay",
+                random(-24, 0) + "s"
+            );
+        }
+    }
+
+
+    console.log(
+        "🌿 SEASONAL ATMOSPHERE ACTIVE:",
+        mode
+    );
+}
+
+
+/* =========================================================
+   INITIALISATION ROBUSTE
+========================================================= */
+
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initSeasonal
+    );
+
+} else {
+
+    initSeasonal();
+}
+
 
 })();

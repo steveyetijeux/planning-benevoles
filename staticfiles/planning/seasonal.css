@@ -1,368 +1,555 @@
 /* =========================================================
    PLANNING FOYER MDL
    THEMES SAISONNIERS
-   VERSION CORRIGÉE
+   VERSION ATMOSPHERIQUE + AMBIANCES RENFORCEES
 ========================================================= */
 
+html,
+body {
+    min-height: 100%;
+}
 
 /* =========================================================
-   COUCHE SAISONNIÈRE
+   COUCHE GENERALE
 ========================================================= */
 
 .season-layer {
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
+    inset: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-
     overflow: hidden !important;
-
     pointer-events: none !important;
-
     z-index: 99999 !important;
-
     display: block !important;
+    isolation: isolate;
 }
 
+.season-layer::before,
+.season-layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
 
-/* Tous les éléments créés par seasonal.js */
+.season-layer::before {
+    z-index: 0;
+}
+
+.season-layer::after {
+    z-index: 1;
+}
 
 .season-layer .season-particle {
     position: absolute !important;
-
     display: block !important;
-
     pointer-events: none !important;
-
     box-sizing: border-box !important;
-
-    z-index: 1 !important;
-
-    opacity: 1;
-}
-
-
-/* =========================================================
-   NOËL
-========================================================= */
-
-.theme-noel {
-    background:
-        radial-gradient(circle at 50% 20%, rgba(255,241,214,.62), transparent 38%),
-        linear-gradient(180deg, #9fc4dc 0%, #d6e8f1 32%, #f7f5ef 72%, #fffaf0 100%) !important;
-}
-
-.theme-noel .navbar {
-    background:
-        linear-gradient(
-            135deg,
-            #102f46,
-            #1d536b
-        ) !important;
-}
-
-.theme-noel .card {
-    position: relative;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.97),
-            rgba(239,248,253,.96)
-        );
-
-    border: 1px solid rgba(180,205,220,.75);
-
-    box-shadow:
-        0 10px 30px rgba(55,85,105,.14),
-        inset 0 0 25px rgba(255,255,255,.9);
-}
-
-.theme-noel .card::after {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    border-radius: inherit;
-
-    pointer-events: none;
-
-    box-shadow:
-        inset 0 0 20px rgba(210,235,248,.75),
-        inset 0 0 5px rgba(255,255,255,1);
-}
-
-
-.theme-noel::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background:
-        radial-gradient(circle at 18% 18%, rgba(255,214,151,.18), transparent 22%),
-        radial-gradient(circle at 82% 28%, rgba(255,231,181,.16), transparent 24%),
-        radial-gradient(ellipse at 50% 100%, rgba(255,236,201,.28), transparent 48%);
-}
-
-/* ---------------------------------------------------------
-   NEIGE
---------------------------------------------------------- */
-
-.snowflake {
-    width: 7px !important;
-    height: 7px !important;
-
-    border-radius: 50% !important;
-
-    background: #ffffff !important;
-
-    box-shadow:
-        0 0 5px rgba(255,255,255,1),
-        0 0 12px rgba(255,255,255,.9) !important;
-
-    animation:
-        snow-fall 12s linear infinite !important;
-
+    z-index: 10 !important;
     will-change: transform, opacity;
 }
 
-.snowflake.large {
-    width: 12px !important;
-    height: 12px !important;
+/* =========================================================
+   NOEL — REFUGE HIVERNAL CHALEUREUX
+========================================================= */
+
+body.theme-noel {
+    background:
+        radial-gradient(
+            ellipse at 50% 12%,
+            rgba(115,180,220,.35),
+            transparent 42%
+        ),
+        linear-gradient(
+            180deg,
+            #071a2c 0%,
+            #0d3047 28%,
+            #6d9fba 68%,
+            #eaf6fb 100%
+        ) !important;
+
+    color: #102535;
 }
 
-@keyframes snow-fall {
+body.theme-noel .navbar {
+    background:
+        linear-gradient(
+            135deg,
+            #061321,
+            #123b55
+        ) !important;
+}
+
+body.theme-noel .card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.98),
+            rgba(232,245,252,.94)
+        );
+
+    border: 1px solid rgba(255,255,255,.75);
+
+    box-shadow:
+        0 15px 40px rgba(4,28,48,.18),
+        inset 0 0 30px rgba(255,255,255,.65);
+}
+
+/* Ciel */
+
+body.theme-noel .season-layer {
+    background:
+        radial-gradient(
+            circle at 78% 14%,
+            rgba(255,255,255,.18),
+            transparent 16%
+        ),
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(255,255,255,.62),
+            transparent 58%
+        ),
+        radial-gradient(
+            ellipse at 18% 78%,
+            rgba(150,210,235,.14),
+            transparent 42%
+        );
+}
+
+body.theme-noel .season-layer::before {
+    background:
+        radial-gradient(
+            ellipse at 15% 20%,
+            rgba(151,207,236,.20),
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 85% 35%,
+            rgba(255,255,255,.14),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(2,20,38,.30),
+            transparent 48%,
+            rgba(255,255,255,.10)
+        );
+}
+
+body.theme-noel .season-layer::after {
+    background:
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(255,255,255,.78),
+            transparent 48%
+        );
+
+    filter: blur(8px);
+}
+
+/* Lune */
+
+.christmas-moon {
+    position: absolute !important;
+    top: 7%;
+    right: 7%;
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 32% 30%,
+            #ffffff 0 16%,
+            #eef8ff 42%,
+            #c9dfed 72%,
+            #a7c4d7 100%
+        );
+
+    box-shadow:
+        0 0 18px rgba(255,255,255,.8),
+        0 0 50px rgba(192,229,250,.45);
+
+    z-index: 4;
+    opacity: .95;
+}
+
+.christmas-moon::before {
+    content: "";
+    position: absolute;
+    width: 17px;
+    height: 13px;
+    top: 25%;
+    left: 25%;
+    border-radius: 50%;
+
+    background: rgba(150,180,195,.18);
+
+    box-shadow:
+        34px 18px 0 rgba(150,180,195,.14),
+        42px 58px 0 rgba(150,180,195,.12),
+        22px 72px 0 rgba(150,180,195,.10);
+}
+
+/* Flocons */
+
+.snowflake {
+    top: -30px;
+
+    width: var(--size, 8px);
+    height: var(--size, 8px);
+
+    left: var(--x, 50%);
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.96);
+
+    box-shadow:
+        0 0 5px rgba(255,255,255,.95),
+        0 0 13px rgba(220,245,255,.75);
+
+    opacity: var(--opacity, .8);
+
+    animation:
+        christmas-snow
+        var(--duration, 20s)
+        linear
+        var(--delay, 0s)
+        infinite;
+}
+
+.snowflake::before,
+.snowflake::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 170%;
+    height: 1px;
+
+    background: rgba(255,255,255,.9);
+
+    transform:
+        translate(-50%, -50%)
+        rotate(60deg);
+
+    border-radius: 999px;
+}
+
+.snowflake::after {
+    transform:
+        translate(-50%, -50%)
+        rotate(-60deg);
+}
+
+@keyframes christmas-snow {
 
     0% {
         transform:
-            translate3d(0, -80px, 0)
+            translate3d(0,-60px,0)
             rotate(0deg);
-        opacity: 0;
-    }
-
-    8% {
-        opacity: 1;
     }
 
     25% {
         transform:
-            translate3d(45px, 25vh, 0)
-            rotate(90deg);
+            translate3d(
+                calc(var(--drift) * .45),
+                25vh,
+                0
+            )
+            rotate(100deg);
     }
 
     50% {
         transform:
-            translate3d(-35px, 50vh, 0)
-            rotate(180deg);
+            translate3d(
+                calc(var(--drift) * -.55),
+                50vh,
+                0
+            )
+            rotate(210deg);
     }
 
     75% {
         transform:
-            translate3d(50px, 75vh, 0)
-            rotate(270deg);
+            translate3d(
+                calc(var(--drift) * .65),
+                75vh,
+                0
+            )
+            rotate(300deg);
     }
 
     100% {
         transform:
-            translate3d(-35px, 115vh, 0)
-            rotate(360deg);
-        opacity: .2;
+            translate3d(
+                var(--drift),
+                112vh,
+                0
+            )
+            rotate(420deg);
+
+        opacity: .12;
     }
 }
 
-
-/* ---------------------------------------------------------
-   ÉTOILES
---------------------------------------------------------- */
+/* Etoiles */
 
 .star {
-    width: 5px !important;
-    height: 5px !important;
+    left: var(--x);
+    top: var(--y);
 
-    border-radius: 50% !important;
+    width: var(--size, 5px);
+    height: var(--size, 5px);
 
-    background: #ffffff !important;
+    background: #ffffff;
+    transform: rotate(45deg);
 
     box-shadow:
-        0 0 6px #ffffff,
-        0 0 14px rgba(255,255,255,.95) !important;
+        0 0 7px #ffffff,
+        0 0 17px rgba(255,232,170,.9);
+
+    opacity: var(--opacity, .7);
 
     animation:
-        star-twinkle 2.5s ease-in-out infinite !important;
-
-    will-change: transform, opacity;
+        christmas-star
+        var(--duration, 4s)
+        ease-in-out
+        var(--delay, 0s)
+        infinite alternate;
 }
 
-@keyframes star-twinkle {
+.star::before,
+.star::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: #fffdf0;
+    border-radius: 999px;
+}
 
-    0%, 100% {
+.star::before {
+    width: 300%;
+    height: 25%;
+    transform: translate(-50%,-50%);
+}
+
+.star::after {
+    width: 25%;
+    height: 300%;
+    transform: translate(-50%,-50%);
+}
+
+@keyframes christmas-star {
+
+    0% {
         opacity: .15;
-        transform: scale(.5);
+        transform: rotate(45deg) scale(.5);
     }
 
     50% {
         opacity: 1;
-        transform: scale(2);
+        transform: rotate(135deg) scale(1.3);
+    }
+
+    100% {
+        opacity: .4;
+        transform: rotate(225deg) scale(.75);
     }
 }
 
-
-/* ---------------------------------------------------------
-   GUIRLANDE
---------------------------------------------------------- */
+/* Lumières */
 
 .christmas-light {
-    width: 9px !important;
-    height: 9px !important;
+    left: var(--x);
+    top: var(--y);
 
-    border-radius: 50% !important;
+    width: 8px;
+    height: 11px;
 
-    background: #ffffff !important;
+    border-radius: 50%;
+
+    background: var(--light-color, #fff);
 
     box-shadow:
-        0 0 8px #ffffff,
-        0 0 16px rgba(255,255,255,.8) !important;
+        0 0 7px var(--light-color),
+        0 0 18px var(--light-color),
+        0 0 30px var(--light-color);
 
     animation:
-        christmas-blink 1.4s ease-in-out infinite alternate !important;
+        christmas-light
+        var(--duration, 3s)
+        ease-in-out
+        var(--delay, 0s)
+        infinite alternate;
 }
 
-@keyframes christmas-blink {
+@keyframes christmas-light {
 
     from {
-        opacity: .25;
-        transform: scale(.75);
+        opacity: .3;
+        transform: scale(.7);
     }
 
     to {
         opacity: 1;
-        transform: scale(1.35);
+        transform: scale(1.3);
     }
 }
 
-
-/* ---------------------------------------------------------
-   TRAÎNEAU
---------------------------------------------------------- */
+/* =========================================================
+   PERE NOEL / TRAINEAU
+========================================================= */
 
 .santa-sleigh {
     position: fixed !important;
+    top: 15vh !important;
+    left: -380px !important;
 
-    top: 12vh !important;
-    left: -350px !important;
+    width: 350px !important;
+    height: 135px !important;
 
-    width: 300px !important;
-    height: 110px !important;
-
-    z-index: 100000 !important;
-
+    z-index: 100 !important;
     pointer-events: none !important;
 
-    display: block !important;
-
     animation:
-        santa-flight 13s linear forwards !important;
+        santa-flight
+        22s
+        cubic-bezier(.35,.05,.2,1)
+        4s
+        infinite !important;
 
     will-change: transform;
 }
 
 .sleigh-body {
     position: absolute;
+    left: 62px;
+    bottom: 30px;
 
-    left: 70px;
-    bottom: 25px;
-
-    width: 145px;
-    height: 42px;
+    width: 175px;
+    height: 48px;
 
     border-radius:
-        15px 45px 18px 18px;
+        12px 52px 18px 18px;
 
     background:
         linear-gradient(
             180deg,
-            #e63950,
-            #a30f26
+            #e63946,
+            #8f1022
         );
 
+    border: 3px solid #ffd66b;
+
     box-shadow:
-        0 8px 12px rgba(0,0,0,.25);
+        0 8px 15px rgba(0,0,0,.35),
+        0 0 18px rgba(255,214,107,.20);
 }
 
 .sleigh-body::before {
     content: "";
-
     position: absolute;
 
-    left: 18px;
-    top: -16px;
+    left: 20px;
+    top: -24px;
 
-    width: 80px;
-    height: 22px;
+    width: 95px;
+    height: 28px;
 
-    border-radius: 25px 25px 5px 5px;
+    border-radius:
+        45px 45px 8px 8px;
 
     background:
         linear-gradient(
             180deg,
-            #c9233b,
-            #861326
+            #f04455,
+            #9e1326
         );
+
+    border: 3px solid #ffd66b;
+}
+
+.sleigh-body::after {
+    content: "";
+    position: absolute;
+
+    left: 25px;
+    top: 9px;
+
+    width: 115px;
+    height: 7px;
+
+    border-radius: 999px;
+
+    background: #ffd66b;
+
+    box-shadow:
+        0 17px 0 rgba(255,214,107,.65);
 }
 
 .sleigh-runner {
     position: absolute;
 
-    left: 65px;
-    bottom: 11px;
+    left: 45px;
+    bottom: 8px;
 
-    width: 160px;
-    height: 13px;
+    width: 195px;
+    height: 18px;
 
     border-bottom:
-        4px solid #d5aa38;
+        5px solid #f4d36b;
 
-    border-radius: 0 0 50% 50%;
+    border-radius:
+        0 0 55% 55%;
 
-    transform: skewX(-15deg);
+    transform:
+        rotate(-4deg)
+        skewX(-12deg);
+
+    filter:
+        drop-shadow(0 3px 3px rgba(0,0,0,.25));
 }
 
 .sleigh-runner.second {
-    left: 85px;
-    bottom: 4px;
+    left: 75px;
+    bottom: 1px;
 }
 
 .sleigh-reindeer {
     position: absolute;
 
-    left: 205px;
-    bottom: 39px;
+    left: 225px;
+    bottom: 45px;
 
-    width: 72px;
-    height: 35px;
+    width: 76px;
+    height: 42px;
 
-    background: #75452d;
+    background:
+        linear-gradient(
+            180deg,
+            #9b5a32,
+            #60351f
+        );
 
     border-radius:
-        50% 45% 45% 40%;
+        55% 45% 45% 50%;
 }
 
 .sleigh-reindeer::before {
     content: "";
 
     position: absolute;
+    right: -20px;
+    top: 2px;
 
-    right: -15px;
-    top: 3px;
+    width: 34px;
+    height: 30px;
 
-    width: 28px;
-    height: 25px;
-
-    background: #75452d;
-
+    background: #754326;
     border-radius: 50%;
 }
 
@@ -370,275 +557,103 @@
     content: "";
 
     position: absolute;
+    left: 14px;
+    top: -28px;
 
-    left: 15px;
-    top: -22px;
+    width: 40px;
+    height: 32px;
 
-    width: 6px;
-    height: 28px;
+    border-top: 4px solid #754326;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
 
-    border-left: 4px solid #75452d;
-    border-right: 4px solid #75452d;
-
-    transform: rotate(-12deg);
+    transform: rotate(-15deg);
 }
 
 .sleigh-snow {
     position: absolute;
 
     left: 0;
-    bottom: 5px;
+    bottom: 0;
 
-    width: 130px;
-    height: 30px;
-
-    border-radius: 50%;
+    width: 170px;
+    height: 45px;
 
     background:
         radial-gradient(
             ellipse,
-            rgba(255,255,255,.9),
+            rgba(255,255,255,.8),
             transparent 70%
         );
 
-    filter: blur(4px);
+    filter: blur(5px);
 }
-
-/* ---------------------------------------------------------
-   PÈRE NOËL — SILHOUETTE STYLISÉE
---------------------------------------------------------- */
-
-.santa-character {
-    position: absolute;
-    left: 48px;
-    bottom: 27px;
-    width: 88px;
-    height: 92px;
-    z-index: 8;
-    filter: drop-shadow(0 5px 7px rgba(55,20,15,.28));
-}
-
-.santa-body {
-    position: absolute;
-    left: 17px;
-    bottom: 12px;
-    width: 58px;
-    height: 58px;
-    border-radius: 48% 48% 42% 42%;
-    background: linear-gradient(145deg, #ef3f43 0%, #c51f2c 72%, #941522 100%);
-    border: 2px solid rgba(118,10,20,.35);
-}
-
-.santa-body::after {
-    content: "";
-    position: absolute;
-    left: 8px;
-    bottom: 7px;
-    width: 42px;
-    height: 12px;
-    border-radius: 0 0 14px 14px;
-    background: rgba(255,255,255,.28);
-}
-
-.santa-head {
-    position: absolute;
-    left: 22px;
-    top: 10px;
-    width: 50px;
-    height: 48px;
-    border-radius: 48% 48% 44% 44%;
-    background: #efbd92;
-    border: 2px solid rgba(124,65,36,.25);
-    z-index: 5;
-}
-
-.santa-head::before {
-    content: "";
-    position: absolute;
-    left: 11px;
-    top: 20px;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #34221c;
-    box-shadow: 20px 0 #34221c;
-}
-
-.santa-head::after {
-    content: "";
-    position: absolute;
-    left: 21px;
-    top: 29px;
-    width: 9px;
-    height: 5px;
-    border-radius: 50%;
-    background: #b95d51;
-}
-
-.santa-beard {
-    position: absolute;
-    left: 18px;
-    top: 35px;
-    width: 58px;
-    height: 47px;
-    border-radius: 12px 12px 38px 38px;
-    background: linear-gradient(145deg, #ffffff, #edf1f3);
-    z-index: 6;
-    box-shadow: 0 3px 5px rgba(80,80,80,.18);
-}
-
-.santa-beard::before {
-    content: "";
-    position: absolute;
-    left: 12px;
-    top: -8px;
-    width: 34px;
-    height: 18px;
-    border-radius: 50%;
-    background: #fff;
-}
-
-.santa-hat {
-    position: absolute;
-    left: 14px;
-    top: 0;
-    width: 64px;
-    height: 37px;
-    background: linear-gradient(155deg, #f33d43, #a81423);
-    clip-path: polygon(4% 88%, 86% 80%, 100% 0, 58% 27%, 0 75%);
-    z-index: 8;
-}
-
-.santa-hat::after {
-    content: "";
-    position: absolute;
-    right: -4px;
-    top: -5px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 0 8px rgba(255,255,255,.8);
-}
-
-.santa-arm {
-    position: absolute;
-    top: 51px;
-    width: 17px;
-    height: 43px;
-    border-radius: 14px;
-    background: linear-gradient(180deg, #df3038, #a71926);
-    z-index: 4;
-}
-
-.santa-arm::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 1px;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #efbd92;
-}
-
-.santa-arm-left {
-    left: 5px;
-    transform: rotate(25deg);
-}
-
-.santa-arm-right {
-    right: 5px;
-    transform: rotate(-28deg);
-}
-
-.santa-belt {
-    position: absolute;
-    left: 20px;
-    bottom: 38px;
-    width: 53px;
-    height: 9px;
-    background: #171313;
-    z-index: 7;
-}
-
-.santa-belt::after {
-    content: "";
-    position: absolute;
-    left: 21px;
-    top: -2px;
-    width: 11px;
-    height: 13px;
-    border-radius: 2px;
-    background: #f5c542;
-    box-shadow: inset 0 0 0 2px #c18a18;
-}
-
-.santa-boot {
-    position: absolute;
-    bottom: 3px;
-    width: 22px;
-    height: 15px;
-    border-radius: 8px 8px 4px 4px;
-    background: #2a1b18;
-    z-index: 5;
-}
-
-.santa-boot-left { left: 19px; }
-.santa-boot-right { right: 12px; }
 
 @keyframes santa-flight {
 
     0% {
         transform:
-            translate3d(0,0,0)
-            rotate(-2deg);
+            translate3d(0,40px,0)
+            rotate(-3deg)
+            scale(.85);
     }
 
-    20% {
+    18% {
         transform:
-            translate3d(25vw,-20px,0)
-            rotate(2deg);
+            translate3d(28vw,-20px,0)
+            rotate(2deg)
+            scale(.95);
     }
 
-    40% {
+    38% {
         transform:
-            translate3d(50vw,15px,0)
-            rotate(-2deg);
+            translate3d(55vw,18px,0)
+            rotate(-2deg)
+            scale(1);
     }
 
-    60% {
+    58% {
         transform:
-            translate3d(75vw,-15px,0)
-            rotate(2deg);
+            translate3d(82vw,-18px,0)
+            rotate(2deg)
+            scale(.96);
     }
 
-    80% {
+    78% {
         transform:
-            translate3d(100vw,10px,0)
-            rotate(-1deg);
+            translate3d(112vw,15px,0)
+            rotate(-2deg)
+            scale(.9);
     }
 
     100% {
         transform:
-            translate3d(140vw,-10px,0)
-            rotate(1deg);
+            translate3d(150vw,-10px,0)
+            rotate(1deg)
+            scale(.82);
     }
 }
 
-
 /* =========================================================
-   RENTRÉE
+   RENTREE
 ========================================================= */
 
-.theme-rentree {
+body.theme-rentree {
     background:
-        radial-gradient(circle at 18% 18%, rgba(255,221,145,.20), transparent 25%),
-        radial-gradient(circle at 82% 22%, rgba(147,197,253,.24), transparent 28%),
-        linear-gradient(135deg, #edf4ff 0%, #f8fbff 45%, #fff8e9 100%) !important;
+        radial-gradient(
+            ellipse at 15% 20%,
+            rgba(255,255,255,.9),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #f8fbff 48%,
+            #fff7ed
+        ) !important;
 }
 
-.theme-rentree .navbar {
+body.theme-rentree .navbar {
     background:
         linear-gradient(
             135deg,
@@ -647,204 +662,217 @@
         ) !important;
 }
 
-.theme-rentree .card {
-    position: relative;
+body.theme-rentree .season-layer {
+    background:
+        radial-gradient(
+            ellipse at 20% 20%,
+            rgba(255,255,255,.8),
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 80% 75%,
+            rgba(251,191,36,.10),
+            transparent 30%
+        );
+}
 
+body.theme-rentree .season-layer::before {
     background:
         linear-gradient(
-            145deg,
-            #ffffff,
-            #f4f8ff
+            120deg,
+            rgba(37,99,235,.06),
+            transparent 45%,
+            rgba(245,158,11,.09)
         );
-
-    border-left:
-        5px solid #2563eb;
-
-    box-shadow:
-        0 8px 25px rgba(37,99,235,.12);
-}
-
-.theme-rentree .card::after {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    pointer-events: none;
-
-    opacity: .25;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 27px,
-            #8db7ee 28px
-        );
-}
-
-.theme-rentree::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: .55;
-    background:
-        repeating-linear-gradient(90deg, transparent 0 14vw, rgba(37,99,235,.035) 14vw 14.2vw),
-        linear-gradient(180deg, rgba(255,255,255,.25), transparent 55%, rgba(245,158,11,.08));
 }
 
 .school-paper {
-    width: 22px !important;
-    height: 30px !important;
+    left: var(--x);
+
+    width: var(--w, 25px);
+    height: var(--h, 36px);
 
     background:
         linear-gradient(
             90deg,
-            #ffffff 0 85%,
-            #dbeafe 85%
-        ) !important;
+            #ffffff 0 88%,
+            #dbeafe 88%
+        );
 
     border:
-        1px solid #b8c7d9 !important;
+        1px solid #b8c7d9;
 
     box-shadow:
-        0 4px 8px rgba(0,0,0,.12) !important;
+        0 5px 12px rgba(0,0,0,.15);
 
     animation:
-        paper-drift 14s linear infinite !important;
-
-    will-change: transform;
+        paper-flight
+        var(--duration, 20s)
+        linear
+        var(--delay, 0s)
+        infinite;
 }
 
-@keyframes paper-drift {
+.school-paper::before {
+    content: "";
+
+    position: absolute;
+
+    top: 9px;
+    left: 5px;
+    right: 5px;
+
+    height: 2px;
+
+    background: #93c5fd;
+
+    box-shadow:
+        0 7px #93c5fd,
+        0 14px #93c5fd;
+}
+
+@keyframes paper-flight {
 
     0% {
         transform:
             translate3d(0,-80px,0)
-            rotate(-12deg);
-        opacity: 0;
+            rotate(-15deg);
     }
 
-    10% {
-        opacity: 1;
-    }
-
-    50% {
+    25% {
         transform:
-            translate3d(80px,50vh,0)
-            rotate(15deg);
+            translate3d(var(--sway1),25vh,0)
+            rotate(90deg);
+    }
+
+    55% {
+        transform:
+            translate3d(var(--sway2),55vh,0)
+            rotate(210deg);
     }
 
     100% {
         transform:
-            translate3d(-40px,115vh,0)
-            rotate(-20deg);
-        opacity: .2;
+            translate3d(var(--sway3),115vh,0)
+            rotate(420deg);
+
+        opacity: .15;
     }
 }
 
 .school-pencil {
-    width: 8px !important;
-    height: 36px !important;
+    left: var(--x);
 
-    border-radius: 3px !important;
+    width: 8px;
+    height: 42px;
+
+    border-radius: 3px;
 
     background:
         linear-gradient(
             90deg,
-            #f5c542 0 70%,
-            #333 70% 82%,
-            #f0d0ae 82%
-        ) !important;
+            #facc15 0 70%,
+            #ef4444 70% 82%,
+            #e5c4a4 82%
+        );
+
+    box-shadow:
+        0 4px 8px rgba(0,0,0,.18);
 
     animation:
-        pencil-drift 16s linear infinite !important;
-
-    will-change: transform;
+        pencil-flight
+        var(--duration, 22s)
+        linear
+        var(--delay, 0s)
+        infinite;
 }
 
-@keyframes pencil-drift {
+.school-pencil::before {
+    content: "";
+
+    position: absolute;
+
+    top: -8px;
+    left: 1px;
+
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 9px solid #d9b08c;
+}
+
+@keyframes pencil-flight {
 
     0% {
         transform:
-            translate3d(0,-70px,0)
-            rotate(25deg);
-        opacity: 0;
+            translate3d(0,-80px,0)
+            rotate(30deg);
     }
 
-    10% {
-        opacity: 1;
+    30% {
+        transform:
+            translate3d(var(--sway1),30vh,0)
+            rotate(150deg);
+    }
+
+    65% {
+        transform:
+            translate3d(var(--sway2),65vh,0)
+            rotate(280deg);
     }
 
     100% {
         transform:
-            translate3d(80px,115vh,0)
-            rotate(385deg);
-        opacity: .2;
+            translate3d(var(--sway3),115vh,0)
+            rotate(450deg);
+
+        opacity: .15;
     }
 }
 
-
 /* =========================================================
-   SAINT-VALENTIN
+   SAINT VALENTIN
 ========================================================= */
 
-.theme-saint-valentin {
+body.theme-saint-valentin {
     background:
         radial-gradient(
             circle at 50% -10%,
-            #ffdce7 0,
-            #fff0f5 38%,
-            #fffafb 75%,
-            #ffffff 100%
+            #ffd1df,
+            #fff0f5 40%,
+            #ffffff
         ) !important;
 }
 
-.theme-saint-valentin .navbar {
+body.theme-saint-valentin .season-layer {
     background:
-        linear-gradient(
-            135deg,
-            #831843,
-            #db2777
-        ) !important;
-}
-
-.theme-saint-valentin .card {
-    position: relative;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.98),
-            #fff1f5
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(244,63,94,.09),
+            transparent 60%
         );
-
-    border:
-        1px solid #f3c0d1;
-
-    box-shadow:
-        0 10px 30px rgba(190,24,93,.12);
 }
 
 .heart-particle {
-    width: 16px !important;
-    height: 16px !important;
+    left: var(--x);
 
-    background: #e11d48 !important;
+    width: var(--size, 17px);
+    height: var(--size, 17px);
+
+    background: var(--heart-color, #e11d48);
 
     transform: rotate(45deg);
 
-    animation:
-        heart-float 11s linear infinite !important;
-
     filter:
         drop-shadow(
-            0 2px 5px rgba(190,24,93,.4)
+            0 3px 6px rgba(190,24,93,.3)
         );
 
-    will-change: transform, opacity;
+    animation:
+        heart-rise
+        var(--duration, 17s)
+        linear
+        var(--delay, 0s)
+        infinite;
 }
 
 .heart-particle::before,
@@ -853,450 +881,677 @@
 
     position: absolute;
 
-    width: 16px;
-    height: 16px;
+    width: 100%;
+    height: 100%;
 
     background: inherit;
-
     border-radius: 50%;
 }
 
 .heart-particle::before {
-    top: -8px;
+    top: -50%;
     left: 0;
 }
 
 .heart-particle::after {
     top: 0;
-    left: -8px;
+    left: -50%;
 }
 
-@keyframes heart-float {
+@keyframes heart-rise {
 
     0% {
         transform:
-            translate3d(0,-50px,0)
+            translate3d(0,110vh,0)
             rotate(45deg)
-            scale(.6);
+            scale(.65);
         opacity: 0;
     }
 
-    10% {
+    12% {
         opacity: .9;
     }
 
-    50% {
+    40% {
         transform:
-            translate3d(40px,50vh,0)
-            rotate(225deg)
+            translate3d(var(--sway1),55vh,0)
+            rotate(145deg)
             scale(1);
     }
 
+    70% {
+        transform:
+            translate3d(var(--sway2),28vh,0)
+            rotate(260deg)
+            scale(.9);
+    }
+
     100% {
         transform:
-            translate3d(-30px,115vh,0)
+            translate3d(var(--sway3),-100px,0)
             rotate(405deg)
-            scale(.8);
+            scale(.7);
         opacity: 0;
     }
 }
 
-
 /* =========================================================
-   PÂQUES
+   PAQUES
 ========================================================= */
 
-.theme-paques {
+body.theme-paques {
     background:
+        radial-gradient(
+            ellipse at 50% 10%,
+            rgba(255,255,255,.85),
+            transparent 32%
+        ),
         linear-gradient(
             180deg,
-            #fff9e9 0%,
-            #f5fff7 55%,
-            #e8f8e8 100%
+            #fff8df,
+            #f0fff4 55%,
+            #dff3dc
         ) !important;
 }
 
-.theme-paques .navbar {
+body.theme-paques .season-layer {
     background:
-        linear-gradient(
-            135deg,
-            #166534,
-            #22c55e
-        ) !important;
-}
-
-.theme-paques .card {
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f5fff7
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(74,222,128,.12),
+            transparent 60%
         );
+}
 
-    border:
-        1px solid #c9e8d0;
-
-    box-shadow:
-        0 8px 25px rgba(34,197,94,.10);
+body.theme-paques .season-layer::before {
+    background:
+        radial-gradient(
+            circle at 15% 25%,
+            rgba(255,255,255,.7),
+            transparent 12%
+        ),
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(255,255,255,.6),
+            transparent 14%
+        );
 }
 
 .easter-egg {
-    width: 23px !important;
-    height: 30px !important;
+    left: var(--x);
+
+    width: var(--w, 28px);
+    height: var(--h, 39px);
 
     border-radius:
-        50% 50% 48% 48% !important;
+        50% 50% 48% 48%;
 
     background:
         linear-gradient(
             135deg,
-            #f9a8d4,
-            #fbcfe8
-        ) !important;
+            var(--egg-light, #f9a8d4),
+            var(--egg-color, #db2777)
+        );
 
     border:
-        2px solid rgba(255,255,255,.8) !important;
+        2px solid rgba(255,255,255,.85);
 
     box-shadow:
-        0 4px 10px rgba(0,0,0,.12) !important;
+        0 5px 12px rgba(0,0,0,.13);
 
     animation:
-        egg-float 13s linear infinite !important;
+        egg-flight
+        var(--duration, 20s)
+        linear
+        var(--delay, 0s)
+        infinite;
 }
 
-@keyframes egg-float {
+.easter-egg::before {
+    content: "";
+
+    position: absolute;
+
+    left: 8%;
+    right: 8%;
+    top: 40%;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.7);
+}
+
+.easter-egg::after {
+    content: "";
+
+    position: absolute;
+
+    left: 25%;
+    right: 25%;
+    top: 63%;
+
+    height: 4px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.5);
+}
+
+@keyframes egg-flight {
 
     0% {
         transform:
-            translate3d(0,-60px,0)
-            rotate(-15deg);
-        opacity: 0;
+            translate3d(0,-70px,0)
+            rotate(-20deg);
     }
 
-    10% {
-        opacity: 1;
-    }
-
-    50% {
+    30% {
         transform:
-            translate3d(50px,50vh,0)
-            rotate(15deg);
+            translate3d(var(--sway1),30vh,0)
+            rotate(80deg);
+    }
+
+    60% {
+        transform:
+            translate3d(var(--sway2),65vh,0)
+            rotate(200deg);
     }
 
     100% {
         transform:
-            translate3d(-30px,115vh,0)
-            rotate(-20deg);
-        opacity: .2;
+            translate3d(var(--sway3),115vh,0)
+            rotate(370deg);
+
+        opacity: .15;
     }
 }
 
 .spring-flower {
-    width: 10px !important;
-    height: 10px !important;
+    left: var(--x);
+    top: var(--y);
 
-    border-radius: 50% !important;
+    width: var(--size, 8px);
+    height: var(--size, 8px);
 
-    background: #f9a8d4 !important;
+    border-radius: 50%;
+
+    background: var(--flower-center, #facc15);
 
     box-shadow:
-        10px 0 #fbcfe8,
-        -10px 0 #fbcfe8,
-        0 10px #fbcfe8,
-        0 -10px #fbcfe8 !important;
+        0 -9px 0 var(--flower-color, #f9a8d4),
+        9px 0 0 var(--flower-color, #f9a8d4),
+        0 9px 0 var(--flower-color, #f9a8d4),
+        -9px 0 0 var(--flower-color, #f9a8d4);
 
     animation:
-        flower-drift 11s linear infinite !important;
+        flower-drift
+        var(--duration, 7s)
+        ease-in-out
+        var(--delay, 0s)
+        infinite alternate;
 }
 
 @keyframes flower-drift {
 
     from {
         transform:
-            translate3d(0,-50px,0)
+            translateX(0)
             rotate(0deg);
-        opacity: 0;
-    }
-
-    10% {
-        opacity: 1;
     }
 
     to {
         transform:
-            translate3d(30px,115vh,0)
-            rotate(360deg);
-        opacity: .2;
+            translateX(var(--sway, 40px))
+            rotate(180deg);
     }
 }
-
 
 /* =========================================================
    HALLOWEEN
 ========================================================= */
 
-.theme-halloween {
+body.theme-halloween {
     background:
         radial-gradient(
-            circle at 50% 5%,
-            #47305f 0%,
-            #24152f 40%,
-            #0d0812 100%
+            ellipse at 50% 10%,
+            #654577 0%,
+            #35203f 35%,
+            #160d1d 70%,
+            #07040a 100%
         ) !important;
 
-    color: #eee;
+    color: #f3e8ff;
 }
 
-.theme-halloween .navbar {
+body.theme-halloween .navbar {
     background:
         linear-gradient(
             135deg,
-            #120b18,
-            #32173e
+            #100713,
+            #35133d
         ) !important;
 }
 
-.theme-halloween .card {
+body.theme-halloween .card {
     background:
         linear-gradient(
             145deg,
-            #24152f,
-            #160d1d
+            #29172f,
+            #130a18
         );
 
-    color: #eee;
+    color: #f5edf8;
 
     border:
         1px solid rgba(249,115,22,.3);
 
     box-shadow:
-        0 10px 35px rgba(0,0,0,.45);
+        0 15px 40px rgba(0,0,0,.5);
 }
 
-.halloween-moon {
-    position: fixed !important;
-
-    top: 8vh !important;
-    right: 10vw !important;
-
-    width: 100px !important;
-    height: 100px !important;
-
-    border-radius: 50% !important;
-
+body.theme-halloween .season-layer {
     background:
         radial-gradient(
-            circle at 35% 35%,
-            #fff8d6,
-            #e8d89a
-        ) !important;
-
-    box-shadow:
-        0 0 30px rgba(255,240,170,.4) !important;
-
-    opacity: .9 !important;
-
-    z-index: 2 !important;
-
-    pointer-events: none !important;
+            ellipse at 50% 100%,
+            rgba(110,92,125,.24),
+            transparent 55%
+        );
 }
 
-.halloween-fog {
-    position: fixed !important;
-
-    left: -10% !important;
-    bottom: 0 !important;
-
-    width: 120% !important;
-    height: 25vh !important;
-
+body.theme-halloween .season-layer::before {
     background:
         radial-gradient(
-            ellipse,
-            rgba(190,180,210,.22),
-            transparent 70%
-        ) !important;
+            ellipse at 20% 70%,
+            rgba(130,110,145,.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 80% 80%,
+            rgba(150,130,160,.15),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.08),
+            rgba(0,0,0,.38)
+        );
+}
 
-    filter: blur(12px);
+body.theme-halloween .season-layer::after {
+    background:
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(196,181,206,.25),
+            transparent 55%
+        );
+
+    filter: blur(16px);
 
     animation:
-        fog-move 12s ease-in-out infinite alternate !important;
-
-    z-index: 3 !important;
-
-    pointer-events: none !important;
+        halloween-atmosphere
+        17s
+        ease-in-out
+        infinite alternate;
 }
 
-@keyframes fog-move {
+@keyframes halloween-atmosphere {
 
     from {
-        transform: translateX(-4%);
+        transform:
+            translateX(-4%)
+            scale(1);
+        opacity: .60;
     }
 
     to {
-        transform: translateX(4%);
+        transform:
+            translateX(4%)
+            scale(1.08);
+        opacity: 1;
     }
 }
 
-.bat {
-    width: 35px !important;
-    height: 18px !important;
+/* Lune */
 
-    background: #09070c !important;
+.halloween-moon {
+    position: absolute !important;
+
+    top: 7%;
+    right: 9%;
+
+    width: 115px;
+    height: 115px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 32%,
+            #fffce0,
+            #eee1a5 60%,
+            #c5b77e
+        );
+
+    box-shadow:
+        0 0 25px rgba(255,240,170,.55),
+        0 0 70px rgba(255,218,110,.25);
+
+    z-index: 5;
+}
+
+.halloween-moon::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 28% 30%,
+            rgba(100,80,50,.16) 0 7%,
+            transparent 8%
+        ),
+        radial-gradient(
+            circle at 65% 25%,
+            rgba(100,80,50,.12) 0 10%,
+            transparent 11%
+        ),
+        radial-gradient(
+            circle at 55% 65%,
+            rgba(100,80,50,.15) 0 8%,
+            transparent 9%
+        );
+}
+
+/* Brouillard */
+
+.halloween-fog {
+    position: absolute !important;
+
+    left: -15%;
+    bottom: -3%;
+
+    width: 130%;
+    height: 30%;
+
+    background:
+        radial-gradient(
+            ellipse at 20% 50%,
+            rgba(205,195,215,.22),
+            transparent 45%
+        ),
+        radial-gradient(
+            ellipse at 70% 40%,
+            rgba(205,195,215,.20),
+            transparent 50%
+        );
+
+    filter: blur(18px);
+
+    animation:
+        halloween-fog-move
+        16s
+        ease-in-out
+        infinite alternate;
+
+    z-index: 6;
+}
+
+@keyframes halloween-fog-move {
+
+    from {
+        transform:
+            translateX(-5%)
+            scaleX(1);
+    }
+
+    to {
+        transform:
+            translateX(5%)
+            scaleX(1.08);
+    }
+}
+
+/* Chauves-souris */
+
+.bat {
+    left: var(--x);
+    top: var(--y);
+
+    width: 38px;
+    height: 20px;
+
+    background: #09070c;
 
     clip-path:
         polygon(
             0 20%,
-            25% 45%,
-            35% 0,
-            50% 35%,
-            65% 0,
-            75% 45%,
+            20% 45%,
+            32% 0,
+            50% 38%,
+            68% 0,
+            80% 45%,
             100% 20%,
-            75% 75%,
+            77% 78%,
             50% 100%,
-            25% 75%
+            23% 78%
         );
 
-    animation:
-        bat-flight 13s linear infinite !important;
+    filter:
+        drop-shadow(0 3px 4px rgba(0,0,0,.5));
 
-    z-index: 4 !important;
+    animation:
+        bat-flight
+        var(--duration, 21s)
+        ease-in-out
+        var(--delay, 0s)
+        infinite;
 }
 
 @keyframes bat-flight {
 
     0% {
         transform:
-            translate3d(-120px,0,0)
-            scale(.8);
+            translate3d(-100px,0,0)
+            scale(.7)
+            rotate(-5deg);
         opacity: 0;
     }
 
-    10% {
+    12% {
         opacity: 1;
     }
 
-    50% {
+    35% {
         transform:
-            translate3d(50vw,-60px,0)
-            scale(1);
+            translate3d(var(--sway1),var(--swayY1),0)
+            scale(1)
+            rotate(5deg);
+    }
+
+    65% {
+        transform:
+            translate3d(var(--sway2),var(--swayY2),0)
+            scale(.9)
+            rotate(-7deg);
     }
 
     100% {
         transform:
-            translate3d(110vw,30px,0)
-            scale(.75);
-        opacity: .2;
+            translate3d(var(--sway3),var(--swayY3),0)
+            scale(.7)
+            rotate(4deg);
+        opacity: 0;
     }
 }
 
+/* Citrouilles */
+
 .pumpkin {
-    width: 34px !important;
-    height: 29px !important;
+    left: var(--x);
+    bottom: var(--bottom);
+
+    width: var(--size, 40px);
+    height: calc(var(--size, 40px) * .78);
 
     border-radius:
-        45% 45% 40% 40% !important;
+        45% 45% 40% 40%;
 
     background:
         radial-gradient(
             circle at 50% 55%,
-            #ffb000,
-            #f97316 65%,
-            #c2410c
-        ) !important;
+            #ffbd22,
+            #f97316 60%,
+            #b83a08
+        );
 
     box-shadow:
-        0 0 14px rgba(249,115,22,.75),
-        0 0 25px rgba(249,115,22,.4) !important;
+        0 0 12px rgba(249,115,22,.8),
+        0 0 30px rgba(249,115,22,.45);
 
     animation:
-        pumpkin-glow 2s ease-in-out infinite alternate !important;
-
-    z-index: 5 !important;
+        pumpkin-glow
+        var(--duration, 5s)
+        ease-in-out
+        var(--delay, 0s)
+        infinite alternate;
 }
 
 .pumpkin::before {
     content: "";
 
     position: absolute;
+    left: 50%;
+    top: -7px;
 
-    top: -6px;
-    left: 14px;
-
-    width: 7px;
-    height: 9px;
+    width: 8px;
+    height: 11px;
 
     background: #365314;
-
     border-radius: 3px;
+
+    transform: translateX(-50%);
+}
+
+.pumpkin::after {
+    content: "◆";
+
+    position: absolute;
+
+    left: 50%;
+    top: 48%;
+
+    transform: translate(-50%,-50%);
+
+    color: #35120b;
+
+    font-size: 16px;
+
+    text-shadow:
+        -8px 0 #35120b,
+        8px 0 #35120b;
 }
 
 @keyframes pumpkin-glow {
 
     from {
-        filter: brightness(.8);
-        transform: scale(.95);
+        transform: scale(.92);
+        filter: brightness(.85);
     }
 
     to {
-        filter: brightness(1.35);
         transform: scale(1.08);
+        filter: brightness(1.3);
     }
 }
-
 
 /* =========================================================
    NOUVEL AN
 ========================================================= */
 
-.theme-nouvel-an {
+body.theme-nouvel-an {
     background:
         radial-gradient(
-            circle at 50% 0%,
-            #26365c,
-            #0d1428 48%,
-            #050812 100%
+            ellipse at 50% 0%,
+            #334b82,
+            #111a35 45%,
+            #03050c 100%
         ) !important;
 
     color: white;
 }
 
-.theme-nouvel-an .navbar {
+body.theme-nouvel-an .navbar {
     background:
         linear-gradient(
             135deg,
-            #070b18,
+            #03050d,
             #172554
         ) !important;
 }
 
-.theme-nouvel-an .card {
+body.theme-nouvel-an .card {
     background:
-        rgba(255,255,255,.07);
+        rgba(255,255,255,.075);
 
     color: white;
 
     border:
-        1px solid rgba(255,255,255,.14);
+        1px solid rgba(255,255,255,.18);
 
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+}
+
+body.theme-nouvel-an .season-layer {
+    background:
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(59,130,246,.16),
+            transparent 55%
+        );
+}
+
+body.theme-nouvel-an .season-layer::before {
+    background:
+        radial-gradient(
+            circle at 20% 25%,
+            rgba(96,165,250,.12),
+            transparent 20%
+        ),
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(244,114,182,.10),
+            transparent 22%
+        );
 }
 
 .newyear-star {
-    width: 4px !important;
-    height: 4px !important;
+    left: var(--x);
+    top: var(--y);
 
-    background: white !important;
+    width: var(--size, 4px);
+    height: var(--size, 4px);
 
-    border-radius: 50% !important;
+    border-radius: 50%;
+
+    background: white;
 
     box-shadow:
-        0 0 6px white,
-        0 0 14px rgba(125,211,252,.9) !important;
+        0 0 7px white,
+        0 0 16px rgba(125,211,252,.95);
 
     animation:
-        newyear-twinkle 2s ease-in-out infinite alternate !important;
+        newyear-twinkle
+        var(--duration, 3s)
+        ease-in-out
+        var(--delay, 0s)
+        infinite alternate;
 }
 
 @keyframes newyear-twinkle {
@@ -1312,56 +1567,34 @@
     }
 }
 
-
-/* ---------------------------------------------------------
-   FEU D'ARTIFICE
---------------------------------------------------------- */
-
 .firework {
-    position: fixed !important;
+    position: absolute !important;
 
-    width: 10px !important;
-    height: 10px !important;
+    left: var(--fire-x);
+    top: var(--fire-y);
 
-    border-radius: 50% !important;
+    width: 8px;
+    height: 8px;
 
-    background: #ffffff !important;
+    border-radius: 50%;
+
+    background: var(--fire-color, #fff);
 
     box-shadow:
-        0 0 8px #ffffff,
-        0 0 18px #7dd3fc,
-        0 0 35px rgba(125,211,252,.8) !important;
+        0 0 8px var(--fire-color),
+        0 0 20px var(--fire-color),
+        0 0 40px var(--fire-color);
+
+    z-index: 30;
 
     animation:
-        firework-burst 2.4s ease-out infinite !important;
-
-    z-index: 20 !important;
-
-    pointer-events: none !important;
+        firework-burst
+        2.8s
+        ease-out
+        forwards;
 }
 
-.firework::before {
-    content: "";
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 4px;
-    height: 130px;
-
-    transform:
-        translate(-50%,-50%);
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(255,255,255,.9),
-            transparent
-        );
-}
-
+.firework::before,
 .firework::after {
     content: "";
 
@@ -1370,60 +1603,72 @@
     left: 50%;
     top: 50%;
 
-    width: 130px;
-    height: 4px;
+    width: 4px;
+    height: 170px;
 
     transform:
         translate(-50%,-50%);
 
     background:
         linear-gradient(
-            to right,
-            transparent,
-            rgba(125,211,252,.9),
+            to bottom,
+            var(--fire-color),
             transparent
         );
+
+    box-shadow:
+        0 0 10px var(--fire-color);
+}
+
+.firework::after {
+    transform:
+        translate(-50%,-50%)
+        rotate(90deg);
 }
 
 @keyframes firework-burst {
 
     0% {
-        transform: scale(.1);
+        transform: scale(.05);
         opacity: 0;
     }
 
-    15% {
+    12% {
+        transform: scale(.4);
         opacity: 1;
-        transform: scale(.5);
     }
 
-    60% {
-        transform: scale(1.7);
-        opacity: .9;
+    55% {
+        transform: scale(1.5);
+        opacity: .95;
     }
 
     100% {
-        transform: scale(3.2);
+        transform: scale(3.8);
         opacity: 0;
     }
 }
 
-
 /* =========================================================
-   ÉTÉ
+   ETE
 ========================================================= */
 
-.theme-ete {
+body.theme-ete {
     background:
+        radial-gradient(
+            ellipse at 75% 15%,
+            rgba(255,255,255,.45),
+            transparent 20%
+        ),
         linear-gradient(
             180deg,
-            #9de4ff 0%,
-            #dff8ff 55%,
-            #ffffff 100%
+            #62d7ff,
+            #bcefff 50%,
+            #fff7d6
         ) !important;
 }
 
-.theme-ete .navbar {
+body.theme-ete .navbar {
     background:
         linear-gradient(
             135deg,
@@ -1432,42 +1677,78 @@
         ) !important;
 }
 
-.theme-ete .card {
+body.theme-ete .season-layer {
     background:
-        rgba(255,255,255,.94);
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(255,218,90,.16),
+            transparent 60%
+        );
+}
+
+body.theme-ete .season-layer::before {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.05),
+            transparent 45%
+        );
 }
 
 .sun {
-    position: fixed !important;
+    position: absolute;
 
-    top: 7vh !important;
-    right: 8vw !important;
+    top: 7%;
+    right: 7%;
 
-    width: 90px !important;
-    height: 90px !important;
+    width: 105px;
+    height: 105px;
 
-    border-radius: 50% !important;
+    border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            #fff7a8,
-            #facc15
-        ) !important;
+            #fffbd0,
+            #fde047 60%,
+            #f59e0b
+        );
 
     box-shadow:
-        0 0 45px rgba(250,204,21,.55) !important;
+        0 0 35px rgba(253,224,71,.75),
+        0 0 85px rgba(251,191,36,.45);
 
-    z-index: 2 !important;
+    z-index: 5;
 
     animation:
-        sun-pulse 3s ease-in-out infinite alternate !important;
+        sun-pulse
+        4s
+        ease-in-out
+        infinite alternate;
+}
+
+.sun::before {
+    content: "";
+
+    position: absolute;
+    inset: -25px;
+
+    border-radius: 50%;
+
+    border:
+        2px dashed rgba(255,226,90,.55);
+
+    animation:
+        sun-rays
+        18s
+        linear
+        infinite;
 }
 
 @keyframes sun-pulse {
 
     from {
-        transform: scale(.95);
+        transform: scale(.96);
         filter: brightness(.95);
     }
 
@@ -1477,163 +1758,293 @@
     }
 }
 
+@keyframes sun-rays {
 
-/* =========================================================
-   AUTOMNE
-========================================================= */
-
-.theme-automne {
-    background:
-        radial-gradient(circle at 22% 18%, rgba(255,220,160,.35), transparent 30%),
-        radial-gradient(circle at 78% 30%, rgba(180,83,9,.10), transparent 30%),
-        linear-gradient(180deg, #fff0d2, #f3dfc4 55%, #dfc4a5) !important;
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.theme-automne .navbar {
+/* =========================================================
+   AUTOMNE — PLUS RICHE ET VIVANT
+========================================================= */
+
+body.theme-automne {
     background:
+        radial-gradient(
+            ellipse at 50% 8%,
+            rgba(255,232,185,.35),
+            transparent 35%
+        ),
         linear-gradient(
-            135deg,
-            #78350f,
-            #b45309
+            180deg,
+            #f2b56b,
+            #d98645 38%,
+            #70402d 100%
         ) !important;
 }
 
-.theme-automne .card {
+body.theme-automne .navbar {
+    background:
+        linear-gradient(
+            135deg,
+            #5c2618,
+            #a84d20
+        ) !important;
+}
+
+body.theme-automne .card {
     background:
         linear-gradient(
             145deg,
             #fffaf2,
-            #f7eadb
+            #f4dfca
         );
 }
 
-.theme-automne::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
+body.theme-automne .season-layer {
     background:
-        radial-gradient(ellipse at 50% 85%, rgba(255,255,255,.22), transparent 55%),
-        linear-gradient(110deg, rgba(120,53,15,.05), transparent 38%, rgba(180,83,9,.06));
+        radial-gradient(
+            ellipse at 50% 15%,
+            rgba(255,218,150,.18),
+            transparent 42%
+        ),
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(73,35,24,.25),
+            transparent 65%
+        ),
+        radial-gradient(
+            ellipse at 15% 55%,
+            rgba(255,160,70,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            ellipse at 85% 45%,
+            rgba(180,65,20,.10),
+            transparent 30%
+        );
 }
 
-.autumn-wind {
-    position: absolute;
-    left: -15%;
-    bottom: 8vh;
-    width: 130%;
-    height: 24vh;
-    background: radial-gradient(ellipse, rgba(255,255,255,.18), transparent 68%);
-    filter: blur(16px);
-    opacity: .55;
-    animation: autumn-wind-drift 11s ease-in-out infinite alternate;
+body.theme-automne .season-layer::before {
+    background:
+        linear-gradient(
+            115deg,
+            rgba(255,220,160,.14),
+            transparent 35%,
+            rgba(77,40,27,.20)
+        );
 }
 
-@keyframes autumn-wind-drift {
-    from { transform: translateX(-4%) scaleX(.96); opacity: .35; }
-    to { transform: translateX(4%) scaleX(1.04); opacity: .7; }
+body.theme-automne .season-layer::after {
+    background:
+        radial-gradient(
+            ellipse at 30% 80%,
+            rgba(255,235,205,.14),
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 80% 70%,
+            rgba(255,235,205,.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,190,110,.06),
+            transparent
+        );
+
+    filter: blur(14px);
+
+    animation:
+        autumn-wind
+        13s
+        ease-in-out
+        infinite alternate;
 }
 
 .leaf-particle {
-    width: 14px !important;
-    height: 20px !important;
+    left: var(--x);
+
+    width: var(--size, 22px);
+    height: calc(var(--size, 22px) * 1.35);
 
     border-radius:
-        3px 12px 3px 12px !important;
+        65% 15% 65% 15%;
 
     background:
-        linear-gradient(
-            135deg,
-            #92400e,
-            #d97706
-        ) !important;
+        var(--leaf-color, #b45309);
 
     box-shadow:
-        0 3px 8px rgba(120,53,15,.2) !important;
+        0 4px 8px rgba(60,30,15,.25);
+
+    transform-origin: 50% 50%;
 
     animation:
-        autumn-leaf 10s linear infinite !important;
-
-    will-change: transform;
+        autumn-leaf
+        var(--duration, 22s)
+        linear
+        var(--delay, 0s)
+        infinite;
 }
 
+.leaf-particle::before {
+    content: "";
 
-.season-layer .leaf-particle:nth-child(3n) { width: 18px !important; height: 12px !important; background: linear-gradient(135deg,#b45309,#ef4444) !important; }
-.season-layer .leaf-particle:nth-child(4n) { width: 11px !important; height: 18px !important; background: linear-gradient(135deg,#d97706,#facc15) !important; }
-.season-layer .leaf-particle:nth-child(5n) { transform-origin: 50% 75%; filter: saturate(1.15) drop-shadow(0 4px 7px rgba(120,53,15,.18)); }
+    position: absolute;
+
+    left: 50%;
+    top: 8%;
+
+    width: 2px;
+    height: 84%;
+
+    background: rgba(90,50,20,.4);
+
+    transform:
+        translateX(-50%)
+        rotate(35deg);
+}
+
+.leaf-particle::after {
+    content: "";
+
+    position: absolute;
+
+    left: 12%;
+    top: 48%;
+
+    width: 76%;
+    height: 2px;
+
+    background: rgba(90,50,20,.28);
+
+    transform: rotate(-25deg);
+}
 
 @keyframes autumn-leaf {
 
     0% {
         transform:
-            translate3d(0,-60px,0)
-            rotate(0deg);
+            translate3d(0,-80px,0)
+            rotate(0deg)
+            scale(var(--scale,1));
+
         opacity: 0;
     }
 
-    10% {
+    12% {
         opacity: 1;
+    }
+
+    25% {
+        transform:
+            translate3d(var(--sway1),25vh,0)
+            rotate(110deg)
+            scale(var(--scale,1));
     }
 
     50% {
         transform:
-            translate3d(80px,50vh,0)
-            rotate(190deg);
+            translate3d(var(--sway2),50vh,0)
+            rotate(250deg)
+            scale(var(--scale,1));
+    }
+
+    75% {
+        transform:
+            translate3d(var(--sway3),76vh,0)
+            rotate(390deg)
+            scale(var(--scale,1));
     }
 
     100% {
         transform:
-            translate3d(-60px,115vh,0)
-            rotate(380deg);
-        opacity: .2;
+            translate3d(var(--sway4),115vh,0)
+            rotate(540deg)
+            scale(var(--scale,1));
+
+        opacity: .12;
     }
 }
 
+@keyframes autumn-wind {
+
+    from {
+        transform:
+            translateX(-5%)
+            scaleX(1);
+
+        opacity: .55;
+    }
+
+    to {
+        transform:
+            translateX(5%)
+            scaleX(1.1);
+
+        opacity: .9;
+    }
+}
+
+/* =========================================================
+   ACCESSIBILITE
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .season-layer *,
+    .season-layer {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 576px) {
+@media (max-width: 700px) {
 
-    .season-layer {
-        opacity: .9 !important;
+    .christmas-moon,
+    .halloween-moon,
+    .sun {
+        transform: scale(.72);
+        transform-origin: top right;
     }
 
     .santa-sleigh {
-        transform-origin: left top;
-    }
-
-    .halloween-moon {
-        width: 70px !important;
-        height: 70px !important;
+        transform-origin: left center;
     }
 
     .school-paper {
-        width: 16px !important;
-        height: 22px !important;
+        width: 20px !important;
+        height: 29px !important;
     }
 
     .school-pencil {
-        width: 5px !important;
-        height: 27px !important;
+        width: 7px !important;
+        height: 34px !important;
     }
 
     .heart-particle {
-        width: 12px !important;
-        height: 12px !important;
+        width: 13px;
+        height: 13px;
+    }
+
+    .halloween-moon {
+        width: 82px;
+        height: 82px;
     }
 }
 
-
 /* =========================================================
-   IMPORTANT
-   Empêche un éventuel CSS global du projet de couper
-   les animations saisonnières.
+   SECURITE
 ========================================================= */
 
 .season-layer *,
 .santa-sleigh {
     animation-play-state: running !important;
 }
+

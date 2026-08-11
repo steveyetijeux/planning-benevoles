@@ -1,4 +1,11 @@
+/* =========================================================
+   PLANNING FOYER MDL
+   ANIMATIONS SAISONNIERES
+   VERSION ROBUSTE
+========================================================= */
+
 (function () {
+
     "use strict";
 
     function initSeasonal() {
@@ -9,78 +16,53 @@
             return;
         }
 
+        /*
+         * Evite de créer plusieurs couches si le script
+         * est chargé plusieurs fois.
+         */
         var oldLayer = document.querySelector(".season-layer");
 
         if (oldLayer) {
-            oldLayer.remove();
+            oldLayer.parentNode.removeChild(oldLayer);
         }
 
         var layer = document.createElement("div");
-
         layer.className = "season-layer";
 
         body.appendChild(layer);
 
 
-        function random(min, max) {
-            return min + Math.random() * (max - min);
-        }
+        /* =====================================================
+           OUTIL PARTICULES
+        ===================================================== */
 
-
-        function randomInt(min, max) {
-            return Math.floor(
-                random(min, max + 1)
-            );
-        }
-
-
-        function css(element, values) {
-
-            Object.keys(values).forEach(function (key) {
-
-                element.style.setProperty(
-                    key,
-                    values[key]
-                );
-
-            });
-
-        }
-
-
-        function create(className) {
-
-            var element =
-                document.createElement("div");
-
-            element.className =
-                "season-particle " + className;
-
-            layer.appendChild(element);
-
-            return element;
-        }
-
-
-        function createParticles(
-            className,
-            count,
-            setup
-        ) {
+        function createParticles(className, count, minDuration, maxDuration) {
 
             var i;
+            var particle;
 
             for (i = 0; i < count; i++) {
 
-                var element =
-                    create(className);
+                particle = document.createElement("div");
 
-                if (setup) {
-                    setup(element, i);
-                }
+                particle.className =
+                    "season-particle " + className;
 
+                particle.style.left =
+                    (Math.random() * 100) + "%";
+
+                particle.style.animationDuration =
+                    (
+                        minDuration +
+                        Math.random() *
+                        (maxDuration - minDuration)
+                    ) + "s";
+
+                particle.style.animationDelay =
+                    (-Math.random() * maxDuration) + "s";
+
+                layer.appendChild(particle);
             }
-
         }
 
 
@@ -88,233 +70,150 @@
            NOEL
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-noel"
-            )
-        ) {
-
-            var christmasMoon =
-                document.createElement("div");
-
-            christmasMoon.className =
-                "christmas-moon";
-
-            layer.appendChild(
-                christmasMoon
-            );
-
+        if (body.classList.contains("theme-noel")) {
 
             createParticles(
                 "snowflake",
-                45,
-                function (snow) {
-
-                    css(snow, {
-
-                        "--x":
-                            random(0, 100) + "%",
-
-                        "--size":
-                            random(5, 12) + "px",
-
-                        "--opacity":
-                            random(.5, .95),
-
-                        "--duration":
-                            random(14, 25) + "s",
-
-                        "--delay":
-                            random(-25, 0) + "s",
-
-                        "--drift":
-                            random(-190, 190) + "px"
-
-                    });
-
-                }
+                55,
+                9,
+                18
             );
-
 
             createParticles(
                 "star",
-                14,
-                function (star) {
-
-                    css(star, {
-
-                        "--x":
-                            random(4, 96) + "%",
-
-                        "--y":
-                            random(4, 58) + "%",
-
-                        "--size":
-                            random(4, 9) + "px",
-
-                        "--opacity":
-                            random(.35, .9),
-
-                        "--duration":
-                            random(3, 6) + "s",
-
-                        "--delay":
-                            random(-6, 0) + "s"
-
-                    });
-
-                }
+                25,
+                2,
+                5
             );
-
-
-            var lightColors = [
-                "#ff4d5a",
-                "#53d769",
-                "#ffd447",
-                "#62b6ff"
-            ];
-
 
             createParticles(
                 "christmas-light",
                 18,
-                function (light) {
-
-                    css(light, {
-
-                        "--x":
-                            random(3, 97) + "%",
-
-                        "--y":
-                            random(8, 86) + "%",
-
-                        "--light-color":
-                            lightColors[
-                                randomInt(
-                                    0,
-                                    lightColors.length - 1
-                                )
-                            ],
-
-                        "--duration":
-                            random(2.5, 5) + "s",
-
-                        "--delay":
-                            random(-5, 0) + "s"
-
-                    });
-
-                }
+                1.5,
+                3
             );
 
 
             function createSleigh() {
 
-                if (
-                    document.querySelector(
-                        ".santa-sleigh"
-                    )
-                ) {
+                var sleigh;
+                var snow;
+                var reindeer;
+                var sleighBody;
+                var runner1;
+                var runner2;
+                var santa;
+                var santaHead;
+                var santaBeard;
+                var santaHat;
+                var santaBody;
+                var santaArmLeft;
+                var santaArmRight;
+                var santaBelt;
+                var santaBootLeft;
+                var santaBootRight;
+
+                if (document.querySelector(".santa-sleigh")) {
                     return;
                 }
 
+                sleigh = document.createElement("div");
+                sleigh.className = "santa-sleigh";
 
-                var sleigh =
-                    document.createElement("div");
+                snow = document.createElement("div");
+                snow.className = "sleigh-snow";
 
-                sleigh.className =
-                    "santa-sleigh";
+                reindeer = document.createElement("div");
+                reindeer.className = "sleigh-reindeer";
+
+                sleighBody = document.createElement("div");
+                sleighBody.className = "sleigh-body";
+
+                runner1 = document.createElement("div");
+                runner1.className = "sleigh-runner";
+
+                runner2 = document.createElement("div");
+                runner2.className = "sleigh-runner second";
+
+                santa = document.createElement("div");
+                santa.className = "santa-character";
+
+                santaBody = document.createElement("div");
+                santaBody.className = "santa-body";
+
+                santaHead = document.createElement("div");
+                santaHead.className = "santa-head";
+
+                santaBeard = document.createElement("div");
+                santaBeard.className = "santa-beard";
+
+                santaHat = document.createElement("div");
+                santaHat.className = "santa-hat";
+
+                santaArmLeft = document.createElement("div");
+                santaArmLeft.className =
+                    "santa-arm santa-arm-left";
+
+                santaArmRight = document.createElement("div");
+                santaArmRight.className =
+                    "santa-arm santa-arm-right";
+
+                santaBelt = document.createElement("div");
+                santaBelt.className = "santa-belt";
+
+                santaBootLeft = document.createElement("div");
+                santaBootLeft.className =
+                    "santa-boot santa-boot-left";
+
+                santaBootRight = document.createElement("div");
+                santaBootRight.className =
+                    "santa-boot santa-boot-right";
 
 
-                var snow =
-                    document.createElement("div");
-
-                snow.className =
-                    "sleigh-snow";
-
-
-                var reindeer =
-                    document.createElement("div");
-
-                reindeer.className =
-                    "sleigh-reindeer";
-
-
-                var sleighBody =
-                    document.createElement("div");
-
-                sleighBody.className =
-                    "sleigh-body";
-
-
-                var runner1 =
-                    document.createElement("div");
-
-                runner1.className =
-                    "sleigh-runner";
-
-
-                var runner2 =
-                    document.createElement("div");
-
-                runner2.className =
-                    "sleigh-runner second";
+                santa.appendChild(santaBody);
+                santa.appendChild(santaHead);
+                santa.appendChild(santaBeard);
+                santa.appendChild(santaHat);
+                santa.appendChild(santaArmLeft);
+                santa.appendChild(santaArmRight);
+                santa.appendChild(santaBelt);
+                santa.appendChild(santaBootLeft);
+                santa.appendChild(santaBootRight);
 
 
                 sleigh.appendChild(snow);
+                sleigh.appendChild(reindeer);
+                sleigh.appendChild(sleighBody);
+                sleigh.appendChild(santa);
+                sleigh.appendChild(runner1);
+                sleigh.appendChild(runner2);
 
-                sleigh.appendChild(
-                    reindeer
-                );
-
-                sleigh.appendChild(
-                    sleighBody
-                );
-
-                sleigh.appendChild(
-                    runner1
-                );
-
-                sleigh.appendChild(
-                    runner2
-                );
+                body.appendChild(sleigh);
 
 
-                layer.appendChild(sleigh);
+                window.setTimeout(function () {
 
+                    if (sleigh.parentNode) {
 
-                window.setTimeout(
-                    function () {
+                        sleigh.parentNode.removeChild(
+                            sleigh
+                        );
 
-                        if (
-                            sleigh.parentNode
-                        ) {
+                    }
 
-                            sleigh.parentNode
-                                .removeChild(
-                                    sleigh
-                                );
-
-                        }
-
-                    },
-                    22000
-                );
-
+                }, 14000);
             }
 
 
             window.setTimeout(
                 createSleigh,
-                3500
+                4000
             );
-
 
             window.setInterval(
                 createSleigh,
-                32000
+                30000
             );
-
         }
 
 
@@ -322,142 +221,36 @@
            RENTREE
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-rentree"
-            )
-        ) {
+        if (body.classList.contains("theme-rentree")) {
 
             createParticles(
                 "school-paper",
-                8,
-                function (paper) {
-
-                    css(paper, {
-
-                        "--x":
-                            random(0, 100) + "%",
-
-                        "--w":
-                            random(25, 44) + "px",
-
-                        "--h":
-                            random(36, 58) + "px",
-
-                        "--duration":
-                            random(16, 25) + "s",
-
-                        "--delay":
-                            random(-25, 0) + "s",
-
-                        "--sway1":
-                            random(-190, 190) + "px",
-
-                        "--sway2":
-                            random(-240, 240) + "px",
-
-                        "--sway3":
-                            random(-280, 280) + "px"
-
-                    });
-
-                }
+                12,
+                10,
+                20
             );
-
 
             createParticles(
                 "school-pencil",
-                4,
-                function (pencil) {
-
-                    css(pencil, {
-
-                        "--x":
-                            random(0, 100) + "%",
-
-                        "--duration":
-                            random(18, 28) + "s",
-
-                        "--delay":
-                            random(-28, 0) + "s",
-
-                        "--sway1":
-                            random(-180, 180) + "px",
-
-                        "--sway2":
-                            random(-230, 230) + "px",
-
-                        "--sway3":
-                            random(-280, 280) + "px"
-
-                    });
-
-                }
+                7,
+                12,
+                22
             );
-
         }
 
 
         /* =====================================================
-           SAINT VALENTIN
+           SAINT-VALENTIN
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-saint-valentin"
-            )
-        ) {
-
-            var heartColors = [
-                "#e11d48",
-                "#ec4899",
-                "#be185d",
-                "#fb7185",
-                "#f43f5e"
-            ];
-
+        if (body.classList.contains("theme-saint-valentin")) {
 
             createParticles(
                 "heart-particle",
-                18,
-                function (heart) {
-
-                    css(heart, {
-
-                        "--x":
-                            random(2, 98) + "%",
-
-                        "--size":
-                            random(11, 22) + "px",
-
-                        "--heart-color":
-                            heartColors[
-                                randomInt(
-                                    0,
-                                    heartColors.length - 1
-                                )
-                            ],
-
-                        "--duration":
-                            random(13, 22) + "s",
-
-                        "--delay":
-                            random(-22, 0) + "s",
-
-                        "--sway1":
-                            random(-170, 170) + "px",
-
-                        "--sway2":
-                            random(-210, 210) + "px",
-
-                        "--sway3":
-                            random(-260, 260) + "px"
-
-                    });
-
-                }
+                30,
+                8,
+                16
             );
-
         }
 
 
@@ -465,125 +258,21 @@
            PAQUES
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-paques"
-            )
-        ) {
-
-            var eggs = [
-
-                ["#ffc2dc", "#e85d91"],
-
-                ["#b9e6ff", "#3996d2"],
-
-                ["#fff0a8", "#e5ad22"],
-
-                ["#c8efb2", "#5fa94a"]
-
-            ];
-
+        if (body.classList.contains("theme-paques")) {
 
             createParticles(
                 "easter-egg",
-                12,
-                function (egg, index) {
-
-                    var palette =
-                        eggs[
-                            index %
-                            eggs.length
-                        ];
-
-
-                    css(egg, {
-
-                        "--x":
-                            random(2, 98) + "%",
-
-                        "--w":
-                            random(25, 37) + "px",
-
-                        "--h":
-                            random(35, 50) + "px",
-
-                        "--egg-light":
-                            palette[0],
-
-                        "--egg-color":
-                            palette[1],
-
-                        "--duration":
-                            random(16, 25) + "s",
-
-                        "--delay":
-                            random(-25, 0) + "s",
-
-                        "--sway1":
-                            random(-180, 180) + "px",
-
-                        "--sway2":
-                            random(-230, 230) + "px",
-
-                        "--sway3":
-                            random(-280, 280) + "px"
-
-                    });
-
-                }
+                18,
+                10,
+                18
             );
-
-
-            var flowerColors = [
-                "#ff8fab",
-                "#ffd166",
-                "#a78bfa",
-                "#ffffff",
-                "#f472b6"
-            ];
-
 
             createParticles(
                 "spring-flower",
-                15,
-                function (flower) {
-
-                    css(flower, {
-
-                        "--x":
-                            random(2, 98) + "%",
-
-                        "--y":
-                            random(12, 85) + "%",
-
-                        "--size":
-                            random(5, 9) + "px",
-
-                        "--flower-color":
-                            flowerColors[
-                                randomInt(
-                                    0,
-                                    flowerColors.length - 1
-                                )
-                            ],
-
-                        "--flower-center":
-                            "#f5b82e",
-
-                        "--duration":
-                            random(5, 9) + "s",
-
-                        "--delay":
-                            random(-9, 0) + "s",
-
-                        "--sway":
-                            random(-55, 55) + "px"
-
-                    });
-
-                }
+                20,
+                9,
+                17
             );
-
         }
 
 
@@ -591,21 +280,15 @@
            HALLOWEEN
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-halloween"
-            )
-        ) {
+        if (body.classList.contains("theme-halloween")) {
 
-            var halloweenMoon =
+            var moon =
                 document.createElement("div");
 
-            halloweenMoon.className =
+            moon.className =
                 "halloween-moon";
 
-            layer.appendChild(
-                halloweenMoon
-            );
+            body.appendChild(moon);
 
 
             var fog =
@@ -614,81 +297,22 @@
             fog.className =
                 "halloween-fog";
 
-            layer.appendChild(
-                fog
-            );
+            body.appendChild(fog);
 
 
             createParticles(
                 "bat",
-                7,
-                function (bat) {
-
-                    css(bat, {
-
-                        "--x":
-                            random(3, 88) + "%",
-
-                        "--y":
-                            random(12, 58) + "%",
-
-                        "--duration":
-                            random(16, 25) + "s",
-
-                        "--delay":
-                            random(-25, 0) + "s",
-
-                        "--sway1":
-                            random(-160, 160) + "px",
-
-                        "--sway2":
-                            random(-230, 230) + "px",
-
-                        "--sway3":
-                            random(-320, 320) + "px",
-
-                        "--swayY1":
-                            random(-100, 100) + "px",
-
-                        "--swayY2":
-                            random(-130, 130) + "px",
-
-                        "--swayY3":
-                            random(-160, 160) + "px"
-
-                    });
-
-                }
+                10,
+                10,
+                20
             );
-
 
             createParticles(
                 "pumpkin",
+                10,
                 5,
-                function (pumpkin) {
-
-                    css(pumpkin, {
-
-                        "--x":
-                            random(5, 92) + "%",
-
-                        "--bottom":
-                            random(4, 20) + "%",
-
-                        "--size":
-                            random(32, 50) + "px",
-
-                        "--duration":
-                            random(3.5, 6) + "s",
-
-                        "--delay":
-                            random(-6, 0) + "s"
-
-                    });
-
-                }
+                10
             );
-
         }
 
 
@@ -696,117 +320,67 @@
            NOUVEL AN
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-nouvel-an"
-            )
-        ) {
+        if (body.classList.contains("theme-nouvel-an")) {
 
             createParticles(
                 "newyear-star",
-                38,
-                function (star) {
-
-                    css(star, {
-
-                        "--x":
-                            random(2, 98) + "%",
-
-                        "--y":
-                            random(3, 72) + "%",
-
-                        "--size":
-                            random(2, 5) + "px",
-
-                        "--duration":
-                            random(2, 5) + "s",
-
-                        "--delay":
-                            random(-5, 0) + "s"
-
-                    });
-
-                }
+                50,
+                2,
+                5
             );
 
 
             function createFirework() {
 
                 var firework =
-                    create("firework");
+                    document.createElement("div");
 
+                firework.className =
+                    "firework";
 
-                var colors = [
-                    "#ff4757",
-                    "#ffd166",
-                    "#5ee7df",
-                    "#8ab4ff",
-                    "#ff8ad8",
-                    "#ffffff"
-                ];
+                firework.style.left =
+                    (15 + Math.random() * 70) + "%";
 
+                firework.style.top =
+                    (10 + Math.random() * 45) + "%";
 
-                css(firework, {
+                firework.style.animationDelay =
+                    (Math.random() * 2) + "s";
 
-                    "--fire-x":
-                        random(12, 88) + "%",
-
-                    "--fire-y":
-                        random(12, 52) + "%",
-
-                    "--fire-color":
-                        colors[
-                            randomInt(
-                                0,
-                                colors.length - 1
-                            )
-                        ]
-
-                });
-
-
-                window.setTimeout(
-                    function () {
-
-                        if (
-                            firework.parentNode
-                        ) {
-
-                            firework.parentNode
-                                .removeChild(
-                                    firework
-                                );
-
-                        }
-
-                    },
-                    3000
+                layer.appendChild(
+                    firework
                 );
 
+
+                window.setTimeout(function () {
+
+                    if (firework.parentNode) {
+
+                        firework.parentNode.removeChild(
+                            firework
+                        );
+
+                    }
+
+                }, 3000);
             }
 
 
             var j;
 
-            for (
-                j = 0;
-                j < 4;
-                j++
-            ) {
+            for (j = 0; j < 5; j++) {
 
                 window.setTimeout(
                     createFirework,
-                    j * 1000
+                    j * 900
                 );
-
             }
 
 
             window.setInterval(
                 createFirework,
-                2600
+                3200
             );
-
         }
 
 
@@ -814,53 +388,17 @@
            ETE
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-ete"
-            )
-        ) {
+        if (body.classList.contains("theme-ete")) {
 
-            var summerSun =
+            var sun =
                 document.createElement("div");
 
-            summerSun.className =
+            sun.className =
                 "sun";
 
-            layer.appendChild(
-                summerSun
+            body.appendChild(
+                sun
             );
-
-
-            createParticles(
-                "sun-particle",
-                18,
-                function (particle) {
-
-                    css(particle, {
-
-                        "--x":
-                            random(3, 97) + "%",
-
-                        "--y":
-                            random(10, 88) + "%",
-
-                        "--size":
-                            random(2, 6) + "px",
-
-                        "--duration":
-                            random(5, 10) + "s",
-
-                        "--delay":
-                            random(-10, 0) + "s",
-
-                        "--sway":
-                            random(-90, 90) + "px"
-
-                    });
-
-                }
-            );
-
         }
 
 
@@ -868,81 +406,24 @@
            AUTOMNE
         ===================================================== */
 
-        if (
-            body.classList.contains(
-                "theme-automne"
-            )
-        ) {
-
-            var leafColors = [
-
-                "#7f2418",
-                "#9f3219",
-                "#b84b19",
-                "#d16b1f",
-                "#e09a26",
-                "#c94d19",
-                "#70451f"
-
-            ];
-
+        if (body.classList.contains("theme-automne")) {
 
             createParticles(
                 "leaf-particle",
-                42,
-                function (leaf) {
-
-                    css(leaf, {
-
-                        "--x":
-                            random(0, 100) + "%",
-
-                        "--size":
-                            random(17, 38) + "px",
-
-                        "--scale":
-                            random(.65, 1.2),
-
-                        "--leaf-color":
-                            leafColors[
-                                randomInt(
-                                    0,
-                                    leafColors.length - 1
-                                )
-                            ],
-
-                        "--duration":
-                            random(18, 30) + "s",
-
-                        "--delay":
-                            random(-30, 0) + "s",
-
-                        "--sway1":
-                            random(-200, 200) + "px",
-
-                        "--sway2":
-                            random(-270, 270) + "px",
-
-                        "--sway3":
-                            random(-330, 330) + "px",
-
-                        "--sway4":
-                            random(-400, 400) + "px"
-
-                    });
-
-                }
+                30,
+                8,
+                17
             );
-
         }
 
     }
 
 
-    if (
-        document.readyState ===
-        "loading"
-    ) {
+    /* =========================================================
+       INITIALISATION
+    ========================================================= */
+
+    if (document.readyState === "loading") {
 
         document.addEventListener(
             "DOMContentLoaded",

@@ -1,7 +1,6 @@
 (function () {
 "use strict";
 
-```
 function initSeasonal() {
     var body = document.body;
     var layer = document.getElementById("season-layer");
@@ -210,6 +209,5 @@ if (document.readyState === "loading") {
 } else {
     initSeasonal();
 }
-```
 
 })();

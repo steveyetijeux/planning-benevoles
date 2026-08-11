@@ -1,639 +1,1586 @@
+/* =========================================================
+   PLANNING FOYER MDL
+   THEMES SAISONNIERS — WOW EDITION
+   ========================================================= */
+
 #season-layer,
 .season-layer {
-position: fixed;
-inset: 0;
-width: 100%;
-height: 100%;
-pointer-events: none;
-overflow: hidden;
-z-index: 9999;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 9990;
+    isolation: isolate;
 }
 
-.season-particle {
-position: absolute;
-pointer-events: none;
-user-select: none;
+#season-layer *,
+.season-layer * {
+    pointer-events: none;
+    box-sizing: border-box;
 }
+
 
 /* =========================================================
-NOËL
-========================================================= */
+   BASE PARTICLES
+   ========================================================= */
 
-.theme-noel .season-layer,
-.theme-noel #season-layer {
-background: transparent;
+.season-particle {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+    will-change: transform;
+}
+
+
+/* =========================================================
+   NOËL
+   ========================================================= */
+
+body.theme-noel {
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(255,255,255,.95) 0,
+            rgba(218,235,250,.75) 24%,
+            rgba(155,185,215,.35) 55%,
+            rgba(29,48,73,.18) 100%
+        ),
+        linear-gradient(
+            180deg,
+            #dcecff 0%,
+            #c5dff5 45%,
+            #eef7ff 100%
+        ) !important;
+    position: relative;
+}
+
+body.theme-noel .navbar {
+    background:
+        linear-gradient(
+            90deg,
+            #0b1f35,
+            #15395b,
+            #0b1f35
+        ) !important;
+}
+
+body.theme-noel footer {
+    background:
+        linear-gradient(
+            90deg,
+            #091827,
+            #173653,
+            #091827
+        ) !important;
+}
+
+body.theme-noel #season-layer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(255,255,255,.5),
+            transparent 55%
+        );
+    opacity: .7;
+}
+
+
+/* Flocons */
+
+.snowflake {
+    width: var(--size, 8px);
+    height: var(--size, 8px);
+    left: var(--x, 50%);
+    top: -30px;
+    opacity: var(--opacity, .8);
+    filter:
+        drop-shadow(0 0 4px rgba(255,255,255,.9))
+        drop-shadow(0 0 10px rgba(255,255,255,.45));
+    animation:
+        christmasSnow var(--duration, 12s)
+        linear var(--delay, 0s)
+        infinite;
+}
+
+.snowflake::before,
+.snowflake::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,.95);
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+}
+
+.snowflake::after {
+    transform:
+        translate(-50%, -50%)
+        rotate(60deg);
 }
 
 .snowflake {
-width: 9px;
-height: 9px;
-border-radius: 50%;
-background: white;
-box-shadow:
-0 0 8px rgba(255,255,255,.9),
-0 0 16px rgba(180,220,255,.8);
-animation:
-snowFall linear infinite,
-snowSwing ease-in-out infinite alternate;
-animation-duration: 14s, 4s;
+    border-radius: 50%;
+    background: rgba(255,255,255,.9);
 }
 
-.snowflake-large {
-width: 16px;
-height: 16px;
-background: rgba(255,255,255,.95);
-border-radius: 50%;
-box-shadow:
-0 0 12px white,
-0 0 24px rgba(150,210,255,.9);
-animation:
-snowFallLarge linear infinite,
-snowSwingLarge ease-in-out infinite alternate;
-animation-duration: 18s, 5s;
+@keyframes christmasSnow {
+    0% {
+        transform:
+            translate3d(0,-40px,0)
+            rotate(0deg);
+    }
+
+    25% {
+        transform:
+            translate3d(
+                calc(var(--drift) * .35),
+                25vh,
+                0
+            )
+            rotate(70deg);
+    }
+
+    50% {
+        transform:
+            translate3d(
+                calc(var(--drift) * -.55),
+                52vh,
+                0
+            )
+            rotate(160deg);
+    }
+
+    75% {
+        transform:
+            translate3d(
+                calc(var(--drift) * .7),
+                78vh,
+                0
+            )
+            rotate(250deg);
+    }
+
+    100% {
+        transform:
+            translate3d(
+                var(--drift),
+                110vh,
+                0
+            )
+            rotate(360deg);
+    }
 }
+
+
+/* Étoiles */
 
 .christmas-star {
-width: 4px;
-height: 4px;
-background: #fff8b5;
-border-radius: 50%;
-box-shadow: 0 0 10px #fff;
-animation: starTwinkle 2s ease-in-out infinite alternate;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    opacity: var(--opacity);
+    filter:
+        drop-shadow(0 0 5px rgba(255,255,255,.95))
+        drop-shadow(0 0 14px rgba(255,220,130,.75));
+    animation:
+        christmasStar var(--duration) ease-in-out
+        var(--delay) infinite alternate;
 }
 
-.christmas-lights {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 35px;
-border-top: 4px solid #183b26;
+.christmas-star::before,
+.christmas-star::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #fff9df;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
 }
 
-.christmas-lights span {
-position: absolute;
-top: 4px;
-width: 12px;
-height: 18px;
-border-radius: 50%;
-background: #ff3030;
-box-shadow: 0 0 14px #ff3030;
-animation: christmasBlink 1.5s ease-in-out infinite alternate;
+.christmas-star::after {
+    transform:
+        translate(-50%, -50%)
+        rotate(90deg);
 }
 
-.christmas-lights span:nth-child(3n) {
-background: #32d74b;
-box-shadow: 0 0 14px #32d74b;
+@keyframes christmasStar {
+    0% {
+        transform: scale(.55) rotate(0deg);
+        opacity: .25;
+    }
+
+    50% {
+        transform: scale(1.15) rotate(45deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(.7) rotate(90deg);
+        opacity: .45;
+    }
 }
 
-.christmas-lights span:nth-child(3n+1) {
-background: #ffd60a;
-box-shadow: 0 0 14px #ffd60a;
+
+/* Guirlande lumineuse */
+
+.christmas-light {
+    left: var(--x);
+    top: var(--y);
+    width: 8px;
+    height: 13px;
+    border-radius: 50% 50% 45% 45%;
+    background: var(--light-color);
+    box-shadow:
+        0 0 5px var(--light-color),
+        0 0 13px var(--light-color),
+        0 0 24px var(--light-color);
+    animation:
+        christmasLight var(--duration)
+        ease-in-out var(--delay)
+        infinite alternate;
 }
 
-.santa-fly {
-position: absolute;
-top: 15%;
-left: -240px;
-width: 220px;
-height: 120px;
-animation: santaFlight 18s linear infinite;
+@keyframes christmasLight {
+    0% {
+        opacity: .3;
+        transform: scale(.75);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+
+    100% {
+        opacity: .5;
+        transform: scale(.85);
+    }
 }
 
-.santa-body {
-position: absolute;
-left: 40px;
-top: 30px;
+
+/* Lune */
+
+.christmas-moon {
+    position: absolute;
+    width: 105px;
+    height: 105px;
+    right: 8%;
+    top: 8%;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 35% 35%,
+            #fff,
+            #eaf5ff 48%,
+            #c5d9e8 100%
+        );
+    box-shadow:
+        0 0 25px rgba(255,255,255,.8),
+        0 0 65px rgba(220,240,255,.65);
+    opacity: .9;
 }
 
-.santa-head {
-position: absolute;
-left: 55px;
-top: -30px;
-width: 55px;
-height: 55px;
+.christmas-moon::after {
+    content: "";
+    position: absolute;
+    width: 105px;
+    height: 105px;
+    left: 25px;
+    top: -7px;
+    border-radius: 50%;
+    background: #c6deef;
 }
 
-.santa-face {
-position: absolute;
-width: 45px;
-height: 45px;
-left: 5px;
-top: 8px;
-border-radius: 50%;
-background: #f2b58f;
-}
 
-.santa-face:before,
-.santa-face:after {
-content: "";
-position: absolute;
-top: 18px;
-width: 6px;
-height: 6px;
-background: #222;
-border-radius: 50%;
-}
+/* Père Noël */
 
-.santa-face:before {
-left: 12px;
-}
-
-.santa-face:after {
-right: 12px;
-}
-
-.santa-hat {
-position: absolute;
-z-index: 2;
-left: 0;
-top: -8px;
-width: 48px;
-height: 35px;
-background: #c9182b;
-border-radius: 45px 45px 5px 5px;
-transform: rotate(-15deg);
-}
-
-.santa-hat:after {
-content: "";
-position: absolute;
-right: -8px;
-top: -7px;
-width: 14px;
-height: 14px;
-background: white;
-border-radius: 50%;
-}
-
-.santa-coat {
-width: 105px;
-height: 70px;
-background: #c9182b;
-border-radius: 35px 35px 15px 15px;
-}
-
-.santa-arm {
-position: absolute;
-top: 15px;
-width: 55px;
-height: 18px;
-background: #c9182b;
-border-radius: 20px;
-}
-
-.santa-arm-left {
-left: -38px;
-transform: rotate(-25deg);
-}
-
-.santa-arm-right {
-right: -38px;
-transform: rotate(25deg);
-}
-
-.santa-sack {
-position: absolute;
-left: 0;
-top: 25px;
-width: 70px;
-height: 90px;
-background: #80552b;
-border-radius: 50%;
-transform: rotate(-15deg);
-}
-
-@keyframes snowFall {
-from { transform: translate3d(0,-20vh,0); }
-to { transform: translate3d(0,120vh,0); }
-}
-
-@keyframes snowFallLarge {
-from { transform: translate3d(0,-25vh,0); }
-to { transform: translate3d(0,120vh,0); }
-}
-
-@keyframes snowSwing {
-from { margin-left: -25px; }
-to { margin-left: 25px; }
-}
-
-@keyframes snowSwingLarge {
-from { margin-left: 30px; }
-to { margin-left: -30px; }
-}
-
-@keyframes christmasBlink {
-from { opacity: .35; transform: scale(.8); }
-to { opacity: 1; transform: scale(1.15); }
-}
-
-@keyframes starTwinkle {
-from { opacity: .2; transform: scale(.6); }
-to { opacity: 1; transform: scale(1.5); }
+.santa {
+    position: absolute;
+    left: -230px;
+    top: var(--santa-top, 19%);
+    width: 210px;
+    height: 135px;
+    transform: scale(var(--santa-scale, 1));
+    animation:
+        santaFlight 18s linear infinite;
+    filter:
+        drop-shadow(0 9px 10px rgba(0,0,0,.18))
+        drop-shadow(0 0 14px rgba(255,255,255,.25));
 }
 
 @keyframes santaFlight {
-0% {
-transform: translateX(0) translateY(0) rotate(-3deg);
+    0% {
+        transform:
+            translate3d(-250px, 25px, 0)
+            scale(var(--santa-scale, 1));
+    }
+
+    42% {
+        transform:
+            translate3d(45vw, -18px, 0)
+            scale(var(--santa-scale, 1));
+    }
+
+    48% {
+        transform:
+            translate3d(52vw, 4px, 0)
+            scale(var(--santa-scale, 1));
+    }
+
+    100% {
+        transform:
+            translate3d(calc(100vw + 300px), -20px, 0)
+            scale(var(--santa-scale, 1));
+    }
 }
 
-```
-45% {
-    transform: translateX(55vw) translateY(-35px) rotate(3deg);
+
+/* Traîneau */
+
+.santa-sleigh {
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+    width: 125px;
+    height: 62px;
+    background:
+        linear-gradient(
+            180deg,
+            #a92924,
+            #641411
+        );
+    border-radius:
+        45px 18px 16px 18px;
+    border: 4px solid #d6a74a;
+    box-shadow:
+        inset 0 -8px 0 rgba(0,0,0,.18),
+        0 4px 10px rgba(0,0,0,.25);
+    transform: skewX(-7deg);
 }
 
-100% {
-    transform: translateX(120vw) translateY(10px) rotate(-2deg);
+.santa-sleigh::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 4px;
+    width: 15px;
+    height: 42px;
+    border-radius: 12px 0 0 12px;
+    border-left: 7px solid #d6a74a;
+    border-top: 5px solid #d6a74a;
 }
-```
 
+.santa-sleigh::after {
+    content: "";
+    position: absolute;
+    left: 9px;
+    bottom: -12px;
+    width: 105px;
+    height: 13px;
+    border-bottom: 5px solid #d6a74a;
+    border-radius: 0 0 50% 50%;
 }
+
+
+/* Corps du Père Noël */
+
+.santa-body {
+    position: absolute;
+    left: 89px;
+    bottom: 42px;
+    width: 48px;
+    height: 67px;
+    border-radius: 25px 25px 18px 18px;
+    background:
+        linear-gradient(
+            90deg,
+            #8d1717,
+            #c82a24 55%,
+            #921817
+        );
+    border: 3px solid #70100f;
+}
+
+.santa-body::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: -5px;
+    width: 38px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 4px rgba(255,255,255,.8);
+}
+
+
+/* Tête */
+
+.santa-head {
+    position: absolute;
+    left: 83px;
+    top: 3px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 58% 35%,
+            #ffd7b2 0 50%,
+            #e9aa7d 85%
+        );
+    border: 3px solid #9c6244;
+    z-index: 3;
+}
+
+
+/* Barbe */
+
+.santa-beard {
+    position: absolute;
+    left: 80px;
+    top: 32px;
+    width: 65px;
+    height: 50px;
+    background: #fff;
+    border-radius:
+        35% 35% 55% 55%;
+    z-index: 4;
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            92% 65%,
+            78% 52%,
+            66% 100%,
+            52% 65%,
+            37% 100%,
+            24% 62%,
+            8% 75%
+        );
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.16);
+}
+
+
+/* Nez */
+
+.santa-nose {
+    position: absolute;
+    left: 106px;
+    top: 31px;
+    width: 10px;
+    height: 8px;
+    border-radius: 50%;
+    background: #df7657;
+    z-index: 6;
+}
+
+
+/* Yeux */
+
+.santa-eye {
+    position: absolute;
+    top: 25px;
+    width: 6px;
+    height: 7px;
+    border-radius: 50%;
+    background: #24150f;
+    z-index: 6;
+}
+
+.santa-eye.left {
+    left: 97px;
+}
+
+.santa-eye.right {
+    left: 119px;
+}
+
+
+/* Bonnet */
+
+.santa-hat {
+    position: absolute;
+    left: 75px;
+    top: -25px;
+    width: 75px;
+    height: 47px;
+    background:
+        linear-gradient(
+            145deg,
+            #d72c25,
+            #941613
+        );
+    clip-path:
+        polygon(
+            3% 92%,
+            28% 15%,
+            72% 0,
+            100% 90%
+        );
+    z-index: 5;
+    transform: rotate(-8deg);
+}
+
+.santa-hat::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: -3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 7px rgba(255,255,255,.8);
+}
+
+.santa-hat::before {
+    content: "";
+    position: absolute;
+    left: -4px;
+    bottom: -3px;
+    width: 76px;
+    height: 12px;
+    border-radius: 999px;
+    background: white;
+}
+
+
+/* Bras */
+
+.santa-arm {
+    position: absolute;
+    left: 72px;
+    bottom: 58px;
+    width: 42px;
+    height: 14px;
+    border-radius: 999px;
+    background: #a51c19;
+    transform: rotate(25deg);
+    z-index: 2;
+}
+
+.santa-arm::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #edb083;
+}
+
+
+/* Renne */
+
+.reindeer {
+    position: absolute;
+    right: 112px;
+    bottom: 34px;
+    width: 55px;
+    height: 45px;
+}
+
+.reindeer-body {
+    position: absolute;
+    left: 3px;
+    bottom: 3px;
+    width: 42px;
+    height: 23px;
+    border-radius: 50%;
+    background: #704025;
+    box-shadow:
+        inset -5px -3px 0 rgba(0,0,0,.15);
+}
+
+.reindeer-head {
+    position: absolute;
+    right: -3px;
+    top: 0;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background: #704025;
+}
+
+.reindeer-head::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: 9px;
+    width: 9px;
+    height: 7px;
+    border-radius: 50%;
+    background: #32170d;
+}
+
+.reindeer-antler {
+    position: absolute;
+    top: -15px;
+    width: 3px;
+    height: 21px;
+    background: #4b2918;
+    transform: rotate(18deg);
+}
+
+.reindeer-antler.left {
+    right: 15px;
+}
+
+.reindeer-antler.right {
+    right: 6px;
+    transform: rotate(-18deg);
+}
+
 
 /* =========================================================
-AUTOMNE
-========================================================= */
+   RENTRÉE
+   ========================================================= */
 
-.leaf-particle {
-width: 24px;
-height: 14px;
-border-radius: 100% 0 100% 0;
-transform: rotate(35deg);
-animation: leafFall 9s linear infinite;
-box-shadow: 0 2px 5px rgba(0,0,0,.18);
+body.theme-rentree {
+    background:
+        linear-gradient(
+            180deg,
+            #fffaf0 0%,
+            #f5f0df 55%,
+            #e7dfcb 100%
+        ) !important;
 }
-
-.leaf-red {
-background: #a61b1b;
-}
-
-.leaf-orange {
-background: #e67e22;
-}
-
-.leaf-yellow {
-background: #f1c40f;
-}
-
-.leaf-brown {
-background: #795548;
-}
-
-@keyframes leafFall {
-0% {
-transform: translate3d(0,-15vh,0) rotate(0deg);
-}
-
-```
-25% {
-    margin-left: 80px;
-}
-
-50% {
-    margin-left: -60px;
-}
-
-75% {
-    margin-left: 100px;
-}
-
-100% {
-    transform: translate3d(-50px,120vh,0) rotate(720deg);
-}
-```
-
-}
-
-/* =========================================================
-HALLOWEEN
-========================================================= */
-
-.halloween-moon {
-position: absolute;
-top: 8%;
-right: 8%;
-width: 100px;
-height: 100px;
-border-radius: 50%;
-background: #ffd166;
-box-shadow: 0 0 45px rgba(255,190,50,.8);
-}
-
-.halloween-ghost {
-position: absolute;
-font-size: 65px;
-left: -80px;
-top: 28%;
-animation: ghostFly 12s linear infinite;
-}
-
-.bat {
-font-size: 30px;
-width: 32px;
-height: 32px;
-animation: batFly 10s linear infinite;
-}
-
-.bat:before {
-content: "🦇";
-}
-
-.pumpkin {
-width: 35px;
-height: 35px;
-border-radius: 45%;
-background: #f97316;
-box-shadow: 0 0 15px rgba(249,115,22,.7);
-animation: pumpkinFloat 5s ease-in-out infinite alternate;
-}
-
-@keyframes ghostFly {
-from { transform: translateX(0); }
-to { transform: translateX(120vw); }
-}
-
-@keyframes batFly {
-from { transform: translate3d(-10vw,0,0) rotate(-10deg); }
-to { transform: translate3d(120vw,30vh,0) rotate(10deg); }
-}
-
-@keyframes pumpkinFloat {
-from { transform: translateY(-10px); }
-to { transform: translateY(15px); }
-}
-
-/* =========================================================
-PÂQUES
-========================================================= */
-
-.easter-egg {
-width: 25px;
-height: 35px;
-border-radius: 50% 50% 45% 45%;
-background: #ff9ed2;
-box-shadow: 0 0 10px rgba(255,255,255,.8);
-animation: easterFall 10s linear infinite;
-}
-
-.easter-egg:nth-child(3n) {
-background: #8ed8ff;
-}
-
-.easter-egg:nth-child(4n) {
-background: #a8e6a3;
-}
-
-.easter-flower {
-width: 18px;
-height: 18px;
-background: #ff8fab;
-border-radius: 50%;
-animation: flowerFall 8s linear infinite;
-}
-
-.easter-bunny {
-font-size: 32px;
-width: 35px;
-height: 35px;
-}
-
-.easter-bunny:before {
-content: "🐰";
-}
-
-.easter-petal {
-width: 8px;
-height: 8px;
-border-radius: 50%;
-background: #ffb3c6;
-animation: petalFall 7s linear infinite;
-}
-
-@keyframes easterFall {
-from { transform: translateY(-20vh) rotate(-20deg); }
-to { transform: translateY(120vh) rotate(360deg); }
-}
-
-@keyframes flowerFall {
-from { transform: translateY(-20vh) rotate(0); }
-to { transform: translateY(120vh) rotate(720deg); }
-}
-
-@keyframes petalFall {
-from { transform: translateY(-20vh); }
-to { transform: translateY(120vh); }
-}
-
-/* =========================================================
-RENTRÉE
-========================================================= */
 
 .school-paper {
-width: 28px;
-height: 35px;
-background: white;
-border: 2px solid #1d4ed8;
-transform: rotate(-10deg);
-animation: paperFall 10s linear infinite;
+    left: var(--x);
+    top: -80px;
+    width: var(--w);
+    height: var(--h);
+    background:
+        linear-gradient(
+            90deg,
+            transparent 0 18%,
+            rgba(74,137,207,.35) 18% 19%,
+            transparent 19% 100%
+        ),
+        repeating-linear-gradient(
+            180deg,
+            white 0 11px,
+            #d7e5f4 12px
+        );
+    border: 1px solid rgba(80,90,100,.18);
+    box-shadow: 0 7px 14px rgba(0,0,0,.14);
+    animation:
+        schoolPaper var(--duration) linear
+        var(--delay) infinite;
+}
+
+@keyframes schoolPaper {
+    0% {
+        transform:
+            translate3d(0,-100px,0)
+            rotate(var(--rotation));
+    }
+
+    25% {
+        transform:
+            translate3d(var(--sway1),25vh,0)
+            rotate(calc(var(--rotation) + 80deg));
+    }
+
+    55% {
+        transform:
+            translate3d(var(--sway2),58vh,0)
+            rotate(calc(var(--rotation) - 110deg));
+    }
+
+    100% {
+        transform:
+            translate3d(var(--sway3),110vh,0)
+            rotate(calc(var(--rotation) + 220deg));
+    }
 }
 
 .school-pencil {
-width: 9px;
-height: 45px;
-background: #facc15;
-border-radius: 3px;
-animation: pencilFall 12s linear infinite;
+    left: var(--x);
+    top: -60px;
+    width: 10px;
+    height: 80px;
+    border-radius: 4px 4px 2px 2px;
+    background:
+        linear-gradient(
+            90deg,
+            #e4a126 0 72%,
+            #f5c85c 72% 100%
+        );
+    box-shadow: 0 4px 8px rgba(0,0,0,.18);
+    animation:
+        pencilFall var(--duration) linear
+        var(--delay) infinite;
 }
 
-.school-star {
-width: 10px;
-height: 10px;
-background: #2563eb;
-transform: rotate(45deg);
-animation: schoolSparkle 2s ease-in-out infinite alternate;
+.school-pencil::before {
+    content: "";
+    position: absolute;
+    top: -13px;
+    left: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 14px solid #e0c7a4;
 }
 
-.school-confetti {
-position: absolute;
-inset: 0;
-}
-
-.school-confetti span {
-position: absolute;
-top: -20px;
-width: 8px;
-height: 18px;
-background: #2563eb;
-animation: confettiFall 7s linear infinite;
-}
-
-.school-confetti span:nth-child(3n) {
-background: #f97316;
-}
-
-.school-confetti span:nth-child(4n) {
-background: #16a34a;
-}
-
-@keyframes paperFall {
-from { transform: translateY(-20vh) rotate(-10deg); }
-to { transform: translateY(120vh) rotate(220deg); }
+.school-pencil::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 12px;
+    border-radius: 0 0 4px 4px;
+    background: #df6c68;
 }
 
 @keyframes pencilFall {
-from { transform: translateY(-20vh) rotate(20deg); }
-to { transform: translateY(120vh) rotate(320deg); }
+    0% {
+        transform:
+            translate3d(0,-80px,0)
+            rotate(20deg);
+    }
+
+    35% {
+        transform:
+            translate3d(var(--sway1),35vh,0)
+            rotate(170deg);
+    }
+
+    70% {
+        transform:
+            translate3d(var(--sway2),70vh,0)
+            rotate(300deg);
+    }
+
+    100% {
+        transform:
+            translate3d(var(--sway3),110vh,0)
+            rotate(500deg);
+    }
 }
 
-@keyframes schoolSparkle {
-from { opacity: .2; transform: scale(.5) rotate(45deg); }
-to { opacity: 1; transform: scale(1.5) rotate(135deg); }
-}
-
-@keyframes confettiFall {
-from {
-transform: translateY(-20px) rotate(0);
-}
-
-```
-to {
-    transform: translateY(120vh) rotate(720deg);
-}
-```
-
-}
 
 /* =========================================================
-SAINT-VALENTIN
-========================================================= */
+   SAINT-VALENTIN
+   ========================================================= */
+
+body.theme-saint-valentin {
+    background:
+        radial-gradient(
+            circle at 50% 0,
+            #fff0f5,
+            #f8dce6 50%,
+            #efd0dc 100%
+        ) !important;
+}
 
 .heart-particle {
-width: 24px;
-height: 22px;
-animation: heartFloat 9s linear infinite;
+    left: var(--x);
+    bottom: -45px;
+    width: var(--size);
+    height: var(--size);
+    background: var(--heart-color);
+    transform: rotate(45deg);
+    filter:
+        drop-shadow(0 0 5px rgba(255,80,120,.35));
+    animation:
+        heartRise var(--duration) ease-in-out
+        var(--delay) infinite;
 }
 
-.heart-particle:before {
-content: "❤";
-color: #ff3366;
-font-size: 26px;
+.heart-particle::before,
+.heart-particle::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: inherit;
 }
 
-.valentine-sparkle {
-width: 7px;
-height: 7px;
-border-radius: 50%;
-background: #ffd1dc;
-box-shadow: 0 0 12px #fff;
-animation: starTwinkle 2s ease-in-out infinite alternate;
+.heart-particle::before {
+    left: -50%;
 }
 
-@keyframes heartFloat {
-from {
-transform: translateY(110vh) rotate(-10deg);
+.heart-particle::after {
+    top: -50%;
 }
 
-```
-to {
-    transform: translateY(-20vh) rotate(15deg);
-}
-```
+@keyframes heartRise {
+    0% {
+        transform:
+            translate3d(0,50px,0)
+            rotate(45deg)
+            scale(.65);
+        opacity: 0;
+    }
 
+    12% {
+        opacity: .9;
+    }
+
+    35% {
+        transform:
+            translate3d(var(--sway1),-30vh,0)
+            rotate(70deg)
+            scale(1);
+    }
+
+    68% {
+        transform:
+            translate3d(var(--sway2),-65vh,0)
+            rotate(25deg)
+            scale(.85);
+    }
+
+    100% {
+        transform:
+            translate3d(var(--sway3),-115vh,0)
+            rotate(75deg)
+            scale(.65);
+        opacity: 0;
+    }
 }
+
 
 /* =========================================================
-NOUVEL AN
-========================================================= */
+   PÂQUES
+   ========================================================= */
 
-.newyear-star {
-width: 5px;
-height: 5px;
-border-radius: 50%;
-background: white;
-box-shadow: 0 0 12px white;
-animation: newyearTwinkle 2s ease-in-out infinite alternate;
+body.theme-paques {
+    background:
+        linear-gradient(
+            180deg,
+            #fffdf3,
+            #eaf7e5 65%,
+            #d9eed2
+        ) !important;
 }
 
-.firework {
-position: absolute;
-width: 5px;
-height: 5px;
-border-radius: 50%;
-background: white;
-box-shadow:
-0 -45px 0 1px #ff3366,
-32px -32px 0 1px #ffd166,
-45px 0 0 1px #4cc9f0,
-32px 32px 0 1px #9b5de5,
-0 45px 0 1px #06d6a0,
--32px 32px 0 1px #ff7b00,
--45px 0 0 1px #f72585,
--32px -32px 0 1px #4cc9f0;
-animation: fireworkPulse 2.5s ease-out infinite;
+.easter-egg {
+    left: var(--x);
+    top: -70px;
+    width: var(--w);
+    height: var(--h);
+    border-radius:
+        48% 52% 48% 52% /
+        58% 58% 42% 42%;
+    background:
+        linear-gradient(
+            135deg,
+            var(--egg-light),
+            var(--egg-color)
+        );
+    box-shadow:
+        inset -7px -8px 0 rgba(0,0,0,.08),
+        0 5px 10px rgba(0,0,0,.13);
+    animation:
+        eggFall var(--duration) linear
+        var(--delay) infinite;
+}
+
+.easter-egg::before {
+    content: "";
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 40%;
+    height: 8px;
+    border-radius: 50%;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(255,255,255,.7) 0 10px,
+            transparent 10px 20px
+        );
+    transform: rotate(-8deg);
+}
+
+@keyframes eggFall {
+    0% {
+        transform:
+            translate3d(0,-80px,0)
+            rotate(-20deg);
+    }
+
+    30% {
+        transform:
+            translate3d(var(--sway1),30vh,0)
+            rotate(80deg);
+    }
+
+    65% {
+        transform:
+            translate3d(var(--sway2),65vh,0)
+            rotate(-120deg);
+    }
+
+    100% {
+        transform:
+            translate3d(var(--sway3),110vh,0)
+            rotate(210deg);
+    }
+}
+
+.spring-flower {
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: var(--flower-center);
+    box-shadow:
+        0 calc(var(--size) * -.48) 0 var(--flower-color),
+        calc(var(--size) * .48) 0 0 var(--flower-color),
+        0 calc(var(--size) * .48) 0 var(--flower-color),
+        calc(var(--size) * -.48) 0 0 var(--flower-color);
+    opacity: .8;
+    animation:
+        flowerFloat var(--duration)
+        ease-in-out var(--delay)
+        infinite alternate;
+}
+
+@keyframes flowerFloat {
+    from {
+        transform:
+            translate3d(0,0,0)
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            translate3d(var(--sway),-35px,0)
+            rotate(35deg);
+    }
+}
+
+
+/* =========================================================
+   HALLOWEEN
+   ========================================================= */
+
+body.theme-halloween {
+    background:
+        radial-gradient(
+            circle at 78% 12%,
+            rgba(105,58,160,.4),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #090713 0%,
+            #171026 50%,
+            #291333 100%
+        ) !important;
+    color: #fff;
+}
+
+body.theme-halloween .navbar {
+    background:
+        linear-gradient(
+            90deg,
+            #100719,
+            #29113d,
+            #100719
+        ) !important;
+}
+
+body.theme-halloween footer {
+    background:
+        linear-gradient(
+            90deg,
+            #0a0610,
+            #25102f,
+            #0a0610
+        ) !important;
+}
+
+.halloween-moon {
+    position: absolute;
+    right: 8%;
+    top: 8%;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 32% 28%,
+            #fff5bf,
+            #f5ce70 65%,
+            #d59637 100%
+        );
+    box-shadow:
+        0 0 25px rgba(255,210,100,.65),
+        0 0 80px rgba(255,160,60,.25);
+}
+
+.halloween-moon::before {
+    content: "";
+    position: absolute;
+    width: 25px;
+    height: 16px;
+    left: 25px;
+    top: 30px;
+    border-radius: 50%;
+    background: rgba(150,100,45,.22);
+    box-shadow:
+        50px 10px 0 rgba(150,100,45,.18),
+        30px 65px 0 rgba(150,100,45,.2),
+        75px 48px 0 rgba(150,100,45,.15);
+}
+
+.halloween-moon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow:
+        inset -12px -8px 15px rgba(130,75,20,.14);
+}
+
+.halloween-fog {
+    position: absolute;
+    left: -10%;
+    bottom: 8%;
+    width: 120%;
+    height: 150px;
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(190,190,215,.18) 0 35%,
+            transparent 70%
+        );
+    filter: blur(15px);
+    animation: halloweenFog 18s ease-in-out infinite alternate;
+}
+
+@keyframes halloweenFog {
+    from {
+        transform: translateX(-5%);
+    }
+
+    to {
+        transform: translateX(5%);
+    }
+}
+
+.bat {
+    left: var(--x);
+    top: var(--y);
+    width: 48px;
+    height: 25px;
+    animation:
+        batFlight var(--duration)
+        ease-in-out var(--delay)
+        infinite;
+}
+
+.bat::before,
+.bat::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    width: 31px;
+    height: 22px;
+    background: #08070c;
+    clip-path:
+        polygon(
+            0 15%,
+            25% 35%,
+            35% 0,
+            50% 35%,
+            68% 8%,
+            100% 40%,
+            72% 100%,
+            50% 68%,
+            28% 100%
+        );
+}
+
+.bat::before {
+    left: -20px;
+    transform: scaleX(-1);
+}
+
+.bat::after {
+    right: -20px;
+}
+
+@keyframes batFlight {
+    0% {
+        transform:
+            translate3d(0,0,0)
+            rotate(-5deg);
+    }
+
+    30% {
+        transform:
+            translate3d(var(--sway1),var(--swayY1),0)
+            rotate(8deg);
+    }
+
+    60% {
+        transform:
+            translate3d(var(--sway2),var(--swayY2),0)
+            rotate(-10deg);
+    }
+
+    100% {
+        transform:
+            translate3d(var(--sway3),var(--swayY3),0)
+            rotate(5deg);
+    }
+}
+
+.pumpkin {
+    left: var(--x);
+    bottom: var(--bottom);
+    width: var(--size);
+    height: calc(var(--size) * .82);
+    border-radius: 48%;
+    background:
+        radial-gradient(
+            ellipse at 35% 35%,
+            #ffbd39,
+            #ef7517 65%,
+            #a83a0a
+        );
+    box-shadow:
+        0 0 12px rgba(255,120,20,.55),
+        0 0 35px rgba(255,90,0,.3);
+    animation:
+        pumpkinGlow var(--duration)
+        ease-in-out var(--delay)
+        infinite alternate;
+}
+
+.pumpkin::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -9px;
+    width: 7px;
+    height: 13px;
+    border-radius: 3px;
+    background: #3e7028;
+}
+
+.pumpkin::after {
+    content: "";
+    position: absolute;
+    left: 27%;
+    top: 31%;
+    width: 48%;
+    height: 30%;
+    background:
+        linear-gradient(
+            45deg,
+            transparent 0 30%,
+            #160d0c 31% 39%,
+            transparent 40% 60%,
+            #160d0c 61% 69%,
+            transparent 70%
+        );
+    clip-path:
+        polygon(
+            0 0,
+            45% 25%,
+            100% 0,
+            82% 100%,
+            50% 70%,
+            18% 100%
+        );
+}
+
+@keyframes pumpkinGlow {
+    from {
+        transform: scale(.92);
+        filter: brightness(.85);
+    }
+
+    to {
+        transform: scale(1.05);
+        filter: brightness(1.25);
+    }
+}
+
+
+/* =========================================================
+   NOUVEL AN
+   ========================================================= */
+
+body.theme-nouvel-an {
+    background:
+        radial-gradient(
+            circle at 50% 5%,
+            rgba(35,69,130,.75),
+            transparent 40%
+        ),
+        linear-gradient(
+            180deg,
+            #020612 0%,
+            #071331 55%,
+            #02050e 100%
+        ) !important;
+    color: white;
+}
+
+body.theme-nouvel-an .navbar {
+    background:
+        linear-gradient(
+            90deg,
+            #030711,
+            #102452,
+            #030711
+        ) !important;
+}
+
+body.theme-nouvel-an footer {
+    background:
+        linear-gradient(
+            90deg,
+            #02050c,
+            #0d1c3c,
+            #02050c
+        ) !important;
+}
+
+.newyear-star {
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: white;
+    border-radius: 50%;
+    box-shadow:
+        0 0 5px white,
+        0 0 13px rgba(120,180,255,.8);
+    animation:
+        newyearTwinkle var(--duration)
+        ease-in-out var(--delay)
+        infinite alternate;
 }
 
 @keyframes newyearTwinkle {
-from { opacity: .2; }
-to { opacity: 1; transform: scale(1.8); }
+    from {
+        opacity: .2;
+        transform: scale(.55);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.3);
+    }
 }
 
-@keyframes fireworkPulse {
-0% {
-transform: scale(.1);
-opacity: 0;
+.firework {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--fire-color);
+    box-shadow:
+        0 0 7px var(--fire-color),
+        0 0 20px var(--fire-color);
+    animation:
+        fireworkBurst 2.8s ease-out forwards;
 }
 
-```
-25% {
-    transform: scale(.7);
-    opacity: 1;
+.firework::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    box-shadow:
+        0 -65px 0 1px var(--fire-color),
+        31px -55px 0 1px var(--fire-color),
+        55px -30px 0 1px var(--fire-color),
+        65px 0 0 1px var(--fire-color),
+        55px 30px 0 1px var(--fire-color),
+        31px 55px 0 1px var(--fire-color),
+        0 65px 0 1px var(--fire-color),
+        -31px 55px 0 1px var(--fire-color),
+        -55px 30px 0 1px var(--fire-color),
+        -65px 0 0 1px var(--fire-color),
+        -55px -30px 0 1px var(--fire-color),
+        -31px -55px 0 1px var(--fire-color);
+    transform: translate(-50%, -50%);
 }
 
-70% {
-    transform: scale(1);
-    opacity: 1;
+@keyframes fireworkBurst {
+    0% {
+        opacity: 1;
+        transform: scale(.1);
+    }
+
+    15% {
+        opacity: 1;
+        transform: scale(.7);
+    }
+
+    75% {
+        opacity: .95;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.12);
+    }
 }
 
-100% {
-    transform: scale(1.5);
-    opacity: 0;
-}
-```
-
-}
 
 /* =========================================================
-ÉTÉ
-========================================================= */
+   ÉTÉ
+   ========================================================= */
 
-.summer-sun {
-position: absolute;
-top: 8%;
-right: 8%;
-width: 110px;
-height: 110px;
-border-radius: 50%;
-background: #ffd60a;
-box-shadow:
-0 0 30px #ffd60a,
-0 0 70px rgba(255,214,10,.6);
-animation: sunPulse 3s ease-in-out infinite alternate;
+body.theme-ete {
+    background:
+        linear-gradient(
+            180deg,
+            #80d8ff 0%,
+            #c8f3ff 55%,
+            #fff3c2 100%
+        ) !important;
 }
 
-.summer-sparkle {
-width: 7px;
-height: 7px;
-border-radius: 50%;
-background: #fff3a3;
-animation: summerSparkle 2s ease-in-out infinite alternate;
+.sun {
+    position: absolute;
+    right: 9%;
+    top: 8%;
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle,
+            #fff8bd,
+            #ffd84d 65%,
+            #ffad24 100%
+        );
+    box-shadow:
+        0 0 30px rgba(255,210,70,.8),
+        0 0 90px rgba(255,185,30,.45);
+    animation:
+        summerSun 5s ease-in-out infinite alternate;
 }
 
-@keyframes sunPulse {
-from { transform: scale(.95); }
-to { transform: scale(1.08); }
+@keyframes summerSun {
+    from {
+        transform: scale(.95);
+        filter: brightness(.95);
+    }
+
+    to {
+        transform: scale(1.08);
+        filter: brightness(1.15);
+    }
 }
 
-@keyframes summerSparkle {
-from { opacity: .2; transform: scale(.5); }
-to { opacity: 1; transform: scale(1.5); }
+.sun-particle {
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: rgba(255,255,220,.9);
+    box-shadow:
+        0 0 7px rgba(255,255,220,.8);
+    animation:
+        summerParticle var(--duration)
+        ease-in-out var(--delay)
+        infinite alternate;
+}
+
+@keyframes summerParticle {
+    from {
+        opacity: .15;
+        transform: translate3d(0,0,0);
+    }
+
+    to {
+        opacity: .9;
+        transform:
+            translate3d(var(--sway),-45px,0);
+    }
+}
+
+
+/* =========================================================
+   AUTOMNE
+   ========================================================= */
+
+body.theme-automne {
+    background:
+        linear-gradient(
+            180deg,
+            #f1d0a0 0%,
+            #e6b875 45%,
+            #c98b4e 100%
+        ) !important;
+}
+
+.leaf-particle {
+    left: var(--x);
+    top: -70px;
+    width: var(--size);
+    height: calc(var(--size) * .78);
+    background: var(--leaf-color);
+    border-radius:
+        100% 0 100% 0;
+    box-shadow:
+        inset -3px -3px 0 rgba(0,0,0,.12),
+        0 3px 7px rgba(0,0,0,.12);
+    animation:
+        autumnLeaf var(--duration)
+        cubic-bezier(.25,.65,.55,1)
+        var(--delay)
+        infinite;
+}
+
+.leaf-particle::before {
+    content: "";
+    position: absolute;
+    left: 48%;
+    top: 5%;
+    width: 2px;
+    height: 90%;
+    background: rgba(90,50,20,.38);
+    transform: rotate(35deg);
+    transform-origin: center;
+}
+
+.leaf-particle::after {
+    content: "";
+    position: absolute;
+    left: 20%;
+    top: 48%;
+    width: 65%;
+    height: 2px;
+    background: rgba(90,50,20,.25);
+    transform: rotate(-25deg);
+}
+
+@keyframes autumnLeaf {
+    0% {
+        transform:
+            translate3d(0,-80px,0)
+            rotate(0deg)
+            scale(var(--scale));
+    }
+
+    20% {
+        transform:
+            translate3d(var(--sway1),20vh,0)
+            rotate(100deg)
+            scale(var(--scale));
+    }
+
+    45% {
+        transform:
+            translate3d(var(--sway2),45vh,0)
+            rotate(230deg)
+            scale(var(--scale));
+    }
+
+    70% {
+        transform:
+            translate3d(var(--sway3),72vh,0)
+            rotate(350deg)
+            scale(var(--scale));
+    }
+
+    100% {
+        transform:
+            translate3d(var(--sway4),110vh,0)
+            rotate(520deg)
+            scale(var(--scale));
+    }
+}
+
+.autumn-wind {
+    position: absolute;
+    left: -15%;
+    bottom: 12%;
+    width: 130%;
+    height: 100px;
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255,255,255,.11),
+            transparent 68%
+        );
+    filter: blur(14px);
+    animation:
+        autumnWind 13s ease-in-out infinite alternate;
+}
+
+@keyframes autumnWind {
+    from {
+        transform: translateX(-5%);
+    }
+
+    to {
+        transform: translateX(5%);
+    }
+}
+
+
+/* =========================================================
+   ACCESSIBILITÉ
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #season-layer *,
+    .season-layer * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .christmas-moon,
+    .halloween-moon,
+    .sun {
+        transform: scale(.72);
+        transform-origin: top right;
+    }
+
+    .santa {
+        --santa-scale: .72;
+    }
+
+    .firework::before {
+        transform: translate(-50%, -50%) scale(.72);
+    }
 }

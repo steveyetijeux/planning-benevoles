@@ -195,21 +195,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         eventClassNames: function(info) {
 
-            if (info.event.extendedProps.complet === true) {
-                return ['creneau-complet'];
-            }
+    if (info.event.extendedProps.complet === true) {
+        return ['creneau-complet'];
+    }
 
-            return [];
+    return [];
 
-        },
+},
 
-        eventClick: function(info) {
+eventClick: function(info) {
 
-            info.jsEvent.preventDefault();
+    info.jsEvent.preventDefault();
 
-            window.location.href = "/inscription/" + info.event.id + "/";
+    if (info.event.extendedProps.complet === true) {
+        alert("Ce créneau est complet. Les inscriptions sont fermées.");
+        return;
+    }
 
-        }
+    window.location.href = "/inscription/" + info.event.id + "/";
+
+}
 
     });
 

@@ -1,3 +1,4 @@
+
 {% extends 'planning/base.html' %}
 
 {% block content %}
@@ -18,43 +19,80 @@
                 {{ creneau.titre }}
             </h4>
 
-            <form method="post">
+            {% if erreur %}
+                <div class="alert alert-danger text-center">
+                    {{ erreur }}
+                </div>
+            {% endif %}
 
-                {% csrf_token %}
+            {% if complet %}
 
-                <!-- NOM -->
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Nom et Prénom
-                    </label>
-
-                    <input type="text"
-                           name="nom"
-                           class="form-control"
-                           required>
-
+                <div class="alert alert-danger text-center">
+                    <h4>🔒 Créneau complet</h4>
+                    <p class="mb-0">
+                        Toutes les places ont été réservées.
+                        Les inscriptions sont fermées.
+                    </p>
                 </div>
 
-                <!-- TELEPHONE -->
-                <div class="mb-4">
+            {% else %}
 
-                    <label class="form-label">
-                        Numéro de téléphone
-                    </label>
+                <div class="alert alert-info text-center">
+                    <strong>{{ nb_inscrits }}</strong>
+                    bénévole(s) inscrit(s) sur
+                    <strong>{{ creneau.max_benevoles }}</strong>.
 
-                    <input type="text"
-                           name="telephone"
-                           class="form-control"
-                           required>
+                    <br>
 
+                    <strong>{{ places_restantes }}</strong>
+                    place(s) restante(s).
                 </div>
 
-                <button class="btn btn-success w-100">
-                    Valider mon inscription
-                </button>
+                <form method="post">
 
-            </form>
+                    {% csrf_token %}
+
+                    <!-- NOM -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Nom et Prénom
+                        </label>
+
+                        <input type="text"
+                               name="nom"
+                               class="form-control"
+                               required>
+
+                    </div>
+
+                    <!-- TELEPHONE -->
+                    <div class="mb-4">
+
+                        <label class="form-label">
+                            Numéro de téléphone
+                        </label>
+
+                        <input type="text"
+                               name="telephone"
+                               class="form-control"
+                               required>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        Valider mon inscription
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="/" class="btn btn-outline-secondary">
+                    Retour à l'accueil
+                </a>
+            </div>
 
         </div>
 
